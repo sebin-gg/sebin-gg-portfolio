@@ -1,26 +1,125 @@
 @import "tailwindcss";
 
+/* Class-based dark mode (toggled by ThemeToggle via <html class="dark">). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+  Semantic tokens. Light values live on :root, dark values live on
+  .dark. Utilities are mapped in @theme inline below so components can
+  use classes like bg-canvas, text-ink, border-line, text-accent.
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --canvas: #f6f5f1;
+  --panel: #ffffff;
+  --panel-2: #efede7;
+  --line: #e3e0d8;
+  --line-strong: #cfcbc0;
+  --ink: #211f19;
+  --ink-soft: #5c574e;
+  --ink-faint: #6f6a5f;
+  --accent: #047857;
+  --accent-strong: #065f46;
+  --accent-soft: #d9efe6;
+  --accent-ink: #ffffff;
+  --glow: rgba(4, 120, 87, 0.14);
+  --terminal-dot: #fbbf24;
+}
+
+.dark {
+  --canvas: #0a0e0c;
+  --panel: #10150f;
+  --panel-2: #161c17;
+  --line: #1f2822;
+  --line-strong: #2c3831;
+  --ink: #e9e7df;
+  --ink-soft: #a6b0a8;
+  --ink-faint: #8b968e;
+  --accent: #34d399;
+  --accent-strong: #6ee7b7;
+  --accent-soft: #0f2b21;
+  --accent-ink: #052e1f;
+  --glow: rgba(52, 211, 153, 0.12);
+  --terminal-dot: #34d399;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-canvas: var(--canvas);
+  --color-panel: var(--panel);
+  --color-panel-2: var(--panel-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-ink: var(--accent-ink);
+  --color-glow: var(--glow);
+  --color-terminal-dot: var(--terminal-dot);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 22px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* Visible keyboard focus everywhere. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Terminal caret blink (disabled above for reduced-motion users). */
+@keyframes caret-blink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  55%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.caret::after {
+  content: "▊";
+  margin-left: 1px;
+  color: var(--accent);
+  animation: caret-blink 1.1s steps(1) infinite;
 }

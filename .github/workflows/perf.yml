@@ -1,0 +1,58 @@
+name: Performance budgets
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: perf-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lighthouse:
+    name: Lighthouse (slow-4G mobile)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Chromium for Lighthouse
+        run: pnpm exec playwright install chromium
+
+      - name: Build
+        run: pnpm build
+
+      - name: Run Lighthouse audits
+        run: |
+          pnpm start --port 3100 > /tmp/app.log 2>&1 &
+          APP_PID=$!
+          # Poll until the server answers (no extra dependency needed).
+          for i in $(seq 1 90); do
+            if curl -sf http://127.0.0.1:3100 > /dev/null; then break; fi
+            sleep 1
+          done
+          CHROME_PATH="$(find ~/.cache/ms-playwright -type f -name chrome -path '*chromium-*' | head -1)"
+          echo "Using Chromium at: $CHROME_PATH"
+          CHROME_PATH="$CHROME_PATH" pnpm exec lhci autorun
+          EXIT_CODE=$?
+          kill "$APP_PID" 2> /dev/null || true
+          exit $EXIT_CODE
+
+      - name: Upload Lighthouse results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-results
+          path: lighthouse-results/
+          retention-days: 14

@@ -1,0 +1,35 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "plugins": ["@stryker-mutator/vitest-runner"],
+  "testRunner": "vitest",
+  "coverageAnalysis": "all",
+  "mutate": [
+    "src/lib/**/*.ts",
+    "src/components/**/*.tsx",
+    "!src/**/*.test.{ts,tsx}",
+    "!src/test/**",
+    "!src/components/icons.tsx"
+  ],
+  "mutator": {
+    "excludedMutations": ["StringLiteral"]
+  },
+  "ignorePatterns": [
+    "node_modules",
+    ".next",
+    "public",
+    "docs",
+    "coverage",
+    "playwright-report",
+    "test-results",
+    "e2e",
+    ".agents",
+    ".claude"
+  ],
+  "reporters": ["clear-text", "html", "progress"],
+  "htmlReporter": { "baseDir": "stryker-report" },
+  "concurrency": 2,
+  "timeoutMS": 30000,
+  "vitest": { "configFile": "vitest.config.ts" },
+  "thresholds": { "high": 85, "low": 70, "break": 60 },
+  "cleanTempDir": true
+}
