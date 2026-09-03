@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { siteUrl } from "@/lib/site";
 import { BlogEmptyState } from "@/components/blog-empty-state";
 import { Eyebrow } from "@/components/section-heading";
 
@@ -6,6 +7,7 @@ export const metadata: Metadata = {
   title: "Blog",
   description:
     "Write-ups on security drills, prompt engineering, and shipping fast websites. Coming soon.",
+  alternates: { canonical: `${siteUrl}/blog` },
 };
 
 export default function BlogPage() {

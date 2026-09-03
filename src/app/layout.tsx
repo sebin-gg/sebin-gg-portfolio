@@ -55,9 +55,6 @@ export const metadata: Metadata = {
   icons: {
     icon: "/icon.svg",
   },
-  alternates: {
-    canonical: siteUrl,
-  },
 };
 
 export const viewport: Viewport = {
