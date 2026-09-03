@@ -2,11 +2,11 @@ import { expect, test } from "@playwright/test";
 import { links, navItems, profile, projects, resumeUrl } from "../src/lib/site";
 
 test.describe("home page", () => {
-  test("shows the name, tagline and terminal card", async ({ page }) => {
+  test("shows the name, tagline and profile highlights", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toContainText(profile.name);
     await expect(page.getByText(profile.tagline.slice(0, 32))).toBeVisible();
-    await expect(page.getByRole("group", { name: "Terminal demo" })).toBeVisible();
+    await expect(page.getByRole("complementary", { name: "Profile highlights" })).toBeVisible();
   });
 
   test("all section anchors point at elements that exist", async ({ page }) => {

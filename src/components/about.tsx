@@ -1,4 +1,13 @@
 import { profile } from "@/lib/site";
+import { Eyebrow } from "@/components/section-heading";
+
+const facts = [
+  { label: "Status", value: "Open to work", accent: true },
+  { label: "Degree", value: profile.degree },
+  { label: "College", value: profile.college },
+  { label: "CGPA", value: String(profile.cgpa) },
+  { label: "Location", value: profile.location },
+];
 
 export function About() {
   return (
@@ -7,7 +16,7 @@ export function About() {
       aria-labelledby="about-title"
       className="mx-auto w-full max-w-5xl px-4 py-20 sm:px-6"
     >
-      <p className="text-accent mb-2 font-mono text-sm"># about</p>
+      <Eyebrow>About</Eyebrow>
       <h2 id="about-title" className="text-ink text-2xl font-bold tracking-tight sm:text-3xl">
         Who I am
       </h2>
@@ -24,31 +33,26 @@ export function About() {
           </p>
         </div>
 
-        <aside className="border-line bg-panel h-fit rounded-lg border p-5 font-mono text-sm">
-          <p className="text-ink-soft">
-            <span className="text-accent">$</span> whoami --details
-          </p>
-          <dl className="text-ink mt-3 space-y-2">
-            <div>
-              <dt className="text-ink-faint inline">name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </dt>
-              <dd className="inline">{profile.name}</dd>
-            </div>
-            <div>
-              <dt className="text-ink-faint inline">based&nbsp;&nbsp;&nbsp;&nbsp;: </dt>
-              <dd className="inline">{profile.location}</dd>
-            </div>
-            <div>
-              <dt className="text-ink-faint inline">degree&nbsp;&nbsp;&nbsp;: </dt>
-              <dd className="inline">{profile.degree}</dd>
-            </div>
-            <div>
-              <dt className="text-ink-faint inline">cgpa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </dt>
-              <dd className="inline">{profile.cgpa}</dd>
-            </div>
-            <div>
-              <dt className="text-ink-faint inline">status&nbsp;&nbsp;&nbsp;: </dt>
-              <dd className="text-accent inline">open to work</dd>
-            </div>
+        <aside
+          aria-label="Quick facts"
+          className="border-line bg-panel h-fit rounded-lg border p-5"
+        >
+          <h3 className="text-ink-soft mb-4 text-sm font-semibold tracking-wide">Quick facts</h3>
+          <dl className="space-y-3">
+            {facts.map((fact) => (
+              <div key={fact.label} className="flex items-baseline justify-between gap-4">
+                <dt className="text-ink-faint text-sm">{fact.label}</dt>
+                <dd
+                  className={
+                    fact.accent
+                      ? "text-accent text-sm font-semibold"
+                      : "text-ink text-sm font-medium"
+                  }
+                >
+                  {fact.value}
+                </dd>
+              </div>
+            ))}
           </dl>
         </aside>
       </div>

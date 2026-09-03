@@ -1,4 +1,4 @@
-import { TerminalIcon } from "@/components/icons";
+import { RssIcon } from "@/components/icons";
 
 const planned = [
   "OWASP Bootcamp 2025: what a phishing drill actually taught me",
@@ -9,9 +9,9 @@ const planned = [
 
 export function BlogEmptyState() {
   return (
-    <div className="border-line-strong bg-panel mx-auto max-w-2xl rounded-lg border border-dashed p-8 text-center sm:p-12">
-      <div className="bg-accent-soft text-accent mx-auto flex h-12 w-12 items-center justify-center rounded-full">
-        <TerminalIcon className="h-6 w-6" />
+    <div className="border-line-strong bg-panel mx-auto max-w-2xl rounded-2xl border border-dashed p-8 text-center sm:p-12">
+      <div className="bg-accent-soft text-accent mx-auto flex h-12 w-12 items-center justify-center rounded-xl">
+        <RssIcon className="h-6 w-6" />
       </div>
       <h2 className="text-ink mt-5 text-xl font-bold">No posts yet — this space is warming up</h2>
       <p className="text-ink-soft mx-auto mt-2 max-w-md text-sm leading-relaxed">
@@ -21,13 +21,16 @@ export function BlogEmptyState() {
       </p>
 
       <div className="mt-8 text-left">
-        <p className="text-accent font-mono text-xs tracking-wide uppercase">In the pipeline</p>
+        <p className="text-accent text-xs font-semibold tracking-[0.12em] uppercase">
+          In the pipeline
+        </p>
         <ul className="mt-3 space-y-2.5">
           {planned.map((post) => (
             <li key={post} className="text-ink-soft flex items-start gap-2 text-sm">
-              <span aria-hidden="true" className="text-accent mt-0.5 font-mono">
-                ▸
-              </span>
+              <span
+                aria-hidden="true"
+                className="bg-accent mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"
+              />
               {post}
             </li>
           ))}

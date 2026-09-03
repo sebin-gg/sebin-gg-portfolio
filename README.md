@@ -14,7 +14,7 @@ bundle weight. The day the blog gets a real backend, they bolt on cleanly.
 | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Static-first (no tRPC client)              | Every KB counts on 2G/3G. tRPC + zod + superjson ≈ 15–25 kB gzip of JS with zero payoff when content is static. Server components render everything. |
 | No image files                             | Terminal/grid visuals are pure CSS gradients — nothing to download.                                                                                  |
-| Self-hosted variable fonts via `next/font` | One small woff2 subset per family, `display: swap`, no third-party font CDN request.                                                                 |     | Class-based dark mode with inline init script | **Dark by default** (terminal brand), light is an explicit toggle — applied before first paint, no theme flash. |
+| Self-hosted variable fonts via `next/font` | One small woff2 subset per family, `display: swap`, no third-party font CDN request.                                                                 |     | Class-based dark mode with inline init script | **Dark by default**, light is an explicit toggle — applied before first paint, no theme flash. |
 | One tiny client island                     | Only `<ThemeToggle>` and `<MobileNav>` are client components (~2 kB). Everything else is a server component.                                         |
 | Typographic apostrophes                    | `&rsquo;` in copy, not ASCII `'` — reads human and keeps lint happy.                                                                                 |
 
@@ -59,12 +59,12 @@ All run in CI: `.github/workflows/ci.yml` (lint/typecheck/format/unit/build/e2e)
 Measured with Lighthouse on simulated slow-4G mobile, median of 3 runs (see `budgets.json`):
 
 - Total transfer ≈ **220 kB** (script + stylesheet + 2 self-hosted fonts — no images)
-- FCP ≈ 1.1 s · LCP ≈ 2.3–2.7 s · CLS = 0 · TBT ≈ 100–160 ms
-- Performance ≈ **96** (home) / **98** (blog) · Accessibility **100** · Best Practices/SEO = 100
+- FCP ≈ 1.1 s · LCP ≈ 2.0–2.5 s · CLS = 0 · TBT ≈ 70–90 ms
+- Performance ≈ **97** (home) / **98** (blog) · Accessibility ≈ 99–100 · Best Practices/SEO = 100
 
 Why it stays fast on 2G/3G: no images, one self-hosted variable sans font preloaded (the LCP
-family) while the mono family loads non-blocking, zero client libraries, and just two tiny
-client components (~2 kB) on an otherwise server-rendered page.
+family) while the mono family loads non-blocking, zero client libraries, and just three tiny
+client components (~3 kB) on an otherwise server-rendered page.
 
 > Running Lighthouse locally while other apps peg the CPU inflates the simulated TBT. On an idle
 > machine scores sit in the high 80s–90s; CI (clean runner, median of 3) is the source of truth.

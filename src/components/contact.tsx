@@ -1,5 +1,6 @@
 import { links, profile } from "@/lib/site";
-import { GithubIcon, LinkedinIcon, MailIcon, TerminalIcon, XIcon } from "@/components/icons";
+import { Eyebrow } from "@/components/section-heading";
+import { GithubIcon, LinkedinIcon, MailIcon, XIcon } from "@/components/icons";
 
 export function Contact() {
   return (
@@ -9,7 +10,9 @@ export function Contact() {
       className="border-line bg-panel/60 border-t"
     >
       <div className="mx-auto w-full max-w-5xl px-4 py-20 text-center sm:px-6">
-        <p className="text-accent mb-2 font-mono text-sm"># contact</p>
+        <div className="flex flex-col items-center">
+          <Eyebrow>Contact</Eyebrow>
+        </div>
         <h2 id="contact-title" className="text-ink text-2xl font-bold tracking-tight sm:text-3xl">
           Let&rsquo;s build something
         </h2>
@@ -54,8 +57,8 @@ export function Contact() {
           </a>
         </div>
 
-        <p className="text-ink-faint mt-8 flex items-center justify-center gap-2 font-mono text-xs">
-          <TerminalIcon className="h-3.5 w-3.5" />
+        <p className="text-ink-faint mt-8 flex items-center justify-center gap-2 text-sm">
+          <span aria-hidden="true" className="bg-accent h-1.5 w-1.5 rounded-full" />
           {profile.location} · IST (UTC+5:30)
         </p>
       </div>

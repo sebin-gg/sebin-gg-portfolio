@@ -19,7 +19,7 @@ export function Skills() {
         <dl className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
           {skills.map((group) => (
             <div key={group.group}>
-              <dt className="text-accent font-mono text-sm font-semibold">[{group.group}]</dt>
+              <dt className="text-ink text-sm font-semibold tracking-wide">{group.group}</dt>
               <dd className="mt-3">
                 <ul className="flex flex-wrap gap-2">
                   {group.items.map((skill) => (

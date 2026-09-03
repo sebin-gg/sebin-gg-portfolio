@@ -26,15 +26,6 @@ export const profile = {
     "I'm a B.Tech Computer Science student at College of Engineering Chengannur (CGPA 8.6). Most of what I build leans backend and security: APIs, automation, a Chrome extension that compresses prompts before they reach an LLM, and a cyber incident dashboard that runs local models instead of phoning home.",
     "My defaults are privacy and verification: no telemetry, modular design, cryptographic checks where they matter. Outside the editor I coordinate projects for FOCES CEC and run security drills — phishing simulations, Nmap sweeps, TryHackMe rooms.",
   ],
-  terminal: {
-    prompt: "sebin@portfolio",
-    lines: [
-      { cmd: "whoami", out: "Sebin Mathew — builder, security-curious" },
-      { cmd: "cat focus.txt", out: "cybersecurity · backend · automation" },
-      { cmd: "cat projects/", out: "6+ shipped · Chrome ext, dashboards, APIs" },
-      { cmd: "./status --now", out: "open to internships & collabs · class of 2028" },
-    ],
-  },
 } as const;
 
 export const links = {

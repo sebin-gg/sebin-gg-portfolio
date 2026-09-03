@@ -1,5 +1,5 @@
 import { links, profile, resumeUrl } from "@/lib/site";
-import { TerminalCard } from "@/components/terminal-card";
+import { Eyebrow } from "@/components/section-heading";
 import {
   ArrowUpRightIcon,
   DownloadIcon,
@@ -15,32 +15,40 @@ const stats = [
   { value: "'28", label: "graduating class" },
 ];
 
+const facts = [
+  { label: "Status", value: "Open to internships & collabs" },
+  { label: "Education", value: `${profile.degree}` },
+  { label: "Location", value: profile.location },
+  { label: "Email", value: profile.email, mailto: true },
+];
+
+function monogram(name: string): string {
+  const [first, second] = name.trim().split(/\s+/);
+  return (first ? first[0] : "") + (second ? second[0] : "");
+}
+
 export function Hero() {
   return (
     <section id="top" aria-label="Introduction" className="relative overflow-hidden">
-      {/* Faint grid backdrop, pure CSS so no image download. */}
+      {/* Soft radial brand glow, pure CSS so no image download. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,var(--line)_1px,transparent_1px),linear-gradient(to_bottom,var(--line)_1px,transparent_1px)] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,black,transparent)] bg-[size:44px_44px] opacity-40"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_70%_0%,var(--glow),transparent_70%)]"
       />
-      <div className="relative mx-auto w-full max-w-5xl px-4 pt-16 pb-16 sm:px-6 sm:pt-24">
-        <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_1fr]">
+      <div className="relative mx-auto w-full max-w-5xl px-4 pt-14 pb-16 sm:px-6 sm:pt-20">
+        <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-14">
           <div>
-            <p className="text-accent mb-4 font-mono text-sm">
-              <span className="text-ink-faint">#</span> hello, world
-            </p>
+            <Eyebrow>Hello, I&rsquo;m a developer</Eyebrow>
             <h1 className="text-ink text-4xl font-extrabold tracking-tight sm:text-5xl">
               {profile.name}
-              <span className="text-ink-soft block font-mono text-lg font-medium sm:text-xl">
-                {profile.role}
-              </span>
             </h1>
-            <p className="text-ink-soft mt-5 max-w-xl text-lg leading-relaxed">{profile.tagline}</p>
-            <ul aria-label="Focus areas" className="mt-5 flex flex-wrap gap-2">
+            <p className="text-ink-soft mt-4 text-xl font-medium sm:text-2xl">{profile.role}</p>
+            <p className="text-ink-soft mt-4 max-w-xl text-lg leading-relaxed">{profile.tagline}</p>
+            <ul aria-label="Focus areas" className="mt-6 flex flex-wrap gap-2">
               {profile.focus.map((area) => (
                 <li
                   key={area}
-                  className="border-line bg-panel text-accent rounded-full border px-3 py-1 font-mono text-xs"
+                  className="border-line bg-panel text-ink-soft rounded-full border px-3 py-1 text-sm"
                 >
                   {area}
                 </li>
@@ -49,14 +57,14 @@ export function Hero() {
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a
                 href="#projects"
-                className="bg-accent text-accent-ink hover:bg-accent-strong inline-flex items-center gap-2 rounded-md px-4 py-2.5 text-sm font-semibold transition-colors"
+                className="bg-accent text-accent-ink hover:bg-accent-strong inline-flex items-center gap-2 rounded-md px-5 py-2.5 text-sm font-semibold transition-colors"
               >
                 View projects
                 <ArrowUpRightIcon className="h-4 w-4" />
               </a>
               <a
                 href={resumeUrl}
-                className="border-line bg-panel text-ink hover:border-accent hover:text-accent inline-flex items-center gap-2 rounded-md border px-4 py-2.5 text-sm font-semibold transition-colors"
+                className="border-line bg-panel text-ink hover:border-accent hover:text-accent inline-flex items-center gap-2 rounded-md border px-5 py-2.5 text-sm font-semibold transition-colors"
               >
                 <DownloadIcon className="h-4 w-4" />
                 Download résumé
@@ -91,14 +99,61 @@ export function Hero() {
               </a>
             </div>
           </div>
-          <TerminalCard />
+
+          <aside
+            aria-label="Profile highlights"
+            className="border-line bg-panel relative overflow-hidden rounded-2xl border p-6 shadow-sm sm:p-8"
+          >
+            <div
+              aria-hidden="true"
+              className="from-accent/25 to-accent-soft/40 absolute -top-20 -right-20 h-56 w-56 rounded-full bg-gradient-to-br blur-2xl"
+            />
+            <div className="relative">
+              <div className="flex items-center gap-4">
+                <span className="bg-accent text-accent-ink flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-lg font-bold">
+                  {monogram(profile.name)}
+                </span>
+                <div>
+                  <p className="text-ink text-sm font-medium">{profile.name}</p>
+                  <p className="text-ink-faint text-sm">
+                    {profile.collegeShort} · class of {profile.classOf}
+                  </p>
+                </div>
+              </div>
+
+              <dl className="mt-6 space-y-3 text-sm">
+                {facts.map((fact) => (
+                  <div key={fact.label} className="flex items-baseline justify-between gap-4">
+                    <dt className="text-ink-faint">{fact.label}</dt>
+                    <dd className="text-ink text-right font-medium">
+                      {fact.mailto ? (
+                        <a href={links.email.href} className="hover:text-accent">
+                          {fact.value}
+                        </a>
+                      ) : (
+                        fact.value
+                      )}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+
+              <a
+                href={resumeUrl}
+                className="border-line text-ink hover:border-accent hover:text-accent mt-7 inline-flex w-full items-center justify-center gap-2 rounded-md border px-4 py-2.5 text-sm font-semibold transition-colors"
+              >
+                <DownloadIcon className="h-4 w-4" />
+                Résumé (PDF)
+              </a>
+            </div>
+          </aside>
         </div>
 
-        <dl className="border-line bg-line mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-lg border sm:grid-cols-4">
+        <dl className="border-line bg-line mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-lg border sm:grid-cols-4">
           {stats.map((stat) => (
             <div key={stat.label} className="bg-panel flex flex-col-reverse px-5 py-4">
               <dt className="text-ink-faint text-xs">{stat.label}</dt>
-              <dd className="text-accent font-mono text-2xl font-bold">{stat.value}</dd>
+              <dd className="text-accent text-2xl font-bold">{stat.value}</dd>
             </div>
           ))}
         </dl>

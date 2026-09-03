@@ -38,20 +38,20 @@ describe("Hero", () => {
     expect(screen.getByRole("link", { name: "X profile" })).toHaveAttribute("href", links.x.href);
   });
 
-  it("renders terminal output lines", () => {
+  it("renders profile highlights with the monogram and key facts", () => {
     render(<Hero />);
-    const terminal = screen.getByRole("group", { name: "Terminal demo" });
-    expect(within(terminal).getAllByText(/sebin@portfolio/).length).toBeGreaterThan(0);
-    expect(within(terminal).getByText(/whoami/)).toBeInTheDocument();
+    const card = screen.getByRole("complementary", { name: "Profile highlights" });
+    expect(within(card).getByText("SM")).toBeInTheDocument();
+    expect(within(card).getByText(/open to internships/i)).toBeInTheDocument();
   });
 });
 
 describe("About", () => {
-  it("renders the bio and the whoami card", () => {
+  it("renders the bio and the quick-facts card", () => {
     render(<About />);
     expect(screen.getByRole("heading", { name: "Who I am" })).toBeInTheDocument();
-    expect(screen.getByText(/Sebin Mathew/)).toBeInTheDocument();
-    expect(screen.getByText("open to work")).toBeInTheDocument();
+    expect(screen.getByText(/Open to work/i)).toBeInTheDocument();
+    expect(screen.getByText(/Kottayam, Kerala, India/)).toBeInTheDocument();
   });
 });
 
@@ -91,7 +91,7 @@ describe("Skills", () => {
   it("groups skills with a heading per group", () => {
     render(<Skills />);
     expect(screen.getByRole("heading", { name: "Toolbox" })).toBeInTheDocument();
-    expect(screen.getByText("[Languages]")).toBeInTheDocument();
+    expect(screen.getByText("Languages")).toBeInTheDocument();
     expect(screen.getByText("TypeScript")).toBeInTheDocument();
   });
 });
