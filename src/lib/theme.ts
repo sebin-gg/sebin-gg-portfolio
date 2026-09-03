@@ -13,10 +13,12 @@ export function storedTheme(storage: Pick<Storage, "getItem">): Theme | null {
   }
 }
 
-/** Whether dark mode should win given the stored value and OS preference. */
-export function prefersDarkTheme(stored: Theme | null, systemPrefersDark: boolean): boolean {
-  if (stored !== null) return stored === "dark";
-  return systemPrefersDark;
+/**
+ * The site is dark by default — the brand is a terminal. Light is an opt-out
+ * the user stores explicitly; the OS preference does not override either.
+ */
+export function resolveThemeIsDark(stored: Theme | null): boolean {
+  return stored !== "light";
 }
 
 /** Whether the <html> element currently carries the dark class. */
@@ -29,15 +31,11 @@ export function themeInitScriptSource(): string {
   const script = `
 (function () {
   try {
-    var stored = localStorage.getItem(${JSON.stringify(THEME_STORAGE_KEY)});
-    var dark =
-      stored === ${JSON.stringify("dark")} ||
-      (!stored && window.matchMedia("(prefers-color-scheme: dark)").matches);
-    if (dark) {
+    if (localStorage.getItem(${JSON.stringify(THEME_STORAGE_KEY)}) !== "light") {
       document.documentElement.classList.add(${JSON.stringify(THEME_DARK_CLASS)});
     }
   } catch (e) {
-    // Storage can be blocked (private mode); fall back to the default theme.
+    // Storage can be blocked (private mode); dark is the default anyway.
   }
 })();
 `;

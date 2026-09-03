@@ -32,6 +32,15 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-2">
           <ThemeToggle />
+          {/* Tablet: icon-only résumé (no room for the label); full button from lg. */}
+          <a
+            href={resumeUrl}
+            aria-label="Download résumé"
+            title="Download résumé"
+            className="bg-accent text-accent-ink hover:bg-accent-strong hidden h-10 w-10 items-center justify-center rounded-md transition-colors md:flex lg:hidden"
+          >
+            <DownloadIcon className="h-4 w-4" />
+          </a>
           <a
             href={resumeUrl}
             className="bg-accent text-accent-ink hover:bg-accent-strong hidden items-center gap-2 rounded-md px-3.5 py-2 text-sm font-semibold transition-colors lg:flex"

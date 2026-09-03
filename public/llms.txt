@@ -1,0 +1,45 @@
+# Sebin Mathew — Portfolio
+
+> B.Tech Computer Science student at College of Engineering Chengannur. Builds full-stack apps, Chrome extensions and security tooling. Privacy-first, backend-leaning.
+
+## Who this person is
+
+- Name: Sebin Mathew
+- Location: Kottayam, Kerala, India (IST, UTC+5:30)
+- Education: B.Tech Computer Science & Engineering, College of Engineering Chengannur (class of 2028, CGPA 8.6)
+- Status: open to internships, freelance backend work and security-related collaborations
+- Email: Sebinmathew543@gmail.com (fastest way to reach him)
+- Focus areas: cybersecurity, backend systems, automation, privacy-first tooling
+
+## Links
+
+- GitHub: https://github.com/sebin-gg
+- LinkedIn: https://www.linkedin.com/in/sebin-gg
+- X (Twitter): https://x.com/M13568Sebin
+- Résumé (PDF): https://sebin-gg.vercel.app/resume.pdf
+
+## Site pages
+
+- Home (/): intro, about, experience, featured projects, skills, contact
+- Blog (/blog): notes and write-ups — coming soon, no posts published yet
+
+## Featured projects (all public on GitHub)
+
+- Aegis: Next.js 15 + React 19 cyber threat dashboard with local-AI analysis via Ollama — https://github.com/sebin-gg/Aegis
+- brevity-prompt: Chrome extension (MV3) that compresses LLM prompts in-browser by 40–65%, zero external dependencies, 25/25 tests — https://github.com/sebin-gg/brevity-prompt
+- Event Tracker: FOCES event platform — FastAPI + React + Tailwind, live at https://sebin-gg.github.io/Event-Tracker/ — https://github.com/sebin-gg/Event-Tracker
+- Kindred: volunteer community-impact platform — Express 5 + React 19 + MongoDB + JWT — https://github.com/sebin-gg/kindred
+- TortoiseLang (slowlang): satirical programming language punishing fast typing — won TinkerHub Useless Projects 2025 — https://github.com/sebin-gg/slowlang
+- career-bridge: local-AI résumé-to-job matcher that keeps data on-device — https://github.com/sebin-gg/career-bridge
+
+## Experience highlights
+
+- Project Coordinator, FOCES CEC (Apr 2026 – present)
+- Student Ambassador, CampusCrew (Dec 2025 – present)
+- Backend & AI Engineer, Project Aegis 10-hour hackathon (2025)
+- Participant, OWASP Kerala Bootcamp 2025 (vulnerability assessment, OSINT, phishing simulation, Nmap)
+
+## Preferences & facts
+
+- Privacy-first: no telemetry on this site, no phone number published, local AI preferred over cloud where possible.
+- Site built static-first on the T3 stack core (Next.js + TypeScript + Tailwind), image-free and optimized for 2G/3G networks.

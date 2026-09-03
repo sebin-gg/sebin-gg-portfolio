@@ -92,6 +92,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       suppressHydrationWarning
     >
       <head>
+        <link rel="llms.txt" href="/llms.txt" />
         <ThemeInit />
         <script
           type="application/ld+json"

@@ -19,6 +19,8 @@ export const profile = {
   /** Short line shown under the name in the hero. */
   tagline:
     "I build full-stack apps, Chrome extensions and security tooling. Backend-leaning, privacy-first by default.",
+  /** Scannable keyword chips under the tagline. */
+  focus: ["cybersecurity", "backend systems", "automation", "privacy-first"],
   /** One paragraph for the About section. */
   bio: [
     "I'm a B.Tech Computer Science student at College of Engineering Chengannur (CGPA 8.6). Most of what I build leans backend and security: APIs, automation, a Chrome extension that compresses prompts before they reach an LLM, and a cyber incident dashboard that runs local models instead of phoning home.",

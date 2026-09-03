@@ -36,6 +36,16 @@ export function Hero() {
               </span>
             </h1>
             <p className="text-ink-soft mt-5 max-w-xl text-lg leading-relaxed">{profile.tagline}</p>
+            <ul aria-label="Focus areas" className="mt-5 flex flex-wrap gap-2">
+              {profile.focus.map((area) => (
+                <li
+                  key={area}
+                  className="border-line bg-panel text-accent rounded-full border px-3 py-1 font-mono text-xs"
+                >
+                  {area}
+                </li>
+              ))}
+            </ul>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a
                 href="#projects"

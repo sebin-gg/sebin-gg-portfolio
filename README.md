@@ -10,14 +10,13 @@ bundle weight. The day the blog gets a real backend, they bolt on cleanly.
 
 ## Stack decisions
 
-| Choice                                        | Why                                                                                                                                                  |
-| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Static-first (no tRPC client)                 | Every KB counts on 2G/3G. tRPC + zod + superjson ≈ 15–25 kB gzip of JS with zero payoff when content is static. Server components render everything. |
-| No image files                                | Terminal/grid visuals are pure CSS gradients — nothing to download.                                                                                  |
-| Self-hosted variable fonts via `next/font`    | One small woff2 subset per family, `display: swap`, no third-party font CDN request.                                                                 |
-| Class-based dark mode with inline init script | Toggle + OS preference applied before first paint — no theme flash, and the page is correct even before hydration.                                   |
-| One tiny client island                        | Only `<ThemeToggle>` and `<MobileNav>` are client components (~2 kB). Everything else is a server component.                                         |
-| Typographic apostrophes                       | `&rsquo;` in copy, not ASCII `'` — reads human and keeps lint happy.                                                                                 |
+| Choice                                     | Why                                                                                                                                                  |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Static-first (no tRPC client)              | Every KB counts on 2G/3G. tRPC + zod + superjson ≈ 15–25 kB gzip of JS with zero payoff when content is static. Server components render everything. |
+| No image files                             | Terminal/grid visuals are pure CSS gradients — nothing to download.                                                                                  |
+| Self-hosted variable fonts via `next/font` | One small woff2 subset per family, `display: swap`, no third-party font CDN request.                                                                 |     | Class-based dark mode with inline init script | **Dark by default** (terminal brand), light is an explicit toggle — applied before first paint, no theme flash. |
+| One tiny client island                     | Only `<ThemeToggle>` and `<MobileNav>` are client components (~2 kB). Everything else is a server component.                                         |
+| Typographic apostrophes                    | `&rsquo;` in copy, not ASCII `'` — reads human and keeps lint happy.                                                                                 |
 
 ## Quickstart
 
@@ -108,3 +107,5 @@ Content lives in one file — `src/lib/site.ts`. Change copy/links there; compon
 - The phone number from the résumé is deliberately **not** published on the page (privacy-first,
   fitting the brand); it stays in the PDF.
 - The homepage is image-free by design, so there are no `next/image` optimizations to babysit.
+- Agent-friendly: the site ships an `llms.txt` (linked from `<head>`) so LLM agents can summarize it, plus sitemap/robots/JSON-LD Person schema.
+- Dark is the default theme; visitors can toggle to light (stored in localStorage, honored pre-hydration).

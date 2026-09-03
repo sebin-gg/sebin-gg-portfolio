@@ -17,11 +17,19 @@ export function Projects() {
       />
 
       <ul className="grid gap-5 sm:grid-cols-2">
-        {projects.map((project) => (
+        {projects.map((project, index) => (
           <li key={project.name}>
             <article className="group border-line bg-panel focus-within:border-accent hover:border-accent/60 flex h-full flex-col rounded-lg border p-6 shadow-sm transition-colors">
               <div className="flex items-start justify-between gap-3">
-                <h3 className="text-ink text-lg font-semibold">{project.name}</h3>
+                <div className="flex items-baseline gap-2">
+                  <span
+                    aria-hidden="true"
+                    className="text-ink-faint font-mono text-xs tabular-nums"
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="text-ink text-lg font-semibold">{project.name}</h3>
+                </div>
                 <a
                   href={project.href}
                   target="_blank"

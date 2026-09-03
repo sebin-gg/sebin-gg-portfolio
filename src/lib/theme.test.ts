@@ -3,7 +3,7 @@ import {
   THEME_DARK_CLASS,
   THEME_STORAGE_KEY,
   htmlHasDarkClass,
-  prefersDarkTheme,
+  resolveThemeIsDark,
   storedTheme,
   themeInitScriptSource,
 } from "@/lib/theme";
@@ -37,15 +37,17 @@ describe("storedTheme", () => {
   });
 });
 
-describe("prefersDarkTheme", () => {
-  it("respects the stored choice first", () => {
-    expect(prefersDarkTheme("dark", false)).toBe(true);
-    expect(prefersDarkTheme("light", true)).toBe(false);
+describe("resolveThemeIsDark", () => {
+  it("defaults to dark when nothing is stored", () => {
+    expect(resolveThemeIsDark(null)).toBe(true);
   });
 
-  it("falls back to the OS preference when nothing is stored", () => {
-    expect(prefersDarkTheme(null, true)).toBe(true);
-    expect(prefersDarkTheme(null, false)).toBe(false);
+  it("stays dark when the user stored dark", () => {
+    expect(resolveThemeIsDark("dark")).toBe(true);
+  });
+
+  it("only goes light when the user explicitly stored light", () => {
+    expect(resolveThemeIsDark("light")).toBe(false);
   });
 });
 
@@ -70,23 +72,25 @@ describe("themeInitScriptSource", () => {
     expect(source).toContain(THEME_DARK_CLASS);
   });
 
-  it("applies the dark class when storage says dark", () => {
-    localStorage.setItem(THEME_STORAGE_KEY, "dark");
-    vi.stubGlobal("matchMedia", () => ({ matches: false }));
+  it("applies dark by default when nothing is stored", () => {
     new Function(themeInitScriptSource())();
     expect(document.documentElement.classList.contains(THEME_DARK_CLASS)).toBe(true);
   });
 
-  it("does not apply dark when storage says light even if the OS prefers dark", () => {
+  it("applies dark when storage says dark", () => {
+    localStorage.setItem(THEME_STORAGE_KEY, "dark");
+    new Function(themeInitScriptSource())();
+    expect(document.documentElement.classList.contains(THEME_DARK_CLASS)).toBe(true);
+  });
+
+  it("skips dark only when the user stored light", () => {
     localStorage.setItem(THEME_STORAGE_KEY, "light");
-    vi.stubGlobal("matchMedia", () => ({ matches: true }));
     new Function(themeInitScriptSource())();
     expect(document.documentElement.classList.contains(THEME_DARK_CLASS)).toBe(false);
   });
 
-  it("survives blocked storage and a missing matchMedia", () => {
+  it("survives blocked storage", () => {
     vi.stubGlobal("localStorage", undefined);
-    vi.stubGlobal("matchMedia", undefined);
     expect(() => {
       new Function(themeInitScriptSource())();
     }).not.toThrow();

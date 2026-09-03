@@ -128,7 +128,11 @@ describe("SiteHeader", () => {
     render(<SiteHeader />);
     expect(screen.getByRole("navigation", { name: "Primary" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /switch to/i })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /résumé/i })).toHaveAttribute("href", "/resume.pdf");
+    const resumeLinks = screen.getAllByRole("link", { name: /résumé/i });
+    expect(resumeLinks.length).toBeGreaterThan(0);
+    for (const link of resumeLinks) {
+      expect(link).toHaveAttribute("href", "/resume.pdf");
+    }
   });
 });
 

@@ -28,8 +28,9 @@ comes from the résumé in `docs/` and the GitHub profile. Single page + a "blog
    UI = tiny isolated client component only. Self-host fonts via `next/font`, never a CDN link.
 2. **Content lives in `src/lib/site.ts`.** Copy, links, projects, experience — update data there,
    not inside components. Keep copy human-voiced (no AI tells), with typographic apostrophes.
-3. **Dark mode is class-based** (`.dark` on `<html>`). Logic lives in `src/lib/theme.ts`; the
-   inline no-FOUC script and the toggle must stay in sync with it.
+3. **Dark mode is class-based** (`.dark` on `<html>`) and **dark is the default** — light only
+   when the user explicitly stored `theme=light`. Logic lives in `src/lib/theme.ts`; the inline
+   no-FOUC script and the toggle must stay in sync with it.
 4. **Quality gates must stay green:** ESLint complexity cap ≤ 4 (`src/**`), Prettier, strict
    TypeScript, coverage ≥ 85 % lines on lib+components, Stryker break threshold 60 %,
    Lighthouse perf ≥ 85 on a median of 3 runs. New code ships with tests.
