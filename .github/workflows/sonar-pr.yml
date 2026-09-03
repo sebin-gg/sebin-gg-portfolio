@@ -1,12 +1,10 @@
 name: SonarCloud
 
-# Registered under a fresh filename (sonar-pr.yml): GitHub caches workflow
-# definitions by file path, and the retired sonar.yml still spawned zero-job
-# "push" runs (shown red) from its stale cached copy. A new path means pushes
-# to main can never match this workflow; it runs on PRs only.
+# Runs only on PRs. Declares no branch filter on pull_request and no push
+# trigger: GitHub was creating zero-job "push" runs (shown red) whenever the
+# workflow file matched a push to main via the branches filter.
 on:
   pull_request:
-    branches: [main]
     types: [opened, synchronize, reopened]
   workflow_dispatch:
 
