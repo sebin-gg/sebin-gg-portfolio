@@ -1,16 +1,18 @@
 name: SonarCloud
 
 on:
-  push:
-    branches: [main]
   pull_request:
+    branches: [main]
     types: [opened, synchronize, reopened]
+  workflow_dispatch:
 
 jobs:
   sonar:
     name: SonarCloud analysis
     runs-on: ubuntu-latest
-    if: env.SONAR_TOKEN != ''
+    # Dependabot runs have no secrets; exclude them and run only when the
+    # SONAR_TOKEN secret has been configured (see scripts/links.sh).
+    if: ${{ github.actor != 'dependabot[bot]' && env.SONAR_TOKEN != '' }}
     env:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
