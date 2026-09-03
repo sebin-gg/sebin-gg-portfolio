@@ -6,6 +6,11 @@ updates:
       interval: "weekly"
       day: "monday"
     versioning-strategy: increase-if-necessary
+    ignore:
+      # Renovate (also enabled) handles major bumps deliberately; Dependabot
+      # was opening unmergeable majors (TS 7, eslint 10 not yet supported).
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
     groups:
       nextjs:
         patterns: ["next", "eslint-config-next"]
