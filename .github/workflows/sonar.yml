@@ -1,0 +1,47 @@
+name: SonarCloud
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+jobs:
+  # GitHub evaluates workflow definitions from the pushed commit's base, so a
+  # push to main can still spawn a zero-job sonar run from an older cached
+  # definition. When that happens (no PR number, and no token on dependabot
+  # runs), exit cleanly instead of showing a red failure.
+  skip-on-push:
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 0
+
+  sonar:
+    name: SonarCloud analysis
+    needs: skip-on-push
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' && env.SONAR_TOKEN != '' }}
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Shallow clones hurt Sonar's blame/coverage linking.
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Unit tests with coverage (for Sonar)
+        run: pnpm test:unit
+
+      - name: SonarCloud scan
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
