@@ -48,22 +48,18 @@ echo "     Config already shipped in renovate.json."
 echo "     Prefer Dependabot instead? Then skip this and enable Dependabot"
 echo "     in GitHub → Settings → Code security → Dependabot (config shipped)."
 echo
-read -r -p "   Press Enter after installing Renovate (or skip)…" -n 1 -s && echo
-
-open_url "https://sonarcloud.io/projects/create"
-echo "  5) SonarCloud (free static analysis): create project for $REPO."
-echo "     IMPORTANT — match sonar-project.properties:"
+read -r -p "   Press Enter after installing Renovate (or skip)…" -n 1 -s && echoopen_url "https://github.com/apps/sonarcloud"
+echo "  5) SonarCloud (free static analysis) — install the GitHub App on $REPO."
+echo "     It analyzes every PR as a check (no workflow needed). Match"
+echo "     sonar-project.properties:"
 echo "       project key  : sebin-gg_portfolio"
 echo "       organization : sebin-gg"
-echo "     Then add the SONAR_TOKEN to:"
-echo "     https://github.com/$REPO/settings/secrets/actions"
 echo
-read -r -p "   Press Enter after SonarCloud + secret are set…" -n 1 -s && echo
-
+read -r -p "   Press Enter after installing the SonarCloud app…" -n 1 -s && echo
 echo
 echo "Done. When CI runs on your first push it will exercise:"
 echo "  • CodeRabbit comments on every PR"
-echo "  • SonarCloud gate (needs SONAR_TOKEN above)"
+echo "  • SonarCloud PR analysis (GitHub App, already installed)"
 echo "  • CodeQL + Dependabot/Renovate for long-term health"
 echo "  • Lighthouse budgets + Stryker mutation score on main"
 echo "  • Playwright e2e + Vitest coverage on every PR"

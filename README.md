@@ -38,7 +38,9 @@ node scripts/visual-check.mjs   # screenshots + horizontal-overflow check
 ```
 
 All run in CI: `.github/workflows/ci.yml` (lint/typecheck/format/unit/build/e2e),
-`mutation.yml`, `perf.yml`, `codeql.yml`, `sonar.yml`.
+`mutation.yml`, `perf.yml`, `codeql.yml`. SonarCloud analyzes pull requests through its
+GitHub App integration — no workflow file (a sonar.yml workflow previously produced phantom
+zero-job push runs on main, so it was removed).
 
 ## Testing
 
@@ -82,8 +84,8 @@ bash scripts/links.sh   # opens GitHub new-repo, Vercel, CodeRabbit, Renovate, S
 3. **CodeRabbit** — install the GitHub app on the repo (config: `.coderabbit.yaml`). Free.
 4. **Renovate or Dependabot** — pick one. Dependabot: enable in repo settings (config shipped in
    `.github/dependabot.yml`). Renovate: install the GitHub app (config: `renovate.json`). Free.
-5. **SonarCloud** — create a free project, set the key/org in `sonar-project.properties`, add the
-   `SONAR_TOKEN` repo secret. `sonar.yml` only runs once the secret exists.
+5. **SonarCloud** — create a free project, set the key/org in `sonar-project.properties`, install
+   the SonarCloud GitHub App on the repo. It analyzes every PR as a check — no workflow needed.
 6. **CodeRabbit / CodeQL** — CodeQL runs out of the box (free, GitHub-hosted).
 
 ## Project layout
