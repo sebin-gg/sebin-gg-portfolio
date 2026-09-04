@@ -34,7 +34,7 @@ export function Hero() {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_70%_0%,var(--glow),transparent_70%)]"
       />
-      <div className="relative mx-auto w-full max-w-5xl px-4 pt-8 pb-10 sm:px-6 sm:pt-14 sm:pb-14 lg:pt-16 lg:pb-16">
+      <div className="relative mx-auto w-full max-w-5xl px-4 pt-6 pb-6 sm:px-6 sm:pt-8 sm:pb-8 lg:pt-10 lg:pb-10">
         <div className="grid items-center gap-8 lg:grid-cols-[1.15fr_1fr] lg:gap-10 xl:gap-12">
           <div>
             <Eyebrow>Hello, I&rsquo;m a developer</Eyebrow>
@@ -51,7 +51,7 @@ export function Hero() {
               {profile.focus.map((area) => (
                 <li
                   key={area}
-                  className="border-line bg-panel text-ink-soft rounded-full border px-2.5 py-0.5 text-xs sm:px-3 sm:py-1 sm:text-sm"
+                  className="border-line/80 bg-panel/80 text-ink-soft hover:border-accent/40 hover:text-ink rounded-full border px-3 py-1 text-xs font-medium backdrop-blur-xs transition-colors sm:text-sm"
                 >
                   {area}
                 </li>
@@ -63,14 +63,14 @@ export function Hero() {
               <div className="flex items-center gap-2.5 sm:gap-3">
                 <a
                   href="#projects"
-                  className="bg-accent text-accent-ink hover:bg-accent-strong inline-flex items-center justify-center gap-1.5 rounded-md px-3.5 py-2 text-xs font-semibold whitespace-nowrap transition-colors sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
+                  className="bg-accent text-accent-ink hover:bg-accent-strong shadow-accent/20 inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-semibold whitespace-nowrap shadow-md transition-all hover:shadow-lg sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
                 >
                   View projects
                   <ArrowUpRightIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </a>
                 <a
                   href={resumeUrl}
-                  className="border-line bg-panel text-ink hover:border-accent hover:text-accent inline-flex items-center justify-center gap-1.5 rounded-md border px-3.5 py-2 text-xs font-semibold whitespace-nowrap transition-colors sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
+                  className="border-line/80 bg-panel/90 text-ink hover:border-accent hover:text-accent inline-flex items-center justify-center gap-1.5 rounded-lg border px-3.5 py-2 text-xs font-semibold whitespace-nowrap shadow-xs backdrop-blur-xs transition-all sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
                 >
                   <DownloadIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   Download résumé
@@ -84,7 +84,7 @@ export function Hero() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="GitHub profile"
-                  className="border-line bg-panel text-ink-soft hover:border-accent hover:text-accent flex h-9 w-9 items-center justify-center rounded-md border transition-colors sm:h-10 sm:w-10"
+                  className="border-line/80 bg-panel/90 text-ink-soft hover:border-accent hover:text-accent flex h-9 w-9 items-center justify-center rounded-lg border shadow-xs backdrop-blur-xs transition-all sm:h-10 sm:w-10"
                 >
                   <GithubIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                 </a>
@@ -93,7 +93,7 @@ export function Hero() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="LinkedIn profile"
-                  className="border-line bg-panel text-ink-soft hover:border-accent hover:text-accent flex h-9 w-9 items-center justify-center rounded-md border transition-colors sm:h-10 sm:w-10"
+                  className="border-line/80 bg-panel/90 text-ink-soft hover:border-accent hover:text-accent flex h-9 w-9 items-center justify-center rounded-lg border shadow-xs backdrop-blur-xs transition-all sm:h-10 sm:w-10"
                 >
                   <LinkedinIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                 </a>
@@ -102,7 +102,7 @@ export function Hero() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="X profile"
-                  className="border-line bg-panel text-ink-soft hover:border-accent hover:text-accent flex h-9 w-9 items-center justify-center rounded-md border transition-colors sm:h-10 sm:w-10"
+                  className="border-line/80 bg-panel/90 text-ink-soft hover:border-accent hover:text-accent flex h-9 w-9 items-center justify-center rounded-lg border shadow-xs backdrop-blur-xs transition-all sm:h-10 sm:w-10"
                 >
                   <XIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </a>
@@ -112,7 +112,7 @@ export function Hero() {
 
           <aside
             aria-label="Profile highlights"
-            className="border-line bg-panel relative overflow-hidden rounded-2xl border p-5 shadow-sm sm:p-6"
+            className="border-line/80 bg-panel/80 relative overflow-hidden rounded-2xl border p-5 shadow-xl shadow-black/5 backdrop-blur-md sm:p-6"
           >
             <div
               aria-hidden="true"
@@ -120,11 +120,11 @@ export function Hero() {
             />
             <div className="relative">
               <div className="flex items-center gap-3.5">
-                <span className="bg-accent text-accent-ink flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-base font-bold sm:h-12 sm:w-12 sm:text-lg">
+                <span className="from-accent to-accent-strong text-accent-ink shadow-accent/25 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br text-base font-bold shadow-md sm:h-12 sm:w-12 sm:text-lg">
                   {monogram(profile.name)}
                 </span>
                 <div>
-                  <p className="text-ink text-sm font-medium">{profile.name}</p>
+                  <p className="text-ink text-sm font-semibold">{profile.name}</p>
                   <p className="text-ink-faint text-sm">
                     {profile.collegeShort} · class of {profile.classOf}
                   </p>
@@ -137,7 +137,7 @@ export function Hero() {
                     <dt className="text-ink-faint">{fact.label}</dt>
                     <dd className="text-ink text-right font-medium">
                       {fact.mailto ? (
-                        <a href={links.email.href} className="hover:text-accent">
+                        <a href={links.email.href} className="hover:text-accent transition-colors">
                           {fact.value}
                         </a>
                       ) : (
@@ -151,14 +151,16 @@ export function Hero() {
           </aside>
         </div>
 
-        <dl className="border-line bg-line mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-lg border sm:mt-10 sm:grid-cols-4 lg:mt-12">
+        <dl className="border-line/80 bg-line/80 mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-xl border shadow-sm backdrop-blur-xs sm:mt-10 sm:grid-cols-4 lg:mt-12">
           {stats.map((stat) => (
             <div
               key={stat.label}
-              className="bg-panel flex flex-col-reverse px-4 py-3 sm:px-5 sm:py-3.5"
+              className="bg-panel/90 flex flex-col-reverse px-4 py-3.5 transition-colors sm:px-5 sm:py-4"
             >
               <dt className="text-ink-faint text-xs">{stat.label}</dt>
-              <dd className="text-accent text-xl font-bold sm:text-2xl">{stat.value}</dd>
+              <dd className="text-accent text-xl font-bold tracking-tight sm:text-2xl">
+                {stat.value}
+              </dd>
             </div>
           ))}
         </dl>

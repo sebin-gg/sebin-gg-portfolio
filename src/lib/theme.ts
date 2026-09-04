@@ -14,8 +14,9 @@ export function storedTheme(storage: Pick<Storage, "getItem">): Theme | null {
 }
 
 /**
- * The site is dark by default — the brand is a terminal. Light is an opt-out
- * the user stores explicitly; the OS preference does not override either.
+ * The site is dark by default with a modern, executive aesthetic.
+ * Light is an opt-out the user stores explicitly; the OS preference
+ * does not override either.
  */
 export function resolveThemeIsDark(stored: Theme | null): boolean {
   return stored !== "light";

@@ -18,13 +18,13 @@ export const profile = {
   classOf: 2028,
   /** Short line shown under the name in the hero. */
   tagline:
-    "I build full-stack apps, Chrome extensions and security tooling. Backend-leaning, privacy-first by default.",
+    "Building full-stack web applications, browser extensions, and local security tooling. Backend-leaning, privacy by default.",
   /** Scannable keyword chips under the tagline. */
   focus: ["cybersecurity", "backend systems", "automation", "privacy-first"],
   /** One paragraph for the About section. */
   bio: [
-    "I'm a B.Tech Computer Science student at College of Engineering Chengannur (CGPA 8.6). Most of what I build leans backend and security: APIs, automation, a Chrome extension that compresses prompts before they reach an LLM, and a cyber incident dashboard that runs local models instead of phoning home.",
-    "My defaults are privacy and verification: no telemetry, modular design, cryptographic checks where they matter. Outside the editor I coordinate projects for FOCES CEC and run security drills — phishing simulations, Nmap sweeps, TryHackMe rooms.",
+    "I’m a Computer Science student at College of Engineering Chengannur (CGPA 8.6). I build backends, Chrome extensions, and security tooling—from browser-side prompt compression to an edge incident response dashboard powered by local Ollama models.",
+    "I design for privacy by default: zero telemetry, modular architectures, and verified inputs. Outside of coding, I coordinate technical projects for FOCES CEC and run defensive drills—phishing simulations, network mapping with Nmap, and TryHackMe labs.",
   ],
 } as const;
 
@@ -61,8 +61,8 @@ export const timeline: TimelineItem[] = [
     period: "Apr 2026 – present",
     kind: "work",
     summary: [
-      "Coordinate technical projects and community initiatives for the 2026–27 executive committee.",
-      "Plan and run club activities alongside the committee; keep student engagement high and operations smooth.",
+      "Coordinate engineering projects and technical workshops for the student computer science association.",
+      "Organize hackathons and community build sessions across campus.",
     ],
   },
   {
@@ -71,7 +71,7 @@ export const timeline: TimelineItem[] = [
     period: "Dec 2025 – present",
     kind: "work",
     summary: [
-      "Represent the campus community and help students discover programs, events and learning tracks.",
+      "Connect engineering peers with open-source roadmaps, hackathons, and technical bootcamps.",
     ],
   },
   {
@@ -80,8 +80,8 @@ export const timeline: TimelineItem[] = [
     period: "2025",
     kind: "program",
     summary: [
-      "Built a hybrid-edge AI cyber incident responder with a small team in a 10-hour sprint.",
-      "Wired local AI models to analyse simulated threats and propose responses — no cloud dependency.",
+      "Engineered an on-device incident response dashboard with a three-person team during a 10-hour hackathon.",
+      "Integrated local Ollama LLMs to classify simulated attacks and output actionable firewall rules without cloud APIs.",
     ],
   },
   {
@@ -90,8 +90,8 @@ export const timeline: TimelineItem[] = [
     period: "2025",
     kind: "program",
     summary: [
-      "Completed vulnerability assessments, OSINT with Google Dorking and TryHackMe challenges.",
-      "Ran a Gophish simulated phishing campaign and full Nmap scans end to end.",
+      "Conducted web vulnerability assessments, OSINT recon, and active network penetration labs.",
+      "Deployed controlled phishing simulations with Gophish and mapped network perimeters with Nmap.",
     ],
   },
 ] as const;
@@ -197,7 +197,7 @@ export const navItems = [
 export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://sebin-gg.vercel.app";
 
 export const siteMeta = {
-  title: "Sebin Mathew — full-stack & security-minded builder",
+  title: "Sebin Mathew — full-stack developer & security tools",
   description:
-    "B.Tech Computer Science student at College of Engineering Chengannur. Builds full-stack apps, Chrome extensions and security tooling. Privacy-first, backend-leaning.",
+    "Computer Science student at College of Engineering Chengannur. Building full-stack web applications, Chrome extensions, and local security tooling.",
 } as const;

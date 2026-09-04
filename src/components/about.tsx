@@ -14,15 +14,20 @@ export function About() {
     <section
       id="about"
       aria-labelledby="about-title"
-      className="mx-auto w-full max-w-5xl px-4 py-14 sm:px-6 sm:py-16"
+      className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-8"
     >
-      <Eyebrow>About</Eyebrow>
-      <h2 id="about-title" className="text-ink text-2xl font-bold tracking-tight sm:text-3xl">
+      <div>
+        <Eyebrow>About</Eyebrow>
+      </div>
+      <h2
+        id="about-title"
+        className="text-ink mt-1 text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl"
+      >
         Who I am
       </h2>
 
       <div className="mt-8 grid gap-10 lg:grid-cols-[1.4fr_1fr]">
-        <div className="text-ink-soft space-y-5 leading-relaxed">
+        <div className="text-ink-soft space-y-5 text-base leading-relaxed sm:text-lg">
           {profile.bio.map((paragraph) => (
             <p key={paragraph.slice(0, 24)}>{paragraph}</p>
           ))}
@@ -35,9 +40,9 @@ export function About() {
 
         <aside
           aria-label="Quick facts"
-          className="border-line bg-panel h-fit rounded-lg border p-5"
+          className="border-line/80 bg-panel/80 h-fit rounded-xl border p-5 shadow-lg shadow-black/5 backdrop-blur-xs sm:p-6"
         >
-          <h3 className="text-ink-soft mb-4 text-sm font-semibold tracking-wide">Quick facts</h3>
+          <h3 className="text-ink mb-4 text-sm font-semibold tracking-wide">Quick facts</h3>
           <dl className="space-y-3">
             {facts.map((fact) => (
               <div key={fact.label} className="flex items-baseline justify-between gap-4">
@@ -45,7 +50,7 @@ export function About() {
                 <dd
                   className={
                     fact.accent
-                      ? "text-accent text-sm font-semibold"
+                      ? "border-accent/20 bg-accent-soft text-accent inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold"
                       : "text-ink text-sm font-medium"
                   }
                 >

@@ -42,7 +42,7 @@ export function ThemeToggle() {
       onClick={toggle}
       aria-label={label}
       title={label}
-      className="border-line bg-panel text-ink-soft hover:border-line-strong hover:text-accent flex h-10 w-10 items-center justify-center rounded-md border transition-colors"
+      className="border-line/80 bg-panel/90 text-ink-soft hover:border-accent hover:text-accent flex h-10 w-10 items-center justify-center rounded-lg border shadow-xs backdrop-blur-xs transition-all"
     >
       {dark ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
     </button>

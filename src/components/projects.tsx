@@ -7,24 +7,24 @@ export function Projects() {
     <section
       id="projects"
       aria-labelledby="projects-title"
-      className="mx-auto w-full max-w-5xl px-4 py-14 sm:px-6 sm:py-16"
+      className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-8"
     >
       <SectionHeading
         id="projects-title"
         kicker="projects"
-        title="Things I've built"
-        lede="Selected work from GitHub — repos are public, so the code speaks for itself."
+        title="Things I’ve built"
+        lede="Open-source repositories with full architecture, tests, and live demos."
       />
 
-      <ul className="grid gap-5 sm:grid-cols-2">
+      <ul className="grid gap-6 sm:grid-cols-2">
         {projects.map((project, index) => (
           <li key={project.name}>
-            <article className="group border-line bg-panel focus-within:border-accent hover:border-accent/60 flex h-full flex-col rounded-lg border p-6 shadow-sm transition-colors">
+            <article className="group border-line/80 bg-panel/90 focus-within:border-accent hover:border-accent/60 hover:shadow-accent/5 flex h-full flex-col rounded-xl border p-6 shadow-sm backdrop-blur-xs transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
               <div className="flex items-start justify-between gap-3">
-                <div className="flex items-baseline gap-2">
+                <div className="flex items-baseline gap-2.5">
                   <span
                     aria-hidden="true"
-                    className="text-ink-faint font-mono text-xs tabular-nums"
+                    className="text-ink-faint text-xs font-semibold tabular-nums"
                   >
                     {String(index + 1).padStart(2, "0")}
                   </span>
@@ -40,9 +40,9 @@ export function Projects() {
                   <ExternalLinkIcon className="h-4 w-4" />
                 </a>
               </div>
-              <p className="text-accent mt-0.5 text-sm font-medium">{project.tagline}</p>
+              <p className="text-accent mt-1 text-sm font-medium">{project.tagline}</p>
               {project.highlight ? (
-                <p className="bg-accent-soft text-accent mt-2 inline-flex w-fit rounded-full px-2.5 py-0.5 text-xs font-semibold">
+                <p className="border-accent/20 bg-accent-soft text-accent mt-2.5 inline-flex w-fit rounded-full border px-2.5 py-0.5 text-xs font-semibold">
                   {project.highlight}
                 </p>
               ) : null}
@@ -54,7 +54,7 @@ export function Projects() {
                   {project.stack.map((tech) => (
                     <li
                       key={tech}
-                      className="border-line bg-panel-2 text-ink-soft rounded border px-2 py-0.5 font-mono text-[11px]"
+                      className="border-line/80 bg-panel-2/90 text-ink-soft hover:border-accent/40 hover:text-ink rounded-md border px-2.5 py-1 text-xs font-medium transition-colors"
                     >
                       {tech}
                     </li>
