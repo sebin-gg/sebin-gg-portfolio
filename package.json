@@ -19,6 +19,7 @@
     "crap:gate": "node scripts/crap-gate.mjs",
     "perf:audit": "lhci autorun",
     "visual:check": "node scripts/visual-check.mjs",
+    "check:thorium": "node scripts/thorium-check.mjs",
     "check:all": "bash scripts/check-all.sh",
     "prepare": "husky"
   },
@@ -47,6 +48,7 @@
     "lint-staged": "^17.4.1",
     "prettier": "^3.9.6",
     "prettier-plugin-tailwindcss": "^0.8.1",
+    "puppeteer-core": "^25.9.0",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.1.11"

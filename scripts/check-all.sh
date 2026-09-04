@@ -38,5 +38,10 @@ pnpm build || fail "pnpm build"
 step "E2E tests (Playwright)"
 pnpm test:e2e || fail "pnpm test:e2e"
 
+if command -v thorium-browser >/dev/null 2>&1 || [ -x /usr/bin/thorium-browser ]; then
+  step "Thorium browser check (Puppeteer)"
+  pnpm check:thorium || fail "pnpm check:thorium"
+fi
+
 echo
 echo "✔ All checks passed."
