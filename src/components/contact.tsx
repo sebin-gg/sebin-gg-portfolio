@@ -9,7 +9,7 @@ export function Contact() {
       aria-labelledby="contact-title"
       className="border-line/80 bg-panel/40 border-t backdrop-blur-xs"
     >
-      <div className="mx-auto w-full max-w-5xl px-4 py-6 text-center sm:px-6 sm:py-8">
+      <div className="mx-auto w-full max-w-7xl px-4 py-6 text-center sm:px-6 sm:py-8 lg:px-8 2xl:max-w-[90rem]">
         <div className="flex flex-col items-center">
           <Eyebrow>Contact</Eyebrow>
         </div>

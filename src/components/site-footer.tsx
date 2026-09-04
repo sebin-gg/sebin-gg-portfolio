@@ -6,7 +6,7 @@ export function SiteFooter() {
   const year = new Date().getFullYear();
   return (
     <footer className="border-line border-t">
-      <div className="text-ink-soft mx-auto flex w-full max-w-5xl flex-col items-center justify-between gap-4 px-4 py-8 text-sm sm:flex-row sm:px-6">
+      <div className="text-ink-soft mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-4 px-4 py-8 text-sm sm:flex-row sm:px-6 lg:px-8 2xl:max-w-[90rem]">
         <p className="flex flex-wrap items-center gap-x-2 gap-y-1">
           <span>
             © {year} {profile.name}

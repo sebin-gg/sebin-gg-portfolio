@@ -7,7 +7,7 @@ export function Projects() {
     <section
       id="projects"
       aria-labelledby="projects-title"
-      className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-8"
+      className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 2xl:max-w-[90rem]"
     >
       <SectionHeading
         id="projects-title"
@@ -16,7 +16,7 @@ export function Projects() {
         lede="Open-source repositories with full architecture, tests, and live demos."
       />
 
-      <ul className="grid gap-6 sm:grid-cols-2">
+      <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {projects.map((project, index) => (
           <li key={project.name}>
             <article className="group border-line/80 bg-panel/90 focus-within:border-accent hover:border-accent/60 hover:shadow-accent/5 flex h-full flex-col rounded-xl border p-6 shadow-sm backdrop-blur-xs transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">

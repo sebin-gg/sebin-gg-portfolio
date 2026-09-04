@@ -11,7 +11,6 @@ import {
 const stats = [
   { value: `${profile.cgpa}`, label: "B.Tech CGPA" },
   { value: "6+", label: "projects shipped" },
-  { value: "4", label: "hackathons & security programs" },
   { value: "'28", label: "graduating class" },
 ];
 
@@ -34,8 +33,8 @@ export function Hero() {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_70%_0%,var(--glow),transparent_70%)]"
       />
-      <div className="relative mx-auto w-full max-w-5xl px-4 pt-6 pb-6 sm:px-6 sm:pt-8 sm:pb-8 lg:pt-10 lg:pb-10">
-        <div className="grid items-center gap-8 lg:grid-cols-[1.15fr_1fr] lg:gap-10 xl:gap-12">
+      <div className="relative mx-auto w-full max-w-7xl px-4 pt-6 pb-6 sm:px-6 sm:pt-8 sm:pb-8 lg:px-8 lg:pt-10 lg:pb-10 2xl:max-w-[90rem]">
+        <div className="grid items-center gap-8 lg:grid-cols-[1.25fr_1fr] lg:gap-12 xl:gap-16">
           <div>
             <Eyebrow>Hello, I&rsquo;m a developer</Eyebrow>
             <h1 className="text-ink text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
@@ -151,7 +150,7 @@ export function Hero() {
           </aside>
         </div>
 
-        <dl className="border-line/80 bg-line/80 mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-xl border shadow-sm backdrop-blur-xs sm:mt-10 sm:grid-cols-4 lg:mt-12">
+        <dl className="border-line/80 bg-line/80 mt-8 grid grid-cols-3 gap-px overflow-hidden rounded-xl border shadow-sm backdrop-blur-xs sm:mt-10 lg:mt-12">
           {stats.map((stat) => (
             <div
               key={stat.label}

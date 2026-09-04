@@ -32,7 +32,7 @@ export function SiteHeader() {
 
   return (
     <header className="border-line/70 bg-canvas/80 sticky top-0 z-40 border-b backdrop-blur-lg">
-      <div className="mx-auto flex h-14 w-full max-w-5xl items-center justify-between gap-4 px-4 sm:px-6">
+      <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8 2xl:max-w-[90rem]">
         <a
           href={logoHref}
           className="text-ink hover:text-accent rounded-lg text-[15px] font-bold tracking-tight transition-colors"

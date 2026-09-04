@@ -6,7 +6,7 @@ export function BlogCta() {
     <section
       id="blog"
       aria-labelledby="blog-title"
-      className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-8"
+      className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 2xl:max-w-[90rem]"
     >
       <SectionHeading
         id="blog-title"

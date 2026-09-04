@@ -13,7 +13,7 @@ export function About() {
     <section
       id="about"
       aria-labelledby="about-title"
-      className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-8"
+      className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 2xl:max-w-[90rem]"
     >
       <div>
         <Eyebrow>About</Eyebrow>
@@ -25,7 +25,7 @@ export function About() {
         Who I am
       </h2>
 
-      <div className="mt-8 grid gap-10 lg:grid-cols-[1.4fr_1fr]">
+      <div className="mt-8 grid gap-10 lg:grid-cols-[1.4fr_1fr] xl:grid-cols-[1.6fr_1fr]">
         <div className="text-ink-soft space-y-4 text-base leading-relaxed sm:text-lg">
           {profile.bio.map((paragraph) => (
             <p key={paragraph.slice(0, 24)}>{paragraph}</p>
