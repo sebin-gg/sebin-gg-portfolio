@@ -2,10 +2,13 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   THEME_DARK_CLASS,
   THEME_STORAGE_KEY,
+  getThemeSnapshot,
   htmlHasDarkClass,
   resolveThemeIsDark,
   storedTheme,
+  subscribeTheme,
   themeInitScriptSource,
+  toggleTheme,
 } from "@/lib/theme";
 
 function makeStorage(initial: Record<string, string> = {}) {
@@ -94,5 +97,44 @@ describe("themeInitScriptSource", () => {
     expect(() => {
       new Function(themeInitScriptSource())();
     }).not.toThrow();
+  });
+});
+
+describe("theme lifecycle & store", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    document.documentElement.classList.remove(THEME_DARK_CLASS);
+    localStorage.clear();
+  });
+
+  it("reads snapshot from document", () => {
+    document.documentElement.classList.remove(THEME_DARK_CLASS);
+    expect(getThemeSnapshot()).toBe(false);
+
+    document.documentElement.classList.add(THEME_DARK_CLASS);
+    expect(getThemeSnapshot()).toBe(true);
+  });
+
+  it("toggles theme and notifies subscribers", () => {
+    document.documentElement.classList.add(THEME_DARK_CLASS);
+    const subscriber = vi.fn();
+    const unsubscribe = subscribeTheme(subscriber);
+
+    const next = toggleTheme();
+    expect(next).toBe(false);
+    expect(document.documentElement.classList.contains(THEME_DARK_CLASS)).toBe(false);
+    expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe("light");
+    expect(subscriber).toHaveBeenCalled();
+
+    unsubscribe();
+  });
+
+  it("toggle survives blocked localStorage", () => {
+    vi.stubGlobal("localStorage", {
+      setItem: () => {
+        throw new Error("blocked");
+      },
+    });
+    expect(() => toggleTheme()).not.toThrow();
   });
 });

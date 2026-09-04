@@ -18,6 +18,7 @@
     "test:all": "pnpm lint && pnpm typecheck && pnpm format:check && pnpm test:unit && pnpm test:e2e",
     "crap:gate": "node scripts/crap-gate.mjs",
     "perf:audit": "lhci autorun",
+    "test:perf": "node scripts/perf-matrix-test.mjs",
     "visual:check": "node scripts/visual-check.mjs",
     "check:thorium": "node scripts/thorium-check.mjs",
     "check:all": "bash scripts/check-all.sh",

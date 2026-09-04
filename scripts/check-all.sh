@@ -41,6 +41,9 @@ pnpm test:e2e || fail "pnpm test:e2e"
 if command -v thorium-browser >/dev/null 2>&1 || [ -x /usr/bin/thorium-browser ]; then
   step "Thorium browser check (Puppeteer)"
   pnpm check:thorium || fail "pnpm check:thorium"
+
+  step "Core Web Vitals Matrix (4G/3G/2G/Slow 2G + 20x CPU throttling)"
+  pnpm test:perf || fail "pnpm test:perf"
 fi
 
 echo

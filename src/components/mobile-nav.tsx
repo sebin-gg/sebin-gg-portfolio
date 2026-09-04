@@ -2,43 +2,24 @@
 
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { navItems, resumeUrl } from "@/lib/site";
+import { resumeUrl } from "@/lib/site";
+import { resolveNavigation, type ResolvedNavItem } from "@/lib/navigation";
 import { CloseIcon, DownloadIcon, MenuIcon } from "@/components/icons";
 
-function getNavHref(itemHref: string, isHome: boolean): string {
-  if (isHome || !itemHref.startsWith("#")) return itemHref;
-  return `/${itemHref}`;
-}
-
-function getNavItemProps(itemHref: string, isHome: boolean, pathname: string) {
-  const isHash = itemHref.startsWith("#");
-  return {
-    href: getNavHref(itemHref, isHome),
-    isCurrent: !isHash && pathname === itemHref,
-  };
-}
-
-function NavLink(props: {
-  itemHref: string;
-  label: string;
-  isHome: boolean;
-  pathname: string;
-  onClick: () => void;
-}) {
-  const { href, isCurrent } = getNavItemProps(props.itemHref, props.isHome, props.pathname);
+function NavLink({ item, onClick }: { item: ResolvedNavItem; onClick: () => void }) {
   return (
     <li>
       <a
-        href={href}
-        onClick={props.onClick}
-        aria-current={isCurrent ? "page" : undefined}
+        href={item.href}
+        onClick={onClick}
+        aria-current={item.isCurrent ? "page" : undefined}
         className={`block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-          isCurrent
+          item.isCurrent
             ? "text-accent bg-panel-2/70 font-semibold"
             : "text-ink hover:bg-panel-2 hover:text-accent"
         }`}
       >
-        {props.label}
+        {item.label}
       </a>
     </li>
   );
@@ -52,7 +33,7 @@ function ToggleIcon({ open }: { open: boolean }) {
 export function MobileNav() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const isHome = !pathname || pathname === "/";
+  const navList = resolveNavigation(pathname);
   const label = open ? "Close menu" : "Open menu";
 
   function close() {
@@ -79,15 +60,8 @@ export function MobileNav() {
           className="border-line/80 bg-panel/95 absolute inset-x-0 top-full z-50 mt-2 max-h-[calc(100dvh-5rem)] overflow-y-auto rounded-xl border p-3 shadow-xl backdrop-blur-md"
         >
           <ul className="flex flex-col">
-            {navItems.map((item) => (
-              <NavLink
-                key={item.href}
-                itemHref={item.href}
-                label={item.label}
-                isHome={isHome}
-                pathname={pathname}
-                onClick={close}
-              />
+            {navList.map((item) => (
+              <NavLink key={item.rawHref} item={item} onClick={close} />
             ))}
 
             <li>

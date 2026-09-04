@@ -2,44 +2,20 @@
 
 import { useSyncExternalStore } from "react";
 import { MoonIcon, SunIcon } from "@/components/icons";
-import { THEME_DARK_CLASS, THEME_STORAGE_KEY, htmlHasDarkClass } from "@/lib/theme";
-
-const THEME_EVENT = "themechange";
-
-function subscribe(onStoreChange: () => void): () => void {
-  window.addEventListener(THEME_EVENT, onStoreChange);
-  return () => window.removeEventListener(THEME_EVENT, onStoreChange);
-}
-
-function getSnapshot(): boolean {
-  return htmlHasDarkClass(document);
-}
+import { getThemeSnapshot, subscribeTheme, toggleTheme } from "@/lib/theme";
 
 function getServerSnapshot(): boolean {
   return false;
 }
 
 export function ThemeToggle() {
-  const dark = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-
-  function toggle() {
-    const next = !dark;
-    document.documentElement.classList.toggle(THEME_DARK_CLASS, next);
-    try {
-      localStorage.setItem(THEME_STORAGE_KEY, next ? "dark" : "light");
-    } catch {
-      // Storage can be unavailable (private mode); the class still flips.
-    }
-    // Notify subscribers so useSyncExternalStore re-reads the class.
-    window.dispatchEvent(new Event(THEME_EVENT));
-  }
-
+  const dark = useSyncExternalStore(subscribeTheme, getThemeSnapshot, getServerSnapshot);
   const label = dark ? "Switch to light mode" : "Switch to dark mode";
 
   return (
     <button
       type="button"
-      onClick={toggle}
+      onClick={() => toggleTheme()}
       aria-label={label}
       title={label}
       className="border-line/80 bg-panel/90 text-ink-soft hover:border-accent hover:text-accent flex h-10 w-10 items-center justify-center rounded-lg border shadow-xs backdrop-blur-xs transition-all"
