@@ -11,7 +11,7 @@ import {
 const stats = [
   { value: `${profile.cgpa}`, label: "B.Tech CGPA" },
   { value: "6+", label: "projects shipped" },
-  { value: "3", label: "hackathons & security programs" },
+  { value: "4", label: "hackathons & security programs" },
   { value: "'28", label: "graduating class" },
 ];
 

@@ -63,8 +63,8 @@ describe("Experience", () => {
     for (const item of timeline) {
       expect(screen.getByText(item.title)).toBeInTheDocument();
       expect(
-        screen.getByText(new RegExp(item.org.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))),
-      ).toBeInTheDocument();
+        screen.getAllByText(new RegExp(item.org.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))).length,
+      ).toBeGreaterThanOrEqual(1);
     }
   });
 });

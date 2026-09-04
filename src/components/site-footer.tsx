@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { links, profile } from "@/lib/site";
 import { GithubIcon, LinkedinIcon, MailIcon, XIcon } from "@/components/icons";
 
@@ -6,9 +7,18 @@ export function SiteFooter() {
   return (
     <footer className="border-line border-t">
       <div className="text-ink-soft mx-auto flex w-full max-w-5xl flex-col items-center justify-between gap-4 px-4 py-8 text-sm sm:flex-row sm:px-6">
-        <p>
-          © {year} {profile.name}. Built with the T3 stack core — Next.js, TypeScript, Tailwind.
+        <p className="flex flex-wrap items-center gap-x-2 gap-y-1">
+          <span>
+            © {year} {profile.name}
+          </span>
+          <span aria-hidden="true">·</span>
+          <Link href="/accessibility" className="hover:text-accent transition-colors">
+            Accessibility
+          </Link>
+          <span aria-hidden="true">·</span>
+          <span>Next.js, TypeScript, Tailwind</span>
         </p>
+
         <div className="flex items-center gap-3">
           <a
             href={links.github.href}

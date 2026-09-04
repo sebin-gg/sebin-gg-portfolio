@@ -94,6 +94,16 @@ export const timeline: TimelineItem[] = [
       "Deployed controlled phishing simulations with Gophish and mapped network perimeters with Nmap.",
     ],
   },
+  {
+    title: "Hackathon Winner",
+    org: "TinkerHub Useless Projects 2.0",
+    period: "Aug 2025",
+    kind: "program",
+    summary: [
+      "Built TortoiseLang (slowlang) — a satirical programming language and IDE enforcing typing cadence with real-time velocity monitoring and ASCII feedback.",
+      "Won first place at TinkerHub Useless Projects 2.0 for creative software engineering and humorous event-driven architecture.",
+    ],
+  },
 ] as const;
 
 export type Project = {
@@ -146,11 +156,12 @@ export const projects: Project[] = [
     name: "TortoiseLang (slowlang)",
     tagline: "A language that punishes fast typing",
     description:
-      "Satirical programming language and IDE that throttles execution when you type too fast — then triggers ASCII turtle rage and poetic haiku feedback. Won the TinkerHub Useless Projects competition.",
+      "Satirical programming language and IDE that throttles execution when you type too fast — then triggers ASCII turtle rage and poetic haiku feedback. Built for and won TinkerHub Useless Projects 2.0.",
     stack: ["Python", "Tkinter", "pytest"],
     href: "https://github.com/sebin-gg/slowlang",
-    highlight: "won TinkerHub 2025",
+    highlight: "Winner · TinkerHub 2.0",
   },
+
   {
     name: "career-bridge",
     tagline: "Local AI résumé matcher",
@@ -177,11 +188,29 @@ export const skills: { group: string; items: string[] }[] = [
   },
   {
     group: "Security & systems",
-    items: ["OWASP", "Nmap", "OSINT", "Linux admin", "Network engineering", "OpenCV"],
+    items: [
+      "OWASP",
+      "Nmap",
+      "Gophish",
+      "TryHackMe",
+      "OSINT",
+      "Linux admin",
+      "Network engineering",
+      "OpenCV",
+    ],
   },
   {
     group: "Data & tooling",
-    items: ["MongoDB", "SQLite", "Git & GitHub", "Chrome MV3", "pytest"],
+    items: [
+      "PostgreSQL",
+      "MongoDB",
+      "SQLite",
+      "Git & GitHub",
+      "GitHub Actions",
+      "Podman",
+      "pytest",
+      "Chrome MV3",
+    ],
   },
 ] as const;
 
