@@ -13,7 +13,7 @@ export function Experience() {
           id="experience-title"
           kicker="experience"
           title="Where I’ve worked & trained"
-          lede="Campus engineering leadership, hackathons, and hands-on security programs."
+          lede="Campus engineering leadership, hackathons, and security programs."
         />
 
         <ol className="border-line/80 relative space-y-7 border-l pl-6 sm:pl-8">
