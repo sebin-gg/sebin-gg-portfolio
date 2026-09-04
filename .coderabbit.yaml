@@ -1,15 +1,22 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
 language: "en-US"
 early_access: false
+tone_instructions: "You are an uncompromising senior principal engineer. Maintain strict standards for code quality, zero runtime bloat, accessibility, strict type safety, and high performance. Flag anti-patterns, edge cases, accessibility flaws, or unnecessary dependencies directly with concrete corrections. No fluff or sugarcoating."
 reviews:
-  profile: "chill"
-  request_changes_workflow: false
+  profile: "assertive"
+  request_changes_workflow: true
   high_level_summary: true
   poem: false
   review_status: true
-  collapse_walkthrough: true
+  collapse_walkthrough: false
   auto_review:
     enabled: true
     drafts: false
     base: main
+  tools:
+    eslint:
+      enabled: true
+    typescript:
+      enabled: true
 chat:
   auto_reply: true

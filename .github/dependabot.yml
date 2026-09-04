@@ -3,8 +3,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: "daily"
     versioning-strategy: increase-if-necessary
     ignore:
       # Renovate (also enabled) handles major bumps deliberately; Dependabot
@@ -39,8 +38,7 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: "daily"
     groups:
       actions:
         patterns: ["*"]

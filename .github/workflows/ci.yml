@@ -38,6 +38,9 @@ jobs:
       - name: Unit tests with coverage
         run: pnpm test:unit
 
+      - name: CRAP complexity gate
+        run: pnpm crap:gate
+
       - name: Upload coverage report
         uses: actions/upload-artifact@v7
         with:

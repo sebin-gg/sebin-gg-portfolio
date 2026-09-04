@@ -26,10 +26,10 @@
     ".claude"
   ],
   "reporters": ["clear-text", "html", "progress"],
-  "htmlReporter": { "baseDir": "stryker-report" },
-  "concurrency": 2,
+  "htmlReporter": { "fileName": "stryker-report/index.html" },
+  "concurrency": 4,
   "timeoutMS": 30000,
   "vitest": { "configFile": "vitest.config.ts" },
-  "thresholds": { "high": 85, "low": 70, "break": 60 },
+  "thresholds": { "high": 85, "low": 70, "break": 65 },
   "cleanTempDir": true
 }

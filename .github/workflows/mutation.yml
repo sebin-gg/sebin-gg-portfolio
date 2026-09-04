@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
     paths: ["src/**", "stryker.config.json", "vitest.config.ts"]
+  pull_request:
+    paths: ["src/**", "stryker.config.json", "vitest.config.ts"]
   workflow_dispatch:
 
 concurrency:
