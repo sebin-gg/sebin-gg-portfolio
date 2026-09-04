@@ -14,7 +14,7 @@ export function About() {
     <section
       id="about"
       aria-labelledby="about-title"
-      className="mx-auto w-full max-w-5xl px-4 py-20 sm:px-6"
+      className="mx-auto w-full max-w-5xl px-4 py-14 sm:px-6 sm:py-16"
     >
       <Eyebrow>About</Eyebrow>
       <h2 id="about-title" className="text-ink text-2xl font-bold tracking-tight sm:text-3xl">

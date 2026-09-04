@@ -42,7 +42,8 @@ describe("Hero", () => {
     render(<Hero />);
     const card = screen.getByRole("complementary", { name: "Profile highlights" });
     expect(within(card).getByText("SM")).toBeInTheDocument();
-    expect(within(card).getByText(/open to internships/i)).toBeInTheDocument();
+    expect(within(card).getByText(/Education/i)).toBeInTheDocument();
+    expect(within(card).queryByText(/open to internships/i)).not.toBeInTheDocument();
   });
 });
 

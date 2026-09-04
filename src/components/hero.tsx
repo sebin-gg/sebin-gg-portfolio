@@ -16,7 +16,6 @@ const stats = [
 ];
 
 const facts = [
-  { label: "Status", value: "Open to internships & collabs" },
   { label: "Education", value: `${profile.degree}` },
   { label: "Location", value: profile.location },
   { label: "Email", value: profile.email, mailto: true },
@@ -35,82 +34,93 @@ export function Hero() {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_70%_0%,var(--glow),transparent_70%)]"
       />
-      <div className="relative mx-auto w-full max-w-5xl px-4 pt-14 pb-16 sm:px-6 sm:pt-20">
-        <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-14">
+      <div className="relative mx-auto w-full max-w-5xl px-4 pt-8 pb-10 sm:px-6 sm:pt-14 sm:pb-14 lg:pt-16 lg:pb-16">
+        <div className="grid items-center gap-8 lg:grid-cols-[1.15fr_1fr] lg:gap-10 xl:gap-12">
           <div>
             <Eyebrow>Hello, I&rsquo;m a developer</Eyebrow>
-            <h1 className="text-ink text-4xl font-extrabold tracking-tight sm:text-5xl">
+            <h1 className="text-ink text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
               {profile.name}
             </h1>
-            <p className="text-ink-soft mt-4 text-xl font-medium sm:text-2xl">{profile.role}</p>
-            <p className="text-ink-soft mt-4 max-w-xl text-lg leading-relaxed">{profile.tagline}</p>
-            <ul aria-label="Focus areas" className="mt-6 flex flex-wrap gap-2">
+            <p className="text-ink-soft mt-2.5 text-lg font-medium sm:mt-3 sm:text-xl lg:text-2xl">
+              {profile.role}
+            </p>
+            <p className="text-ink-soft mt-3 max-w-xl text-base leading-relaxed sm:mt-4 sm:text-lg">
+              {profile.tagline}
+            </p>
+            <ul aria-label="Focus areas" className="mt-4 flex flex-wrap gap-1.5 sm:mt-5 sm:gap-2">
               {profile.focus.map((area) => (
                 <li
                   key={area}
-                  className="border-line bg-panel text-ink-soft rounded-full border px-3 py-1 text-sm"
+                  className="border-line bg-panel text-ink-soft rounded-full border px-2.5 py-0.5 text-xs sm:px-3 sm:py-1 sm:text-sm"
                 >
                   {area}
                 </li>
               ))}
             </ul>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a
-                href="#projects"
-                className="bg-accent text-accent-ink hover:bg-accent-strong inline-flex items-center gap-2 rounded-md px-5 py-2.5 text-sm font-semibold transition-colors"
-              >
-                View projects
-                <ArrowUpRightIcon className="h-4 w-4" />
-              </a>
-              <a
-                href={resumeUrl}
-                className="border-line bg-panel text-ink hover:border-accent hover:text-accent inline-flex items-center gap-2 rounded-md border px-5 py-2.5 text-sm font-semibold transition-colors"
-              >
-                <DownloadIcon className="h-4 w-4" />
-                Download résumé
-              </a>
-              <span className="bg-line mx-1 hidden h-5 w-px sm:block" aria-hidden="true" />
-              <a
-                href={links.github.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="GitHub profile"
-                className="border-line bg-panel text-ink-soft hover:border-accent hover:text-accent rounded-md border p-2.5 transition-colors"
-              >
-                <GithubIcon className="h-5 w-5" />
-              </a>
-              <a
-                href={links.linkedin.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn profile"
-                className="border-line bg-panel text-ink-soft hover:border-accent hover:text-accent rounded-md border p-2.5 transition-colors"
-              >
-                <LinkedinIcon className="h-5 w-5" />
-              </a>
-              <a
-                href={links.x.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="X profile"
-                className="border-line bg-panel text-ink-soft hover:border-accent hover:text-accent rounded-md border p-2.5 transition-colors"
-              >
-                <XIcon className="h-4 w-4" />
-              </a>
+
+            <div className="mt-6 flex flex-col gap-3 sm:mt-7">
+              {/* Primary action row: cleanly on one line */}
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <a
+                  href="#projects"
+                  className="bg-accent text-accent-ink hover:bg-accent-strong inline-flex items-center justify-center gap-1.5 rounded-md px-3.5 py-2 text-xs font-semibold whitespace-nowrap transition-colors sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
+                >
+                  View projects
+                  <ArrowUpRightIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                </a>
+                <a
+                  href={resumeUrl}
+                  className="border-line bg-panel text-ink hover:border-accent hover:text-accent inline-flex items-center justify-center gap-1.5 rounded-md border px-3.5 py-2 text-xs font-semibold whitespace-nowrap transition-colors sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
+                >
+                  <DownloadIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  Download résumé
+                </a>
+              </div>
+
+              {/* Social media links: neatly lined up in a single row directly below */}
+              <div className="flex items-center gap-2 pt-0.5">
+                <a
+                  href={links.github.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="GitHub profile"
+                  className="border-line bg-panel text-ink-soft hover:border-accent hover:text-accent flex h-9 w-9 items-center justify-center rounded-md border transition-colors sm:h-10 sm:w-10"
+                >
+                  <GithubIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+                </a>
+                <a
+                  href={links.linkedin.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn profile"
+                  className="border-line bg-panel text-ink-soft hover:border-accent hover:text-accent flex h-9 w-9 items-center justify-center rounded-md border transition-colors sm:h-10 sm:w-10"
+                >
+                  <LinkedinIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+                </a>
+                <a
+                  href={links.x.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="X profile"
+                  className="border-line bg-panel text-ink-soft hover:border-accent hover:text-accent flex h-9 w-9 items-center justify-center rounded-md border transition-colors sm:h-10 sm:w-10"
+                >
+                  <XIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                </a>
+              </div>
             </div>
           </div>
 
           <aside
             aria-label="Profile highlights"
-            className="border-line bg-panel relative overflow-hidden rounded-2xl border p-6 shadow-sm sm:p-8"
+            className="border-line bg-panel relative overflow-hidden rounded-2xl border p-5 shadow-sm sm:p-6"
           >
             <div
               aria-hidden="true"
-              className="from-accent/25 to-accent-soft/40 absolute -top-20 -right-20 h-56 w-56 rounded-full bg-gradient-to-br blur-2xl"
+              className="from-accent/25 to-accent-soft/40 pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-gradient-to-br blur-2xl sm:-top-20 sm:-right-20 sm:h-56 sm:w-56"
             />
             <div className="relative">
-              <div className="flex items-center gap-4">
-                <span className="bg-accent text-accent-ink flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-lg font-bold">
+              <div className="flex items-center gap-3.5">
+                <span className="bg-accent text-accent-ink flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-base font-bold sm:h-12 sm:w-12 sm:text-lg">
                   {monogram(profile.name)}
                 </span>
                 <div>
@@ -121,7 +131,7 @@ export function Hero() {
                 </div>
               </div>
 
-              <dl className="mt-6 space-y-3 text-sm">
+              <dl className="mt-5 space-y-2.5 text-sm sm:mt-6 sm:space-y-3">
                 {facts.map((fact) => (
                   <div key={fact.label} className="flex items-baseline justify-between gap-4">
                     <dt className="text-ink-faint">{fact.label}</dt>
@@ -137,23 +147,18 @@ export function Hero() {
                   </div>
                 ))}
               </dl>
-
-              <a
-                href={resumeUrl}
-                className="border-line text-ink hover:border-accent hover:text-accent mt-7 inline-flex w-full items-center justify-center gap-2 rounded-md border px-4 py-2.5 text-sm font-semibold transition-colors"
-              >
-                <DownloadIcon className="h-4 w-4" />
-                Résumé (PDF)
-              </a>
             </div>
           </aside>
         </div>
 
-        <dl className="border-line bg-line mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-lg border sm:grid-cols-4">
+        <dl className="border-line bg-line mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-lg border sm:mt-10 sm:grid-cols-4 lg:mt-12">
           {stats.map((stat) => (
-            <div key={stat.label} className="bg-panel flex flex-col-reverse px-5 py-4">
+            <div
+              key={stat.label}
+              className="bg-panel flex flex-col-reverse px-4 py-3 sm:px-5 sm:py-3.5"
+            >
               <dt className="text-ink-faint text-xs">{stat.label}</dt>
-              <dd className="text-accent text-2xl font-bold">{stat.value}</dd>
+              <dd className="text-accent text-xl font-bold sm:text-2xl">{stat.value}</dd>
             </div>
           ))}
         </dl>

@@ -8,7 +8,7 @@ export function Experience() {
       aria-labelledby="experience-title"
       className="border-line bg-panel/60 border-y"
     >
-      <div className="mx-auto w-full max-w-5xl px-4 py-20 sm:px-6">
+      <div className="mx-auto w-full max-w-5xl px-4 py-14 sm:px-6 sm:py-16">
         <SectionHeading
           id="experience-title"
           kicker="experience"
