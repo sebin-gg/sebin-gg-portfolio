@@ -10,7 +10,6 @@ import {
 
 const stats = [
   { value: `${profile.cgpa}`, label: "B.Tech CGPA" },
-  { value: "6+", label: "projects shipped" },
   { value: "'28", label: "graduating class" },
 ];
 
@@ -150,7 +149,7 @@ export function Hero() {
           </aside>
         </div>
 
-        <dl className="border-line/80 bg-line/80 mt-8 grid grid-cols-3 gap-px overflow-hidden rounded-xl border shadow-sm backdrop-blur-xs sm:mt-10 lg:mt-12">
+        <dl className="border-line/80 bg-line/80 mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-xl border shadow-sm backdrop-blur-xs sm:mt-10 lg:mt-12">
           {stats.map((stat) => (
             <div
               key={stat.label}
