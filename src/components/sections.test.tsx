@@ -51,7 +51,8 @@ describe("About", () => {
   it("renders the bio and the quick-facts card", () => {
     render(<About />);
     expect(screen.getByRole("heading", { name: "Who I am" })).toBeInTheDocument();
-    expect(screen.getByText(/Open to work/i)).toBeInTheDocument();
+    expect(screen.getByText(profile.degree)).toBeInTheDocument();
+    expect(screen.queryByText(/Open to work/i)).not.toBeInTheDocument();
     expect(screen.getByText(/Kottayam, Kerala, India/)).toBeInTheDocument();
   });
 });

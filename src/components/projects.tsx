@@ -21,7 +21,7 @@ export function Projects() {
           <li key={project.name}>
             <article className="group border-line/80 bg-panel/90 focus-within:border-accent hover:border-accent/60 hover:shadow-accent/5 flex h-full flex-col rounded-xl border p-6 shadow-sm backdrop-blur-xs transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
               <div className="flex items-start justify-between gap-3">
-                <div className="flex items-baseline gap-2.5">
+                <div className="flex flex-wrap items-center gap-2">
                   <span
                     aria-hidden="true"
                     className="text-ink-faint text-xs font-semibold tabular-nums"
@@ -29,6 +29,11 @@ export function Projects() {
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <h3 className="text-ink text-lg font-semibold">{project.name}</h3>
+                  {project.highlight ? (
+                    <span className="border-accent/20 bg-accent-soft text-accent rounded-full border px-2 py-0.5 text-[11px] font-semibold">
+                      {project.highlight}
+                    </span>
+                  ) : null}
                 </div>
                 <a
                   href={project.href}
@@ -41,14 +46,10 @@ export function Projects() {
                 </a>
               </div>
               <p className="text-accent mt-1 text-sm font-medium">{project.tagline}</p>
-              {project.highlight ? (
-                <p className="border-accent/20 bg-accent-soft text-accent mt-2.5 inline-flex w-fit rounded-full border px-2.5 py-0.5 text-xs font-semibold">
-                  {project.highlight}
-                </p>
-              ) : null}
-              <p className="text-ink-soft mt-3 flex-1 text-sm leading-relaxed">
+              <p className="text-ink-soft mt-2.5 flex-1 text-sm leading-relaxed">
                 {project.description}
               </p>
+
               <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
                 <ul className="flex flex-wrap gap-1.5">
                   {project.stack.map((tech) => (
