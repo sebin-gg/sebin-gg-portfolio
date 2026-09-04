@@ -32,16 +32,36 @@ export const metadata: Metadata = {
   authors: [{ name: profile.name, url: siteUrl }],
   keywords: [
     "Sebin Mathew",
+    "Sebin Mathew Portfolio",
     "full-stack developer",
+    "full stack engineer",
     "cybersecurity",
+    "cybersecurity student Kerala",
     "React",
     "Next.js",
     "TypeScript",
+    "Tailwind CSS",
     "FastAPI",
+    "Python backend",
+    "College of Engineering Chengannur",
     "portfolio",
+    "web performance",
+    "static site",
   ],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
     type: "website",
+    locale: "en_US",
     url: siteUrl,
     title: siteMeta.title,
     description: siteMeta.description,
@@ -51,6 +71,7 @@ export const metadata: Metadata = {
     card: "summary",
     title: siteMeta.title,
     description: siteMeta.description,
+    creator: links.x.handle,
   },
   icons: {
     icon: "/icon.svg",
@@ -65,20 +86,55 @@ export const viewport: Viewport = {
   colorScheme: "light dark",
 };
 
-const personJsonLd = {
+const jsonLdData = {
   "@context": "https://schema.org",
-  "@type": "Person",
-  name: profile.name,
-  url: siteUrl,
-  jobTitle: "Computer Science Student & Developer",
-  alumniOf: profile.college,
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Kottayam",
-    addressRegion: "Kerala",
-    addressCountry: "IN",
-  },
-  sameAs: [links.github.href, links.linkedin.href, links.x.href],
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      url: siteUrl,
+      name: `${profile.name} — Portfolio`,
+      description: siteMeta.description,
+      inLanguage: "en-US",
+    },
+    {
+      "@type": "ProfilePage",
+      "@id": `${siteUrl}/#profilepage`,
+      url: siteUrl,
+      name: siteMeta.title,
+      isPartOf: { "@id": `${siteUrl}/#website` },
+      about: { "@id": `${siteUrl}/#person` },
+      mainEntity: { "@id": `${siteUrl}/#person` },
+    },
+    {
+      "@type": "Person",
+      "@id": `${siteUrl}/#person`,
+      name: profile.name,
+      givenName: profile.firstName,
+      url: siteUrl,
+      jobTitle: "Computer Science Student & Full-Stack Developer",
+      alumniOf: {
+        "@type": "EducationalOrganization",
+        name: profile.college,
+      },
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Kottayam",
+        addressRegion: "Kerala",
+        addressCountry: "IN",
+      },
+      sameAs: [links.github.href, links.linkedin.href, links.x.href],
+      knowsAbout: [
+        "Computer Science",
+        "Full-Stack Development",
+        "Cybersecurity",
+        "Next.js",
+        "TypeScript",
+        "FastAPI",
+        "Python",
+      ],
+    },
+  ],
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -93,7 +149,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <ThemeInit />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdData) }}
         />
       </head>
       <body className="bg-canvas text-ink flex min-h-screen flex-col antialiased">
