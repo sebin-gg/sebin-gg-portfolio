@@ -96,6 +96,18 @@ test.describe("home page", () => {
     expect(errors).toEqual([]);
   });
 
+  test("exposes social sharing meta tags for LinkedIn and X", async ({ page }) => {
+    await page.goto("/");
+    const meta = async (selector: string, attr = "content") =>
+      page.locator(selector).first().getAttribute(attr);
+
+    await expect(page.locator('meta[property="og:title"]')).toHaveCount(1);
+    await expect(page.locator('meta[property="og:description"]')).toHaveCount(1);
+    expect(await meta('meta[property="og:image"]')).toMatch(/opengraph-image/);
+    expect(await meta('meta[name="twitter:card"]')).toBe("summary_large_image");
+    expect(await meta('meta[name="twitter:image"]')).toMatch(/opengraph-image/);
+  });
+
   test("social profile links point at the real profiles", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("link", { name: "GitHub profile" }).first()).toHaveAttribute(

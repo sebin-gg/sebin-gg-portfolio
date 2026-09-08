@@ -68,10 +68,11 @@ export const metadata: Metadata = {
     siteName: `${profile.name} — portfolio`,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: siteMeta.title,
     description: siteMeta.description,
     creator: links.x.handle,
+    images: ["/opengraph-image"],
   },
   icons: {
     icon: "/icon.svg",
