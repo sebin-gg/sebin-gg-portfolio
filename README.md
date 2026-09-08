@@ -10,13 +10,13 @@ bundle weight. The day the blog gets a real backend, they bolt on cleanly.
 
 ## Stack decisions
 
-| Choice                                     | Why                                                                                                                                                  |
-| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Static-first (no tRPC client)              | Every KB counts on 2G/3G. tRPC + zod + superjson ≈ 15–25 kB gzip of JS with zero payoff when content is static. Server components render everything. |
-| No image files                             | Terminal/grid visuals are pure CSS gradients — nothing to download.                                                                                  |
-| Self-hosted variable fonts via `next/font` | One small woff2 subset per family, `display: swap`, no third-party font CDN request.                                                                 |     | Class-based dark mode with inline init script | **Dark by default**, light is an explicit toggle — applied before first paint, no theme flash. |
-| One tiny client island                     | Only `<ThemeToggle>` and `<MobileNav>` are client components (~2 kB). Everything else is a server component.                                         |
-| Typographic apostrophes                    | `&rsquo;` in copy, not ASCII `'` — reads human and keeps lint happy.                                                                                 |
+| Choice                                     | Why                                                                                                                                                            |
+| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Static-first (no tRPC client)              | Every KB counts on 2G/3G. tRPC + zod + superjson ≈ 15–25 kB gzip of JS with zero payoff when content is static. Server components render everything.           |
+| No image files                             | Terminal/grid visuals are pure CSS gradients — nothing to download.                                                                                            |
+| Self-hosted variable fonts via `next/font` | One small woff2 subset per family, `display: swap`, no third-party font CDN request.                                                                           |     | Class-based dark mode with inline init script | **Dark by default**, light is an explicit toggle — applied before first paint, no theme flash. |
+| Tiny client islands, hydrating on idle     | 4 small header components are client-rendered; the toggle/menu/scroll-spy hydrate only after the main thread goes idle. Everything else is a server component. |
+| Typographic apostrophes                    | `&rsquo;` in copy, not ASCII `'` — reads human and keeps lint happy.                                                                                           |
 
 ## Quickstart
 
@@ -33,7 +33,9 @@ pnpm test:e2e           # needs a build first (script runs next build itself via
 ```bash
 pnpm check:all    # lint → typecheck → format → unit+coverage → CRAP gate → build → e2e
 pnpm test:mutation    # Stryker mutation score (slow; also runs in CI on main)
-pnpm perf:audit       # Lighthouse, simulated slow-4G mobile, / + /blog (needs CHROME_PATH)
+pnpm perf:audit       # lhci budgets + floors, simulated slow-4G mobile, / + /blog (needs CHROME_PATH)
+pnpm perf:matrix      # full Lighthouse matrix: themes × 2G/3G/4G × CPU 1x–20x × mobile/desktop × navigation/timespan/snapshot × routes (needs CHROME_PATH)
+pnpm test:perf        # live Core Web Vitals matrix with real CDP network + CPU throttling
 node scripts/visual-check.mjs   # screenshots + horizontal-overflow check
 ```
 
@@ -58,18 +60,52 @@ zero-job push runs on main, so it was removed).
 
 ## Performance
 
-Measured with Lighthouse on simulated slow-4G mobile, median of 3 runs (see `budgets.json`):
+Measured with Lighthouse (see `budgets.json`, `lighthouserc.js`, and
+`scripts/perf-lighthouse-matrix.mjs`):
 
-- Total transfer ≈ **220 kB** (script + stylesheet + 2 self-hosted fonts — no images)
-- FCP ≈ 1.1 s · LCP ≈ 2.0–2.5 s · CLS = 0 · TBT ≈ 70–90 ms
-- Performance ≈ **97** (home) / **98** (blog) · Accessibility ≈ 99–100 · Best Practices/SEO = 100
+- Total transfer ≈ **220 kB** (JS + inline CSS + 2 self-hosted fonts — no images)
+- FCP ≈ 0.5–1.3 s · LCP ≈ 0.4–2.5 s · CLS = 0 · TBT ≈ 0–30 ms (simulated), ~30 ms at 4× real throttle
+- `pnpm perf:matrix` sweeps every theme × network × CPU × device × mode combo:
+  **Performance = 100** wherever physics allows (mobile 2G/20× included), **Accessibility,
+  Best Practices and SEO = 100 in every single combination** — dark and light, mobile and desktop.
+  Only exempted rows are desktop 2G (~88–91, 450 kbps cap on desktop curves) and 20× CPU
+  (~87–96), where 100 is impossible by definition.
 
 Why it stays fast on 2G/3G: no images, one self-hosted variable sans font preloaded (the LCP
-family) while the mono family loads non-blocking, zero client libraries, and just three tiny
-client components (~3 kB) on an otherwise server-rendered page.
+family) while the mono family loads non-blocking, zero client libraries, CSS inlined via
+`experimental.inlineCss` (one less round-trip on cold 2G loads), and the header's interactive
+widgets hydrate only after the main thread goes idle so their work lands outside the
+FCP → TTI window.
 
 > Running Lighthouse locally while other apps peg the CPU inflates the simulated TBT. On an idle
 > machine scores sit in the high 80s–90s; CI (clean runner, median of 3) is the source of truth.
+
+## Agent productivity tools (speed + token reduction)
+
+The repo is set up for agent-friendly work. Skills live in `.agents/skills/` (locked in
+`skills-lock.json`); agents load them with the `skill` tool. `AGENTS.md` tells agents which ones
+to use when working here.
+
+| Tool / skill                   | What it does                                                                                       | How to use                                                               |
+| ------------------------------ | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `caveman`                      | Token-reducing terse mode — cuts output tokens while keeping technical accuracy                    | Load `skill:caveman`; levels `lite / full / ultra`; `/caveman off` exits |
+| `unslop`                       | Strips AI tells / redundancy from user-visible copy, with bundled scanners                         | `skill:unslop`; `scripts/banned_phrase_scan.py` etc. for audits          |
+| `designing-beautiful-websites` | UI/UX design guidance for redesigns                                                                | Load before any visual work                                              |
+| `cavecrew`                     | Delegates to `investigator` / `builder` / `reviewer` subagents to save main-thread context         | `skill:cavecrew`                                                         |
+| `zlog`                         | Compresses agent session logs (`.log`/`.out`/`.txt` > 10 KB → `.zst`/`.xz`/`.gz`, saves 77–99.9 %) | `skill:zlog` (dry-run first)                                             |
+| `llmlingua-compress`           | Shrinks long prompts/context before sending to an LLM                                              | `skill:llmlingua-compress`                                               |
+| `find-skills`                  | Discovers installable community skills                                                             | `npx skills find <query>`                                                |
+
+Install any community skill into the repo:
+
+```bash
+npx skills add <owner/repo> --list       # preview a repo's skills
+npx skills add <owner/repo> --skill <name> --yes   # install into .agents/skills/
+```
+
+Related speed tooling: `pnpm perf:matrix` (the full Lighthouse sweep), `pnpm test:perf`
+(live Core Web Vitals with real throttling), and the pre-commit hook (Husky + lint-staged) that
+formats and lints staged files so pushes stay green.
 
 ## You still need to do these (one-time, ~10 min)
 
