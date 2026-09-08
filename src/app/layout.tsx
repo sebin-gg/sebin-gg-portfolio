@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { links, profile, siteMeta, siteUrl } from "@/lib/site";
 import { ThemeInit } from "@/components/theme-init";
 import { SiteHeader } from "@/components/site-header";
@@ -164,6 +165,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           {children}
         </main>
         <SiteFooter />
+        <Analytics />
       </body>
     </html>
   );
