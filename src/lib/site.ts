@@ -121,7 +121,7 @@ export const projects: Project[] = [
     name: "Aegis",
     tagline: "Cyber threat dashboard with local AI",
     description:
-      "Real-time threat monitoring dashboard. Streaming terminal logs, automated attack simulation, iptables mitigation commands and optional local-AI analysis via Ollama.",
+      "Streaming terminal logs, automated attack simulation, iptables mitigation commands and optional local-AI analysis via Ollama.",
     stack: ["Next.js 15", "React 19", "TypeScript", "Ollama"],
     href: "https://github.com/sebin-gg/Aegis",
     highlight: "security",
@@ -156,7 +156,7 @@ export const projects: Project[] = [
     name: "TortoiseLang (slowlang)",
     tagline: "A language that punishes fast typing",
     description:
-      "Satirical programming language and IDE that throttles execution when you type too fast — then triggers ASCII turtle rage and poetic haiku feedback. Built for and won TinkerHub Useless Projects 2.0.",
+      "Satirical programming language and IDE that throttles execution when you type too fast — then triggers ASCII turtle rage and poetic haiku feedback.",
     stack: ["Python", "Tkinter", "pytest"],
     href: "https://github.com/sebin-gg/slowlang",
     highlight: "Winner · TinkerHub 2.0",
