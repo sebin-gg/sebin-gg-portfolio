@@ -2,9 +2,11 @@ import { resumeUrl } from "@/lib/site";
 import { getSectionIds } from "@/lib/navigation";
 import { BrandLink } from "@/components/brand-link";
 import { DesktopNav } from "@/components/desktop-nav";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { MobileNav } from "@/components/mobile-nav";
-import { ActiveSection } from "@/components/active-section";
+import {
+  DeferredActiveSection,
+  DeferredMobileNav,
+  DeferredThemeToggle,
+} from "@/components/deferred-header";
 import { DownloadIcon } from "@/components/icons";
 
 const sectionIds = getSectionIds();
@@ -17,7 +19,7 @@ export function SiteHeader() {
         <DesktopNav />
 
         <div className="flex items-center gap-2">
-          <ThemeToggle />
+          <DeferredThemeToggle />
           {/* Tablet: icon-only résumé (no room for the label); full button from lg. */}
           <a
             href={resumeUrl}
@@ -34,10 +36,10 @@ export function SiteHeader() {
             <DownloadIcon className="h-4 w-4" />
             Résumé
           </a>
-          <MobileNav />
+          <DeferredMobileNav />
         </div>
       </div>
-      <ActiveSection ids={sectionIds} />
+      <DeferredActiveSection ids={sectionIds} />
     </header>
   );
 }

@@ -8,12 +8,7 @@ export function BlogCta() {
       aria-labelledby="blog-title"
       className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 2xl:max-w-[90rem]"
     >
-      <SectionHeading
-        id="blog-title"
-        kicker="Blog"
-        title="Notes & write-ups"
-        lede="Security walkthroughs, project post-mortems and whatever else survives the draft folder."
-      />
+      <SectionHeading id="blog-title" kicker="Blog" title="Notes & write-ups" />
 
       <a
         href="/blog"
@@ -23,8 +18,7 @@ export function BlogCta() {
           <p className="border-accent/20 bg-accent-soft text-accent inline-flex rounded-full border px-3 py-1 text-xs font-semibold">
             Coming soon
           </p>
-          <p className="text-ink mt-3 text-lg font-semibold">The blog is coming soon.</p>
-          <p className="text-ink-soft mt-1 max-w-xl text-sm leading-relaxed">
+          <p className="text-ink-soft mt-3 max-w-xl text-sm leading-relaxed">
             First posts are planned around OWASP drills, the brevity-prompt extension, and what 2G
             performance budgets taught me. No newsletter spam — just a feed.
           </p>

@@ -27,7 +27,7 @@ describe("links", () => {
 
 describe("navigation", () => {
   it("anchors to sections that exist on the home page", () => {
-    const sectionIds = ["about", "experience", "projects", "skills", "contact"];
+    const sectionIds = ["about", "experience", "projects", "skills"];
     const anchors = navItems.filter((item) => item.href.startsWith("#"));
     for (const item of anchors) {
       expect(sectionIds).toContain(item.href.slice(1));

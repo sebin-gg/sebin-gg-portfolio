@@ -9,12 +9,7 @@ export function Skills() {
       className="border-line/80 bg-panel/40 border-y backdrop-blur-xs"
     >
       <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 2xl:max-w-[90rem]">
-        <SectionHeading
-          id="skills-title"
-          kicker="skills"
-          title="Toolbox"
-          lede="Languages, frameworks, and security tooling in my regular development stack."
-        />
+        <SectionHeading id="skills-title" kicker="skills" title="Toolbox" />
 
         <dl className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {skills.map((group) => (

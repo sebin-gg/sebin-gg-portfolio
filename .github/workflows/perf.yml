@@ -3,6 +3,7 @@ name: Performance budgets
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 
 concurrency:
@@ -11,9 +12,9 @@ concurrency:
 
 jobs:
   lighthouse:
-    name: Lighthouse (slow-4G mobile)
+    name: Lighthouse (full matrix + budgets)
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v7
 
@@ -33,7 +34,7 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Run Lighthouse audits
+      - name: Run Lighthouse audits (budgets + full matrix)
         run: |
           pnpm start --port 3100 > /tmp/app.log 2>&1 &
           APP_PID=$!
@@ -44,8 +45,19 @@ jobs:
           done
           CHROME_PATH="$(find ~/.cache/ms-playwright -type f -name chrome -path '*chromium-*' | head -1)"
           echo "Using Chromium at: $CHROME_PATH"
-          CHROME_PATH="$CHROME_PATH" pnpm exec lhci autorun
-          EXIT_CODE=$?
+          export CHROME_PATH
+          EXIT_CODE=0
+
+          # 1. Budget + category floors on the standard slow-4G mobile profile.
+          pnpm exec lhci autorun || EXIT_CODE=$?
+
+          # 2. Full matrix: themes × networks (2G/3G/4G) × CPU (laptop/phone/
+          #    mid-tier/low-tier/20x) × devices (mobile/desktop) × modes
+          #    (navigation/timespan/snapshot) × routes (/, /blog).
+          #    a11y/bp/seo must be 100 everywhere; perf 100 except the
+          #    best-effort 2G/20x rows. Reuses the server started above.
+          pnpm perf:matrix --server 3100 || EXIT_CODE=$?
+
           kill "$APP_PID" 2> /dev/null || true
           exit $EXIT_CODE
 

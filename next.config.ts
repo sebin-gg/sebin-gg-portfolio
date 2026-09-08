@@ -9,6 +9,13 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  experimental: {
+    // Inline the (small, Tailwind-generated) CSS into <head> so first paint
+    // doesn't wait an extra round-trip for the stylesheet — the biggest win on
+    // 2G/3G first visits. CSS is only ~8 KB gzipped, so the caching trade-off
+    // is acceptable for a portfolio whose visitors are mostly first-timers.
+    inlineCss: true,
+  },
   async headers() {
     return [
       {

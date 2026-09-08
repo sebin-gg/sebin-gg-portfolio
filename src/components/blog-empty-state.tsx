@@ -13,11 +13,10 @@ export function BlogEmptyState() {
       <div className="from-accent to-accent-strong text-accent-ink shadow-accent/20 mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br shadow-md">
         <RssIcon className="h-6 w-6" />
       </div>
-      <h2 className="text-ink mt-5 text-xl font-bold">No posts yet — this space is warming up</h2>
+      <h2 className="text-ink mt-5 text-xl font-bold">No posts yet</h2>
       <p className="text-ink-soft mx-auto mt-2 max-w-md text-sm leading-relaxed">
-        I&rsquo;m drafting the first few write-ups. They&rsquo;ll land here, one at a time, as I
-        finish them. If you want to know when that happens, the cheapest way is watching this repo
-        on GitHub.
+        I&rsquo;m drafting the first few write-ups. They&rsquo;ll land here as I finish them. If you
+        want to know when that happens, the cheapest way is watching this repo on GitHub.
       </p>
 
       <div className="mt-8 text-left">

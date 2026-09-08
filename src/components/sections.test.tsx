@@ -1,11 +1,10 @@
-import { describe, expect, it } from "vitest";
-import { render, screen, within } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { act, render, screen, within } from "@testing-library/react";
 import { Hero } from "@/components/hero";
 import { About } from "@/components/about";
 import { Experience } from "@/components/experience";
 import { Projects } from "@/components/projects";
 import { Skills } from "@/components/skills";
-import { Contact } from "@/components/contact";
 import { BlogEmptyState } from "@/components/blog-empty-state";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -42,7 +41,8 @@ describe("Hero", () => {
     render(<Hero />);
     const card = screen.getByRole("complementary", { name: "Profile highlights" });
     expect(within(card).getByText("SM")).toBeInTheDocument();
-    expect(within(card).getByText(/Education/i)).toBeInTheDocument();
+    expect(within(card).queryByText(/Education/i)).not.toBeInTheDocument();
+    expect(within(card).getByText(profile.email)).toBeInTheDocument();
     expect(within(card).queryByText(/open to internships/i)).not.toBeInTheDocument();
   });
 });
@@ -53,7 +53,7 @@ describe("About", () => {
     expect(screen.getByRole("heading", { name: "Who I am" })).toBeInTheDocument();
     expect(screen.getByText(profile.degree)).toBeInTheDocument();
     expect(screen.queryByText(/Open to work/i)).not.toBeInTheDocument();
-    expect(screen.getByText(/Kottayam, Kerala, India/)).toBeInTheDocument();
+    expect(screen.queryByText(/Kottayam, Kerala, India/)).not.toBeInTheDocument();
   });
 });
 
@@ -98,21 +98,6 @@ describe("Skills", () => {
   });
 });
 
-describe("Contact", () => {
-  it("offers email, GitHub and LinkedIn actions", () => {
-    render(<Contact />);
-    expect(screen.getByRole("link", { name: profile.email })).toHaveAttribute(
-      "href",
-      links.email.href,
-    );
-    expect(screen.getByRole("link", { name: "GitHub" })).toHaveAttribute("href", links.github.href);
-    expect(screen.getByRole("link", { name: "LinkedIn" })).toHaveAttribute(
-      "href",
-      links.linkedin.href,
-    );
-  });
-});
-
 describe("BlogEmptyState", () => {
   it("says the blog is coming soon and lists planned posts", () => {
     render(<BlogEmptyState />);
@@ -126,15 +111,26 @@ describe("BlogEmptyState", () => {
 });
 
 describe("SiteHeader", () => {
-  it("exposes navigation, theme toggle and résumé", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("exposes navigation, theme toggle and résumé", async () => {
+    // The theme toggle hydrates after the main thread goes idle.
+    vi.useFakeTimers();
     render(<SiteHeader />);
     expect(screen.getByRole("navigation", { name: "Primary" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /switch to/i })).toBeInTheDocument();
     const resumeLinks = screen.getAllByRole("link", { name: /résumé/i });
     expect(resumeLinks.length).toBeGreaterThan(0);
     for (const link of resumeLinks) {
       expect(link).toHaveAttribute("href", "/resume.pdf");
     }
+
+    await act(async () => {
+      vi.advanceTimersByTime(400);
+    });
+    vi.useRealTimers();
+    expect(await screen.findByRole("button", { name: /switch to/i })).toBeInTheDocument();
   });
 });
 
@@ -143,5 +139,6 @@ describe("SiteFooter", () => {
     render(<SiteFooter />);
     expect(screen.getByText(new RegExp(`© \\d{4} ${profile.name}`))).toBeInTheDocument();
     expect(screen.getAllByRole("link", { name: "GitHub profile" }).length).toBeGreaterThan(0);
+    expect(screen.getByText(/Kottayam, Kerala, India/)).toBeInTheDocument();
   });
 });

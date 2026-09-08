@@ -5,7 +5,6 @@ const facts = [
   { label: "Degree", value: profile.degree },
   { label: "College", value: profile.college },
   { label: "CGPA", value: String(profile.cgpa) },
-  { label: "Location", value: profile.location },
 ];
 
 export function About() {

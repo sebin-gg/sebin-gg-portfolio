@@ -23,8 +23,8 @@ export const profile = {
   focus: ["cybersecurity", "backend systems", "automation", "privacy-first"],
   /** One paragraph for the About section. */
   bio: [
-    "I’m a Computer Science student at College of Engineering Chengannur (CGPA 8.6). I build backends, Chrome extensions, and security tooling—from browser-side prompt compression to an edge incident response dashboard powered by local Ollama models.",
-    "I design for privacy by default: zero telemetry, modular architectures, and verified inputs. Outside of coding, I coordinate technical projects for FOCES CEC and run defensive drills—phishing simulations, network mapping with Nmap, and TryHackMe labs.",
+    "I’m a Computer Science student at College of Engineering Chengannur (CGPA 8.6). Recent work spans browser-side prompt compression to an edge incident response dashboard powered by local Ollama models.",
+    "I build with zero telemetry, modular architectures, and verified inputs. Outside of coding, I coordinate technical projects for FOCES CEC and run defensive drills—phishing simulations, network mapping with Nmap, and TryHackMe labs.",
   ],
 } as const;
 
@@ -220,7 +220,6 @@ export const navItems = [
   { label: "Projects", href: "#projects" },
   { label: "Skills", href: "#skills" },
   { label: "Blog", href: "/blog" },
-  { label: "Contact", href: "#contact" },
 ] as const;
 
 export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://sebin-gg.vercel.app";

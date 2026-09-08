@@ -1,5 +1,4 @@
 import { links, profile, resumeUrl } from "@/lib/site";
-import { Eyebrow } from "@/components/section-heading";
 import {
   ArrowUpRightIcon,
   DownloadIcon,
@@ -13,11 +12,7 @@ const stats = [
   { value: "'28", label: "graduating class" },
 ];
 
-const facts = [
-  { label: "Education", value: `${profile.degree}` },
-  { label: "Location", value: profile.location },
-  { label: "Email", value: profile.email, mailto: true },
-];
+const facts = [{ label: "Email", value: profile.email, mailto: true }];
 
 function monogram(name: string): string {
   const [first, second] = name.trim().split(/\s+/);
@@ -35,7 +30,6 @@ export function Hero() {
       <div className="relative mx-auto w-full max-w-7xl px-4 pt-6 pb-6 sm:px-6 sm:pt-8 sm:pb-8 lg:px-8 lg:pt-10 lg:pb-10 2xl:max-w-[90rem]">
         <div className="grid items-center gap-8 lg:grid-cols-[1.25fr_1fr] lg:gap-12 xl:gap-16">
           <div>
-            <Eyebrow>Hello, I&rsquo;m a developer</Eyebrow>
             <h1 className="text-ink text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
               {profile.name}
             </h1>
@@ -105,6 +99,25 @@ export function Hero() {
                   <XIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </a>
               </div>
+              <p className="text-ink-faint flex flex-wrap items-center gap-x-3 gap-y-1 pt-1 text-xs break-all sm:text-sm">
+                <a
+                  href={links.github.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-accent transition-colors"
+                >
+                  {links.github.href.replace(/^https:\/\//, "")}
+                </a>
+                <span aria-hidden="true">·</span>
+                <a
+                  href={links.linkedin.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-accent transition-colors"
+                >
+                  {links.linkedin.href.replace(/^https:\/\//, "")}
+                </a>
+              </p>
             </div>
           </div>
 
