@@ -10,13 +10,14 @@ bundle weight. The day the blog gets a real backend, they bolt on cleanly.
 
 ## Stack decisions
 
-| Choice                                     | Why                                                                                                                                                            |
-| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Static-first (no tRPC client)              | Every KB counts on 2G/3G. tRPC + zod + superjson ≈ 15–25 kB gzip of JS with zero payoff when content is static. Server components render everything.           |
-| No image files                             | Terminal/grid visuals are pure CSS gradients — nothing to download.                                                                                            |
-| Self-hosted variable fonts via `next/font` | One small woff2 subset per family, `display: swap`, no third-party font CDN request.                                                                           |     | Class-based dark mode with inline init script | **Dark by default**, light is an explicit toggle — applied before first paint, no theme flash. |
-| Tiny client islands, hydrating on idle     | 4 small header components are client-rendered; the toggle/menu/scroll-spy hydrate only after the main thread goes idle. Everything else is a server component. |
-| Typographic apostrophes                    | `&rsquo;` in copy, not ASCII `'` — reads human and keeps lint happy.                                                                                           |
+| Choice                                        | Why                                                                                                                                                                |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Static-first (no tRPC client)                 | Every KB counts on 2G/3G. tRPC + zod + superjson ≈ 15–25 kB gzip of JS with zero payoff when content is static. Server components render everything.               |
+| No image files                                | Terminal/grid visuals are pure CSS gradients — nothing to download.                                                                                                |
+| Self-hosted variable fonts via `next/font`    | One small woff2 subset per family, `display: swap`, no third-party font CDN request.                                                                               |
+| Class-based dark mode with inline init script | **Dark by default**, light is an explicit toggle — applied before first paint, no theme flash.                                                                     |
+| Tiny client islands, hydrating on idle        | Header widgets (theme toggle, menu, scroll-spy, nav) render on the client but hydrate only after the main thread goes idle. Everything else is a server component. |
+| Typographic apostrophes                       | `&rsquo;` in copy, not ASCII `'` — reads human and keeps lint happy.                                                                                               |
 
 ## Quickstart
 
@@ -36,7 +37,7 @@ Fast loops: `test:unit:fast` skips coverage, `test:e2e:local` skips WebKit
 ## Quality gates (the short version)
 
 ```bash
-pnpm check:all    # lint+typecheck+format in parallel → unit+coverage → CRAP gate → build → e2e
+pnpm check:all    # static gates ∥ unit+build+browsers ∥ CRAP → e2e → terminal/thorium → CWV matrix
 pnpm test:mutation    # Stryker mutation score (slow; also runs in CI on main)
 pnpm perf:audit       # lhci budgets + floors, simulated slow-4G mobile, / + /blog (needs CHROME_PATH)
 pnpm perf:quick       # 8-run Lighthouse subset (both routes × both devices, 4G dark) for fast local loops
@@ -45,10 +46,13 @@ pnpm test:perf        # live Core Web Vitals matrix with real CDP network + CPU 
 node scripts/visual-check.mjs   # screenshots + horizontal-overflow check
 ```
 
-All run in CI: `.github/workflows/ci.yml` (lint/typecheck/format/unit/build/e2e),
-`mutation.yml`, `perf.yml`, `codeql.yml`. SonarCloud analyzes pull requests through its
-GitHub App integration — no workflow file (a sonar.yml workflow previously produced phantom
-zero-job push runs on main, so it was removed).
+CI (all green required on `main`, which is branch-protected): `ci.yml`
+(lint/typecheck/format/unit/build, e2e matrix across chromium/firefox/webkit/mobile, terminal
+browsers), `perf.yml` (budgets + quick subset on PRs, full matrix nightly), `mutation.yml`,
+`codeql.yml`, `browsers-nightly.yml` (puppeteer-core sweep over installed Chrome-family
+browsers). SonarCloud analyzes pull requests through its GitHub App integration — no workflow
+file (a sonar.yml workflow previously produced phantom zero-job push runs on main, so it was
+removed). Dependabot is the sole dependency bot (grouped updates, majors ignored).
 
 ## Testing
 
@@ -58,11 +62,15 @@ zero-job push runs on main, so it was removed).
   complexity cap of 4 (`pnpm crap:gate`).
 - **Mutation** — StrykerJS with the Vitest runner mutates `src/lib` + `src/components`
   (string-literal mutants excluded — copy is for human review). Break threshold 60 %.
-- **E2E** — Playwright, two projects (desktop Chromium + iPhone-12 viewport). It renders the real
-  production build (`next build && next start`), clicks _every_ button and internal link on the
-  page, asserts every hash anchor resolves to an element, checks the résumé PDF downloads with
-  `application/pdf`, verifies theme persistence with zero console/page errors, and covers the blog
-  "coming soon" state and the 404 page.
+- **E2E** — Playwright, four projects (desktop Chromium, desktop Firefox, WebKit/Safari
+  engine, iPhone-12 viewport). It renders the real production build, clicks _every_ button and
+  internal link on the page with zero console/page errors (sync waits, no fixed sleeps), asserts
+  every hash anchor resolves to an element, checks the résumé PDF downloads with
+  `application/pdf`, verifies theme persistence and the no-FOUC init script, covers the blog
+  "coming soon" state, per-page share tags, the 404 page (incl. its `noindex`), and social meta
+  tags with OG image dimensions. Beyond Playwright: a terminal-browser check (lynx/w3m/links,
+  zero JS) and a puppeteer-core sweep over installed Chrome-family browsers (Thorium, Brave,
+  Edge, …).
 
 ## Performance
 
@@ -92,15 +100,11 @@ The repo is set up for agent-friendly work. Skills live in `.agents/skills/` (lo
 `skills-lock.json`); agents load them with the `skill` tool. `AGENTS.md` tells agents which ones
 to use when working here.
 
-| Tool / skill                   | What it does                                                                                       | How to use                                                               |
-| ------------------------------ | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| `caveman`                      | Token-reducing terse mode — cuts output tokens while keeping technical accuracy                    | Load `skill:caveman`; levels `lite / full / ultra`; `/caveman off` exits |
-| `unslop`                       | Strips AI tells / redundancy from user-visible copy, with bundled scanners                         | `skill:unslop`; `scripts/banned_phrase_scan.py` etc. for audits          |
-| `designing-beautiful-websites` | UI/UX design guidance for redesigns                                                                | Load before any visual work                                              |
-| `cavecrew`                     | Delegates to `investigator` / `builder` / `reviewer` subagents to save main-thread context         | `skill:cavecrew`                                                         |
-| `zlog`                         | Compresses agent session logs (`.log`/`.out`/`.txt` > 10 KB → `.zst`/`.xz`/`.gz`, saves 77–99.9 %) | `skill:zlog` (dry-run first)                                             |
-| `llmlingua-compress`           | Shrinks long prompts/context before sending to an LLM                                              | `skill:llmlingua-compress`                                               |
-| `find-skills`                  | Discovers installable community skills                                                             | `npx skills find <query>`                                                |
+| Tool / skill                   | What it does                                                                    | How to use                                                               |
+| ------------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `caveman`                      | Token-reducing terse mode — cuts output tokens while keeping technical accuracy | Load `skill:caveman`; levels `lite / full / ultra`; `/caveman off` exits |
+| `unslop`                       | Strips AI tells / redundancy from user-visible copy, with bundled scanners      | `skill:unslop`; `scripts/banned_phrase_scan.py` etc. for audits          |
+| `designing-beautiful-websites` | UI/UX design guidance for redesigns                                             | Load before any visual work                                              |
 
 Install any community skill into the repo:
 
@@ -113,33 +117,27 @@ Related speed tooling: `pnpm perf:matrix` (the full Lighthouse sweep), `pnpm tes
 (live Core Web Vitals with real throttling), and the pre-commit hook (Husky + lint-staged) that
 formats and lints staged files so pushes stay green.
 
-## You still need to do these (one-time, ~10 min)
+## Already set up (was: one-time checklist)
 
-These need your accounts, so the repo ships a helper that opens each page:
-
-```bash
-bash scripts/links.sh   # opens GitHub new-repo, Vercel, CodeRabbit, Renovate, SonarCloud
-```
-
-1. **Push to GitHub** as `sebin-gg/sebin-gg-portfolio` (public → all free tools below apply).
-2. **Vercel** — import the repo, deploy. Optionally set `NEXT_PUBLIC_SITE_URL`.
-3. **CodeRabbit** — install the GitHub app on the repo (config: `.coderabbit.yaml`). Free.
-4. **Renovate or Dependabot** — pick one. Dependabot: enable in repo settings (config shipped in
-   `.github/dependabot.yml`). Renovate: install the GitHub app (config: `renovate.json`). Free.
-5. **SonarCloud** — create a free project, set the key/org in `sonar-project.properties`, install
-   the SonarCloud GitHub App on the repo. It analyzes every PR as a check — no workflow needed.
-6. **CodeRabbit / CodeQL** — CodeQL runs out of the box (free, GitHub-hosted).
+GitHub repo (public), Vercel deploys on `main`, CodeRabbit + SonarCloud GitHub Apps installed,
+CodeQL workflow live, Dependabot grouped updates on, `main` branch-protected with 9 required
+checks. Still manual: uninstall the Renovate app (superseded by Dependabot), click Verify in
+Search Console, import the site into Bing Webmaster.
 
 ## Project layout
 
 ```
 src/
-  app/            # routes: /, /blog (coming soon), 404, sitemap, robots, icon
-  components/     # server components + 2 tiny client islands
+  app/            # routes: / (hero → projects → about → experience → skills → blog CTA),
+                  # /blog (coming soon), /accessibility, 404, sitemap, robots, icon,
+                  # opengraph-image, manifest
+  components/     # server components + small client islands (header widgets hydrate on idle)
   lib/            # site.ts (all content), theme.ts (no-FOUC logic)
-e2e/              # Playwright specs
-scripts/          # setup, check-all, links, visual-check, crap-gate, prepare-resume
+e2e/              # Playwright specs (home, blog, theme, mobile-nav)
+scripts/          # setup, check-all, links, visual-check, crap-gate, prepare-resume,
+                  # thorium/browsers/safari/firefox/terminal checks, perf matrices
 docs/             # résumé PDF + screenshots/ (for review)
+public/           # llms.txt, resume.pdf, Search Console verification file
 ```
 
 Content lives in one file — `src/lib/site.ts`. Change copy/links there; components follow.

@@ -1,6 +1,6 @@
 # Sebin Mathew — Portfolio
 
-> B.Tech Computer Science student at College of Engineering Chengannur. Builds full-stack apps, Chrome extensions and security tooling. Privacy-first, backend-leaning.
+> B.Tech Computer Science student at College of Engineering Chengannur. Builds full-stack apps, Chrome extensions and security tooling.
 
 ## Who this person is
 
@@ -20,13 +20,13 @@
 
 ## Site pages
 
-- [Home (/)](https://sebin-gg.vercel.app/): intro, about, experience, featured projects, skills, contact
+- [Home (/)](https://sebin-gg.vercel.app/): intro, featured projects, about, experience, skills, contact
 - [Blog (/blog)](https://sebin-gg.vercel.app/blog): notes and write-ups — coming soon, no posts published yet
 
 ## Featured projects (all public on GitHub)
 
 - Aegis: Next.js 15 + React 19 cyber threat dashboard with local-AI analysis via Ollama — [github.com/sebin-gg/Aegis](https://github.com/sebin-gg/Aegis)
-- brevity-prompt: Chrome extension (MV3) that compresses LLM prompts in-browser by 40–65%, zero external dependencies, 25/25 tests — [github.com/sebin-gg/brevity-prompt](https://github.com/sebin-gg/brevity-prompt)
+- brevity-prompt: Chrome extension (MV3) that compresses LLM prompts in-browser by 40–65%, zero external dependencies — [github.com/sebin-gg/brevity-prompt](https://github.com/sebin-gg/brevity-prompt)
 - Event Tracker: FOCES event platform — FastAPI + React + Tailwind, live at [sebin-gg.github.io/Event-Tracker](https://sebin-gg.github.io/Event-Tracker/) — [github.com/sebin-gg/Event-Tracker](https://github.com/sebin-gg/Event-Tracker)
 - Kindred: volunteer community-impact platform — Express 5 + React 19 + MongoDB + JWT — [github.com/sebin-gg/kindred](https://github.com/sebin-gg/kindred)
 - TortoiseLang (slowlang): satirical programming language punishing fast typing — won TinkerHub Useless Projects 2025 — [github.com/sebin-gg/slowlang](https://github.com/sebin-gg/slowlang)
