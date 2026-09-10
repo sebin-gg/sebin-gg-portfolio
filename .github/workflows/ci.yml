@@ -122,7 +122,7 @@ jobs:
           path: .next
 
       - name: Run e2e tests
-        run: pnpm test:e2e
+        run: pnpm test:e2e --project=${{ matrix.browser }}
         env:
           E2E_SKIP_BUILD: 1
 
