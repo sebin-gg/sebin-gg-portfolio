@@ -285,6 +285,30 @@ function summarize(lhr, mode) {
   };
 }
 
+async function exerciseTimespan(span, page) {
+  // Give the page a quiet beat, then exercise a scroll so layout shift and
+  // long tasks have a chance to appear — that is what the timespan window
+  // is for.
+  await new Promise((r) => setTimeout(r, 800));
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight / 2));
+  await new Promise((r) => setTimeout(r, 2000));
+  const result = await span.endTimespan();
+  return result?.lhr;
+}
+
+async function gatherLhr(page, url, flags, mode) {
+  if (mode === "navigation") {
+    const result = await lighthouse.navigation(page, url, { flags });
+    return result?.lhr;
+  }
+  if (mode === "timespan") {
+    const span = await lighthouse.startTimespan(page, { flags });
+    return exerciseTimespan(span, page);
+  }
+  const result = await lighthouse.snapshot(page, { flags });
+  return result?.lhr;
+}
+
 async function runCombo(browser, baseUrl, row) {
   const { route, theme, themeSeed, networkSpec: network, cpu, deviceSpec: device, mode } = row;
   const page = await browser.newPage();
@@ -299,24 +323,7 @@ async function runCombo(browser, baseUrl, row) {
     // keep storage (disableStorageReset: true) so the class sticks.
     await seedTheme(page, baseUrl, route, { name: theme, seed: themeSeed });
 
-    let lhr;
-    if (mode === "navigation") {
-      const result = await lighthouse.navigation(page, url, { flags });
-      lhr = result?.lhr;
-    } else if (mode === "timespan") {
-      const span = await lighthouse.startTimespan(page, { flags });
-      // Give the page a quiet beat, then exercise a scroll so layout shift and
-      // long tasks have a chance to appear — that is what the timespan window
-      // is for.
-      await new Promise((r) => setTimeout(r, 800));
-      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight / 2));
-      await new Promise((r) => setTimeout(r, 2000));
-      const result = await span.endTimespan();
-      lhr = result?.lhr;
-    } else {
-      const result = await lighthouse.snapshot(page, { flags });
-      lhr = result?.lhr;
-    }
+    const lhr = await gatherLhr(page, url, flags, mode);
 
     if (!lhr) throw new Error("Lighthouse returned no LHR");
     return lhr;
@@ -356,6 +363,147 @@ function buildMatrix(args) {
     }
   }
   return rows;
+}
+
+async function runRowWithRetries(browser, baseUrl, row) {
+  // Shared CI runners can flake a single navigation; retry before failing.
+  let lhr;
+  let lastError;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      lhr = await runCombo(browser, baseUrl, row);
+      break;
+    } catch (err) {
+      lastError = err;
+      if (attempt < 3) {
+        process.stdout.write(`(retry ${attempt}) `);
+        await new Promise((r) => setTimeout(r, 1500 * attempt));
+      }
+    }
+  }
+  if (!lhr) throw lastError ?? new Error("run failed after retries");
+  return lhr;
+}
+
+function dumpLhr(lhr, row) {
+  // Per-run JSON for later inspection.
+  const { route, theme, network, cpu, device, mode } = row;
+  const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+  writeFileSync(
+    resolve(
+      outDir,
+      `${mode}-${device}-${theme}-${network}-cpu${cpu}x-${route === "/" ? "home" : "blog"}-${stamp}.json`,
+    ),
+    JSON.stringify(lhr, null, 2),
+  );
+}
+
+function checkRowPolicy(mode, network, cpu, summary) {
+  // Policy checks (mode-aware: only enforce categories LH actually scores).
+  const rowFailures = [];
+  const mustBe100 = CATEGORIES_BY_MODE[mode] ?? [];
+  for (const cat of mustBe100) {
+    const s = summary[cat];
+    if (s === null) rowFailures.push(`${cat}: no score (run failed)`);
+    else if (s / 100 < HARD_FLOOR)
+      rowFailures.push(`${cat}: ${s} < ${Math.round(HARD_FLOOR * 100)}`);
+  }
+  if (
+    mode !== "snapshot" &&
+    summary.performance !== null &&
+    !PERF_BEST_EFFORT({ name: network }, { rate: cpu }) &&
+    summary.performance / 100 < PERF_FLOOR
+  ) {
+    rowFailures.push(`performance: ${summary.performance} < ${Math.round(PERF_FLOOR * 100)}`);
+  }
+  return rowFailures;
+}
+
+function printRowResult(summary, rowFailures) {
+  const ok = rowFailures.length === 0;
+  const mark = (value) => (value === null ? "—" : value);
+  console.log(
+    `${ok ? "✔" : "✗"} perf ${mark(summary.performance)} · a11y ${mark(summary.accessibility)} · bp ${mark(summary["best-practices"])} · seo ${mark(summary.seo)}` +
+      (summary.metrics?.["total-blocking-time"]
+        ? ` · TBT ${summary.metrics["total-blocking-time"]}`
+        : "") +
+      (summary.error ? ` · ${summary.error}` : ""),
+  );
+  if (!ok) console.log(`    ${rowFailures.join(" | ")}`);
+  return ok;
+}
+
+async function runMatrixRow(browser, baseUrl, row, index, total) {
+  const { route, theme, network, cpu, cpuName, device, mode } = row;
+  const label = `[${index}/${total}] ${mode} ${device} ${theme} ${network} cpu${cpu}x ${route}`;
+  process.stdout.write(`\n${label} … `);
+
+  let summary;
+  try {
+    const lhr = await runRowWithRetries(browser, baseUrl, row);
+    summary = summarize(lhr, mode);
+    dumpLhr(lhr, row);
+  } catch (err) {
+    summary = {
+      mode,
+      performance: null,
+      accessibility: null,
+      "best-practices": null,
+      seo: null,
+      error: String(err?.message ?? err),
+    };
+  }
+
+  const rowFailures = checkRowPolicy(mode, network, cpu, summary);
+  const ok = printRowResult(summary, rowFailures);
+  return {
+    result: { mode, device, theme, network, cpu: `${cpu}x`, cpuName, route, ...summary },
+    ok,
+    label,
+    issues: rowFailures,
+  };
+}
+
+function printFinalTable(results) {
+  console.log("\n----------------------------------------------------------------------");
+  console.table(
+    results.map((r) => ({
+      mode: r.mode,
+      device: r.device,
+      theme: r.theme,
+      network: r.network,
+      cpu: r.cpu,
+      route: r.route,
+      perf: r.performance,
+      a11y: r.accessibility,
+      bp: r["best-practices"],
+      seo: r.seo,
+      TBT: r.metrics?.["total-blocking-time"] ?? "",
+      LCP: r.metrics?.["largest-contentful-paint"] ?? "",
+      CLS: r.metrics?.["cumulative-layout-shift"] ?? "",
+    })),
+  );
+}
+
+function reportPolicy(failures) {
+  if (failures.length) {
+    console.error(`\n✗ ${failures.length} combination(s) failed the score policy:`);
+    for (const f of failures) {
+      console.error(`  - ${f.label}: ${f.issues.join(" | ")}`);
+    }
+    process.exit(1);
+  }
+  console.log(
+    "\n✔ All combinations meet the score policy (a11y/bp/seo = 100 everywhere; perf = 100 where reachable).",
+  );
+}
+
+function finishRun(results, failures) {
+  // Persist the summary for CI / later inspection.
+  const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+  writeFileSync(resolve(outDir, `summary-${stamp}.json`), JSON.stringify(results, null, 2));
+  printFinalTable(results);
+  reportPolicy(failures);
 }
 
 async function main() {
@@ -413,133 +561,15 @@ Filters (comma-separated values):
 
   for (const row of rows) {
     index += 1;
-    const { route, theme, network, cpu, cpuName, device, mode } = row;
-    const label = `[${index}/${rows.length}] ${mode} ${device} ${theme} ${network} cpu${cpu}x ${route}`;
-    process.stdout.write(`\n${label} … `);
-
-    let summary;
-    try {
-      // Shared CI runners can flake a single navigation; retry before failing.
-      let lhr;
-      let lastError;
-      for (let attempt = 1; attempt <= 3; attempt++) {
-        try {
-          lhr = await runCombo(browser, baseUrl, row);
-          break;
-        } catch (err) {
-          lastError = err;
-          if (attempt < 3) {
-            process.stdout.write(`(retry ${attempt}) `);
-            await new Promise((r) => setTimeout(r, 1500 * attempt));
-          }
-        }
-      }
-      if (!lhr) throw lastError ?? new Error("run failed after retries");
-      summary = summarize(lhr, mode);
-
-      // Per-run JSON for later inspection.
-      const stamp = new Date().toISOString().replace(/[:.]/g, "-");
-      writeFileSync(
-        resolve(
-          outDir,
-          `${mode}-${device}-${theme}-${network}-cpu${cpu}x-${route === "/" ? "home" : "blog"}-${stamp}.json`,
-        ),
-        JSON.stringify(lhr, null, 2),
-      );
-    } catch (err) {
-      summary = {
-        mode,
-        performance: null,
-        accessibility: null,
-        "best-practices": null,
-        seo: null,
-        error: String(err?.message ?? err),
-      };
-    }
-
-    // Policy checks (mode-aware: only enforce categories LH actually scores).
-    const rowFailures = [];
-    const mustBe100 = CATEGORIES_BY_MODE[mode] ?? [];
-    for (const cat of mustBe100) {
-      const s = summary[cat];
-      if (s === null) rowFailures.push(`${cat}: no score (run failed)`);
-      else if (s / 100 < HARD_FLOOR)
-        rowFailures.push(`${cat}: ${s} < ${Math.round(HARD_FLOOR * 100)}`);
-    }
-    if (
-      mode !== "snapshot" &&
-      summary.performance !== null &&
-      !PERF_BEST_EFFORT({ name: network }, { rate: cpu }) &&
-      summary.performance / 100 < PERF_FLOOR
-    ) {
-      rowFailures.push(`performance: ${summary.performance} < ${Math.round(PERF_FLOOR * 100)}`);
-    }
-
-    const ok = rowFailures.length === 0;
-    if (!ok) failures.push({ label, issues: rowFailures, summary });
-
-    const perfMark = summary.performance === null ? "—" : summary.performance;
-    const a11yMark = summary.accessibility === null ? "—" : summary.accessibility;
-    const bpMark = summary["best-practices"] === null ? "—" : summary["best-practices"];
-    const seoMark = summary.seo === null ? "—" : summary.seo;
-
-    console.log(
-      `${ok ? "✔" : "✗"} perf ${perfMark} · a11y ${a11yMark} · bp ${bpMark} · seo ${seoMark}` +
-        (summary.metrics?.["total-blocking-time"]
-          ? ` · TBT ${summary.metrics["total-blocking-time"]}`
-          : "") +
-        (summary.error ? ` · ${summary.error}` : ""),
-    );
-    if (!ok) console.log(`    ${rowFailures.join(" | ")}`);
-
-    results.push({
-      mode,
-      device,
-      theme,
-      network,
-      cpu: `${cpu}x`,
-      cpuName,
-      route,
-      ...summary,
-    });
+    const outcome = await runMatrixRow(browser, baseUrl, row, index, rows.length);
+    results.push(outcome.result);
+    if (!outcome.ok) failures.push({ label: outcome.label, issues: outcome.issues });
   }
 
   await browser.close();
   if (server) server.kill("SIGTERM");
 
-  // Persist the summary for CI / later inspection.
-  const stamp = new Date().toISOString().replace(/[:.]/g, "-");
-  writeFileSync(resolve(outDir, `summary-${stamp}.json`), JSON.stringify(results, null, 2));
-
-  console.log("\n----------------------------------------------------------------------");
-  console.table(
-    results.map((r) => ({
-      mode: r.mode,
-      device: r.device,
-      theme: r.theme,
-      network: r.network,
-      cpu: r.cpu,
-      route: r.route,
-      perf: r.performance,
-      a11y: r.accessibility,
-      bp: r["best-practices"],
-      seo: r.seo,
-      TBT: r.metrics?.["total-blocking-time"] ?? "",
-      LCP: r.metrics?.["largest-contentful-paint"] ?? "",
-      CLS: r.metrics?.["cumulative-layout-shift"] ?? "",
-    })),
-  );
-
-  if (failures.length) {
-    console.error(`\n✗ ${failures.length} combination(s) failed the score policy:`);
-    for (const f of failures) {
-      console.error(`  - ${f.label}: ${f.issues.join(" | ")}`);
-    }
-    process.exit(1);
-  }
-  console.log(
-    "\n✔ All combinations meet the score policy (a11y/bp/seo = 100 everywhere; perf = 100 where reachable).",
-  );
+  finishRun(results, failures);
 }
 
 main().catch((err) => {
