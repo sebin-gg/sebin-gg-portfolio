@@ -41,5 +41,5 @@
 
 ## Preferences & facts
 
-- Privacy-first: no telemetry on this site, no phone number published, local AI preferred over cloud where possible.
+- Privacy-first: no phone number published, local AI preferred over cloud where possible.
 - Site built static-first on the T3 stack core (Next.js + TypeScript + Tailwind), image-free and optimized for 2G/3G networks.

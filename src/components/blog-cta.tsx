@@ -8,16 +8,13 @@ export function BlogCta() {
       aria-labelledby="blog-title"
       className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 2xl:max-w-[90rem]"
     >
-      <SectionHeading id="blog-title" kicker="Blog" title="Notes & write-ups" />
+      <SectionHeading id="blog-title" title="Notes & write-ups" />
 
       <a
         href="/blog"
         className="group border-line-strong/80 bg-panel/80 hover:border-accent hover:shadow-accent/5 flex flex-col items-start justify-between gap-4 rounded-2xl border border-dashed p-6 backdrop-blur-xs transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl sm:flex-row sm:items-center sm:p-8"
       >
         <div>
-          <p className="border-accent/20 bg-accent-soft text-accent inline-flex rounded-full border px-3 py-1 text-xs font-semibold">
-            Coming soon
-          </p>
           <p className="text-ink-soft mt-3 max-w-xl text-sm leading-relaxed">
             First posts are planned around OWASP drills, the brevity-prompt extension, and what 2G
             performance budgets taught me. No newsletter spam — just a feed.

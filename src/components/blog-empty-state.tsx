@@ -20,10 +20,7 @@ export function BlogEmptyState() {
       </p>
 
       <div className="mt-8 text-left">
-        <p className="border-accent/20 bg-accent-soft text-accent inline-flex rounded-full border px-2.5 py-0.5 text-xs font-semibold tracking-wider uppercase">
-          In the pipeline
-        </p>
-        <ul className="mt-3 space-y-2.5">
+        <ul aria-label="Planned posts" className="mt-3 space-y-2.5">
           {planned.map((post) => (
             <li key={post} className="text-ink-soft flex items-start gap-2.5 text-sm">
               <span

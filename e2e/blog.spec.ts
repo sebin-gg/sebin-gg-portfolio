@@ -5,7 +5,6 @@ test.describe("blog route", () => {
     await page.goto("/blog");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Notes & write-ups");
     await expect(page.getByText(/no posts yet/i)).toBeVisible();
-    await expect(page.getByText(/in the pipeline/i)).toBeVisible();
     await expect(page.getByText(/OWASP Bootcamp 2025/i)).toBeVisible();
   });
 

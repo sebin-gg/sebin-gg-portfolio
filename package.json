@@ -14,6 +14,7 @@
     "test:unit:watch": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
+    "test:e2e:local": "playwright test --project=chromium --project=firefox --project=mobile",
     "test:mutation": "stryker run",
     "test:all": "pnpm lint && pnpm typecheck && pnpm format:check && pnpm test:unit && pnpm test:e2e",
     "crap:gate": "node scripts/crap-gate.mjs",

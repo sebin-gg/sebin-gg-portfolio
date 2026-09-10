@@ -9,7 +9,7 @@ export function Projects() {
       aria-labelledby="projects-title"
       className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 2xl:max-w-[90rem]"
     >
-      <SectionHeading id="projects-title" kicker="projects" title="Things I’ve built" />
+      <SectionHeading id="projects-title" title="Things I’ve built" />
 
       <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {projects.map((project, index) => (

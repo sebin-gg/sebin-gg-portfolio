@@ -9,11 +9,7 @@ export function Experience() {
       className="border-line bg-panel/60 border-y"
     >
       <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 2xl:max-w-[90rem]">
-        <SectionHeading
-          id="experience-title"
-          kicker="experience"
-          title="Where I’ve worked & trained"
-        />
+        <SectionHeading id="experience-title" title="Where I’ve worked & trained" />
 
         <ol className="border-line/80 relative space-y-7 border-l pl-6 sm:pl-8">
           {timeline.map((item) => (
