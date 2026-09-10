@@ -147,7 +147,7 @@ export const projects: Project[] = [
     name: "Kindred",
     tagline: "Community impact tracker",
     description:
-      "Platform where volunteers log impact across six tracks, earn titles and appear in a privacy-controlled directory. Rate-limited REST API with bcrypt auth.",
+      "Platform where volunteers log impact across six tracks, earn titles and appear in a private dashboard. Rate-limited REST API with bcrypt auth.",
     stack: ["Express 5", "React 19", "MongoDB", "JWT"],
     href: "https://github.com/sebin-gg/kindred",
   },
@@ -158,7 +158,7 @@ export const projects: Project[] = [
       "Satirical programming language and IDE that throttles execution when you type too fast — then triggers ASCII turtle rage and poetic haiku feedback.",
     stack: ["Python", "Tkinter", "pytest"],
     href: "https://github.com/sebin-gg/slowlang",
-    highlight: "Winner · TinkerHub 2.0",
+    highlight: "Useless Projects 2.0 by TinkerHub",
   },
 
   {

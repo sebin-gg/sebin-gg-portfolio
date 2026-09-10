@@ -61,10 +61,10 @@ export function Projects() {
                     href={project.demo}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-accent hover:text-accent-strong inline-flex items-center gap-1 text-xs font-semibold"
+                    className="bg-accent text-accent-ink hover:bg-accent-strong shadow-accent/20 inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold whitespace-nowrap shadow-md transition-all hover:shadow-lg"
                   >
                     Live demo
-                    <ArrowUpRightIcon className="h-3.5 w-3.5" />
+                    <ArrowUpRightIcon className="h-4 w-4" />
                   </a>
                 ) : null}
               </div>
