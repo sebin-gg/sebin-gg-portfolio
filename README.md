@@ -23,8 +23,13 @@ bundle weight. The day the blog gets a real backend, they bolt on cleanly.
 ```bash
 pnpm install            # deps
 pnpm dev                # http://localhost:3000
-pnpm test:e2e           # needs a build first (script runs next build itself via Playwright)
+pnpm test:unit:fast    # unit tests, no coverage (inner loop)
+pnpm test:e2e:local    # fast E2E (chromium + firefox + mobile, no webkit)
 ```
+
+Fast loops: `test:unit:fast` skips coverage, `test:e2e:local` skips WebKit
+(which needs system libs Fedora lacks — CI still runs it). Full gates stay in
+`pnpm check:all`, whose independent steps run in parallel.
 
 `bash scripts/setup.sh` does the whole first-time dance (deps, Chromium, résumé copy).
 
