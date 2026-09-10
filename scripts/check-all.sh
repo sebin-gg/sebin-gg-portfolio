@@ -17,14 +17,23 @@ fail() {
   exit 1
 }
 
-step "Lint (incl. complexity cap for CRAP)"
-pnpm lint || fail "pnpm lint"
+step "Lint + typecheck + format (parallel, independent)"
+pnpm lint > /tmp/check-lint.log 2>&1 & lint_pid=$!
+pnpm typecheck > /tmp/check-typecheck.log 2>&1 & typecheck_pid=$!
+pnpm format:check > /tmp/check-format.log 2>&1 & format_pid=$!
 
-step "Typecheck"
-pnpm typecheck || fail "pnpm typecheck"
-
-step "Format check (Prettier)"
-pnpm format:check || fail "pnpm format:check"
+parallel_failed=""
+wait "$lint_pid" || parallel_failed="${parallel_failed} lint"
+wait "$typecheck_pid" || parallel_failed="${parallel_failed} typecheck"
+wait "$format_pid" || parallel_failed="${parallel_failed} format"
+if [ -n "$parallel_failed" ]; then
+  for job in $parallel_failed; do
+    echo "--- $job failed, tail of /tmp/check-$job.log:"
+    tail -30 "/tmp/check-$job.log"
+  done
+  fail "parallel gates:$parallel_failed"
+fi
+echo "✔ lint, typecheck and format all passed."
 
 step "Unit tests + coverage"
 pnpm test:unit || fail "pnpm test:unit"

@@ -20,6 +20,7 @@
     "crap:gate": "node scripts/crap-gate.mjs",
     "perf:audit": "lhci autorun",
     "perf:matrix": "node scripts/perf-lighthouse-matrix.mjs",
+    "perf:quick": "node scripts/perf-lighthouse-matrix.mjs --devices mobile,desktop --themes dark --networks 4G --cpus laptop,phone/mid-tier --modes navigation --routes /,/blog",
     "test:perf": "node scripts/perf-matrix-test.mjs",
     "visual:check": "node scripts/visual-check.mjs",
     "check:thorium": "node scripts/thorium-check.mjs",

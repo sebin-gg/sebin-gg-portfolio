@@ -23,8 +23,8 @@ export const profile = {
   focus: ["cybersecurity", "backend systems", "automation", "privacy-first"],
   /** One paragraph for the About section. */
   bio: [
-    "I’m a Computer Science student at College of Engineering Chengannur (CGPA 8.6). Recent work spans browser-side prompt compression to an edge incident response dashboard powered by local Ollama models.",
-    "I coordinate technical projects for FOCES CEC and run defensive drills—phishing simulations, network mapping with Nmap, and TryHackMe labs.",
+    "I’m a Computer Science student at College of Engineering Chengannur (CGPA 8.6). My recent work spans browser-side prompt compression to an edge incident response dashboard powered by local Ollama models.",
+    "I coordinate technical projects for FOCES CEC.",
   ],
 } as const;
 

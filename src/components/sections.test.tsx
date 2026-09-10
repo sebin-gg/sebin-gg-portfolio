@@ -43,6 +43,7 @@ describe("Hero", () => {
     expect(within(card).getByText("SM")).toBeInTheDocument();
     expect(within(card).queryByText(/Education/i)).not.toBeInTheDocument();
     expect(within(card).getByText(profile.email)).toBeInTheDocument();
+    expect(within(card).getByText(profile.college)).toBeInTheDocument();
     expect(within(card).queryByText(/open to internships/i)).not.toBeInTheDocument();
   });
 });
