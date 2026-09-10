@@ -16,8 +16,6 @@ export function SiteFooter() {
             <Link href="/accessibility" className="hover:text-accent transition-colors">
               Accessibility
             </Link>
-            <span aria-hidden="true">·</span>
-            <span>Next.js, TypeScript, Tailwind</span>
           </p>
 
           <div className="flex items-center gap-3">
@@ -56,7 +54,6 @@ export function SiteFooter() {
               <MailIcon className="h-5 w-5" />
             </a>
           </div>
-          <p className="text-ink-faint text-xs">No telemetry</p>
         </div>
         <p className="text-ink-faint mt-6 text-center text-xs">
           {profile.degree} · {profile.college} · {profile.location}

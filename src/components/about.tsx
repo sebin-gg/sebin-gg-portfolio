@@ -1,5 +1,4 @@
 import { profile } from "@/lib/site";
-import { Eyebrow } from "@/components/section-heading";
 
 const facts = [
   { label: "Degree", value: profile.degree },
@@ -14,9 +13,6 @@ export function About() {
       aria-labelledby="about-title"
       className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 2xl:max-w-[90rem]"
     >
-      <div>
-        <Eyebrow>About</Eyebrow>
-      </div>
       <h2
         id="about-title"
         className="text-ink mt-1 text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl"

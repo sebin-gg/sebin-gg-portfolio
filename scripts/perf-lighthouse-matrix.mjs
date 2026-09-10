@@ -76,7 +76,7 @@ const DEVICES = [
   { name: "desktop", formFactor: "desktop", width: 1350, height: 940, dpr: 1 },
 ];
 
-const MODES = ["navigation", "timespan", "snapshot"];
+const MODES = [{ name: "navigation" }, { name: "timespan" }, { name: "snapshot" }];
 
 // Which categories must hit the hard 100 floor per gather mode (performance is
 // handled separately below so the 2G/20x best-effort exemption applies):
@@ -153,11 +153,7 @@ function parseArgs(argv) {
         args.devices = parseList(next(), DEVICES, "device");
         break;
       case "--modes":
-        args.modes = parseList(
-          next(),
-          MODES.map((m) => ({ name: m })),
-          "mode",
-        );
+        args.modes = parseList(next(), MODES, "mode");
         break;
       case "--server":
         args.server = Number(next());

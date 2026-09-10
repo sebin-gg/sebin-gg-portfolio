@@ -104,6 +104,9 @@ test.describe("home page", () => {
     await expect(page.locator('meta[property="og:title"]')).toHaveCount(1);
     await expect(page.locator('meta[property="og:description"]')).toHaveCount(1);
     expect(await meta('meta[property="og:image"]')).toMatch(/opengraph-image/);
+    expect(await meta('meta[property="og:image:width"]')).toBe("1200");
+    expect(await meta('meta[property="og:image:height"]')).toBe("630");
+    expect(await meta('meta[property="og:image:alt"]')).toMatch(/Sebin Mathew/);
     expect(await meta('meta[name="twitter:card"]')).toBe("summary_large_image");
     expect(await meta('meta[name="twitter:image"]')).toMatch(/opengraph-image/);
   });
