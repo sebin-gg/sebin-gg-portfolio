@@ -69,15 +69,16 @@ jobs:
         run: pnpm build
 
       # One build, every downstream job reuses it — no `pnpm build` in the
-      # e2e/cross-browser jobs. Next needs its node_modules to serve, so
-      # upload `.next` without `cache/`, then restore node_modules separately.
+      # e2e/cross-browser jobs. Prune the build cache first: `next start`
+      # never reads it, and it only bloats the artifact.
+      - name: Prune build cache
+        run: rm -rf .next/cache
+
       - name: Upload build output
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c3c89aef350131 # v7
         with:
           name: next-build
-          path: |
-            .next/
-            !.next/cache
+          path: .next
           retention-days: 1
 
   e2e:
