@@ -11,6 +11,7 @@
     "format:write": "prettier --write .",
     "format:check": "prettier --check .",
     "test:unit": "vitest run --coverage",
+    "test:unit:fast": "vitest run",
     "test:unit:watch": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",

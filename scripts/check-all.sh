@@ -37,17 +37,26 @@ if [[ -n "$parallel_failed" ]]; then
 fi
 echo "✔ lint, typecheck and format all passed."
 
-step "Unit tests + coverage"
-pnpm test:unit || fail "pnpm test:unit"
+step "Unit tests + build + browsers (parallel, independent)"
+pnpm test:unit > /tmp/check-unit.log 2>&1 & unit_pid=$!
+pnpm build > /tmp/check-build.log 2>&1 & build_pid=$!
+pnpm exec playwright install chromium firefox webkit > /tmp/check-pw.log 2>&1 & pw_pid=$!
 
-step "CRAP gate (< 6)"
+parallel_failed=""
+wait "$unit_pid" || parallel_failed="${parallel_failed} unit"
+wait "$build_pid" || parallel_failed="${parallel_failed} build"
+wait "$pw_pid" || parallel_failed="${parallel_failed} playwright-install"
+if [[ -n "$parallel_failed" ]]; then
+  for job in $parallel_failed; do
+    echo "--- $job failed, tail of /tmp/check-$job.log:"
+    tail -30 "/tmp/check-$job.log"
+  done
+  fail "parallel build:$parallel_failed"
+fi
+echo "✔ unit tests, build and browser install all passed."
+
+step "CRAP gate (< 6, uses unit coverage above)"
 pnpm crap:gate || fail "pnpm crap:gate"
-
-step "Production build"
-pnpm build || fail "pnpm build"
-
-step "Playwright browsers (idempotent, cached)"
-pnpm exec playwright install chromium firefox webkit || fail "playwright install"
 
 step "E2E tests (Playwright: chromium/firefox/webkit/mobile)"
 pnpm test:e2e || fail "pnpm test:e2e"
