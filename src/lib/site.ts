@@ -212,6 +212,23 @@ export const skills: { group: string; items: string[] }[] = [
       "Chrome MV3",
     ],
   },
+  {
+    group: "Performance",
+    items: ["Lighthouse", "Core Web Vitals", "Performance budgets"],
+  },
+  {
+    group: "Soft skills",
+    items: [
+      "Project coordination",
+      "Event organization",
+      "Team collaboration",
+      "Community building",
+    ],
+  },
+  {
+    group: "Spoken languages",
+    items: ["English", "Hindi", "Malayalam"],
+  },
 ] as const;
 
 export const navItems = [

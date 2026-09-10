@@ -1,12 +1,22 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { siteUrl } from "@/lib/site";
+import { profile, siteUrl } from "@/lib/site";
 import { ArrowUpRightIcon } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Accessibility",
   description: "Accessibility statement and standards for Sebin Mathew’s portfolio.",
   alternates: { canonical: `${siteUrl}/accessibility` },
+  openGraph: {
+    url: `${siteUrl}/accessibility`,
+    title: `Accessibility · ${profile.name}`,
+    description: "Accessibility statement and standards for Sebin Mathew’s portfolio.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `Accessibility · ${profile.name}`,
+    description: "Accessibility statement and standards for Sebin Mathew’s portfolio.",
+  },
 };
 
 export default function AccessibilityPage() {

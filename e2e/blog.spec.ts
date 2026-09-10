@@ -5,6 +5,7 @@ test.describe("blog route", () => {
     await page.goto("/blog");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Notes & write-ups");
     await expect(page.getByText(/no posts yet/i)).toBeVisible();
+    await expect(page.getByText(/in the pipeline/i)).toBeVisible();
     await expect(page.getByText(/OWASP Bootcamp 2025/i)).toBeVisible();
   });
 
@@ -13,6 +14,15 @@ test.describe("blog route", () => {
     const follow = page.getByRole("link", { name: "Follow on GitHub" });
     await expect(follow).toHaveAttribute("href", "https://github.com/sebin-gg");
   });
+
+  test("exposes its own share tags with the blog URL", async ({ page }) => {
+    await page.goto("/blog");
+    const meta = async (selector: string, attr = "content") =>
+      page.locator(selector).first().getAttribute(attr);
+    expect(await meta('meta[property="og:url"]')).toMatch(/\/blog$/);
+    expect(await meta('meta[property="og:type"]')).toBe("article");
+    expect(await meta('meta[name="twitter:title"]')).toMatch(/Blog/);
+  });
 });
 
 test.describe("unknown route", () => {
@@ -20,6 +30,7 @@ test.describe("unknown route", () => {
     const response = await page.goto("/this-route-does-not-exist");
     expect(response?.status()).toBe(404);
     await expect(page.getByRole("heading", { name: /That page doesn.t exist/ })).toBeVisible();
+    await expect(page.locator('meta[name="robots"]').first()).toHaveAttribute("content", /noindex/);
     await expect(page.getByRole("link", { name: "Back to home" })).toHaveAttribute("href", "/");
   });
 });

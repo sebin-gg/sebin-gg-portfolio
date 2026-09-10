@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { siteUrl } from "@/lib/site";
+import { profile, siteUrl } from "@/lib/site";
 import { BlogEmptyState } from "@/components/blog-empty-state";
 
 export const metadata: Metadata = {
@@ -7,6 +7,19 @@ export const metadata: Metadata = {
   description:
     "Write-ups on security drills, prompt engineering, and shipping fast websites. Coming soon.",
   alternates: { canonical: `${siteUrl}/blog` },
+  openGraph: {
+    type: "article",
+    url: `${siteUrl}/blog`,
+    title: `Blog · ${profile.name}`,
+    description:
+      "Write-ups on security drills, prompt engineering, and shipping fast websites. Coming soon.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `Blog · ${profile.name}`,
+    description:
+      "Write-ups on security drills, prompt engineering, and shipping fast websites. Coming soon.",
+  },
 };
 
 export default function BlogPage() {

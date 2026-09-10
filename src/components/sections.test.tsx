@@ -96,13 +96,23 @@ describe("Skills", () => {
     expect(screen.getByText("Languages")).toBeInTheDocument();
     expect(screen.getByText("TypeScript")).toBeInTheDocument();
   });
+
+  it("lists performance, soft skills and spoken languages", () => {
+    render(<Skills />);
+    expect(screen.getByText("Performance")).toBeInTheDocument();
+    expect(screen.getByText("Core Web Vitals")).toBeInTheDocument();
+    expect(screen.getByText("Soft skills")).toBeInTheDocument();
+    expect(screen.getByText("Project coordination")).toBeInTheDocument();
+    expect(screen.getByText("Spoken languages")).toBeInTheDocument();
+    expect(screen.getByText("Malayalam")).toBeInTheDocument();
+  });
 });
 
 describe("BlogEmptyState", () => {
-  it("says the blog has no posts yet and lists planned posts", () => {
+  it("says the blog is coming soon and lists planned posts", () => {
     render(<BlogEmptyState />);
     expect(screen.getByText(/no posts yet/i)).toBeInTheDocument();
-    expect(screen.getByRole("list", { name: "Planned posts" })).toBeInTheDocument();
+    expect(screen.getByText(/in the pipeline/i)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Follow on GitHub" })).toHaveAttribute(
       "href",
       "https://github.com/sebin-gg",
