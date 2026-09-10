@@ -8,7 +8,7 @@ export function BlogCta() {
       aria-labelledby="blog-title"
       className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 2xl:max-w-[90rem]"
     >
-      <SectionHeading id="blog-title" kicker="Blog" title="Notes & write-ups" />
+      <SectionHeading id="blog-title" title="Notes & write-ups" />
 
       <a
         href="/blog"

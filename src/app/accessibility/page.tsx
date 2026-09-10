@@ -1,20 +1,28 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { siteUrl } from "@/lib/site";
-import { Eyebrow } from "@/components/section-heading";
+import { profile, siteUrl } from "@/lib/site";
 import { ArrowUpRightIcon } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Accessibility",
   description: "Accessibility statement and standards for Sebin Mathew’s portfolio.",
   alternates: { canonical: `${siteUrl}/accessibility` },
+  openGraph: {
+    url: `${siteUrl}/accessibility`,
+    title: `Accessibility · ${profile.name}`,
+    description: "Accessibility statement and standards for Sebin Mathew’s portfolio.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `Accessibility · ${profile.name}`,
+    description: "Accessibility statement and standards for Sebin Mathew’s portfolio.",
+  },
 };
 
 export default function AccessibilityPage() {
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 sm:py-10">
       <header className="mb-8">
-        <Eyebrow>Standards</Eyebrow>
         <h1 className="text-ink text-3xl font-bold tracking-tight sm:text-4xl">
           Accessibility statement
         </h1>
@@ -47,14 +55,6 @@ export default function AccessibilityPage() {
             The site respects system{" "}
             <code className="text-accent text-xs">prefers-reduced-motion</code> settings, disabling
             non-essential animations for users with vestibular sensitivities.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-ink text-lg font-semibold">Performance &amp; privacy</h2>
-          <p className="text-ink-soft mt-2 text-sm leading-relaxed">
-            Zero third-party trackers, zero advertising scripts, and zero telemetry. Total payload
-            is optimized for low-bandwidth 2G/3G connections.
           </p>
         </section>
       </div>
