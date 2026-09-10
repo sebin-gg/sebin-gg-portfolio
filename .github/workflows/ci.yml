@@ -79,6 +79,8 @@ jobs:
         with:
           name: next-build
           path: .next
+          # .next is a dot-directory; without this the step uploads nothing.
+          include-hidden-files: true
           retention-days: 1
 
   e2e:
