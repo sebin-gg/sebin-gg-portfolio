@@ -31,10 +31,11 @@ pnpm test:e2e           # needs a build first (script runs next build itself via
 ## Quality gates (the short version)
 
 ```bash
-pnpm check:all    # lint → typecheck → format → unit+coverage → CRAP gate → build → e2e
+pnpm check:all    # lint+typecheck+format in parallel → unit+coverage → CRAP gate → build → e2e
 pnpm test:mutation    # Stryker mutation score (slow; also runs in CI on main)
 pnpm perf:audit       # lhci budgets + floors, simulated slow-4G mobile, / + /blog (needs CHROME_PATH)
-pnpm perf:matrix      # full Lighthouse matrix: themes × 2G/3G/4G × CPU 1x–20x × mobile/desktop × navigation/timespan/snapshot × routes (needs CHROME_PATH)
+pnpm perf:quick       # 8-run Lighthouse subset (both routes × both devices, 4G dark) for fast local loops
+pnpm perf:matrix      # full 288-run matrix, nightly in CI (PRs run budgets + perf:quick instead)
 pnpm test:perf        # live Core Web Vitals matrix with real CDP network + CPU throttling
 node scripts/visual-check.mjs   # screenshots + horizontal-overflow check
 ```

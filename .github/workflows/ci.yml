@@ -42,6 +42,7 @@ jobs:
         run: pnpm crap:gate
 
       - name: Upload coverage report
+        if: always()
         uses: actions/upload-artifact@v7
         with:
           name: coverage
@@ -67,16 +68,71 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Upload build output for debugging
-        if: failure()
+      # One build, every downstream job reuses it — no `pnpm build` in the
+      # e2e/cross-browser jobs. Next needs its node_modules to serve, so
+      # upload `.next` without `cache/`, then restore node_modules separately.
+      - name: Upload build output
         uses: actions/upload-artifact@v7
         with:
-          name: next-build-logs
-          path: .next/
-          retention-days: 7
+          name: next-build
+          path: |
+            .next/
+            !.next/cache
+          retention-days: 1
 
   e2e:
-    name: Playwright end-to-end
+    name: E2E (${{ matrix.browser }})
+    runs-on: ubuntu-latest
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Cache keyed on the Playwright version so browsers re-download only
+      # when it changes.
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Download production build
+        uses: actions/download-artifact@v7
+        with:
+          name: next-build
+          path: .next
+
+      - name: Run e2e tests
+        run: pnpm test:e2e
+        env:
+          E2E_SKIP_BUILD: 1
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report-${{ matrix.browser }}
+          path: playwright-report/
+          retention-days: 14
+
+  mobile:
+    name: E2E (mobile emulation)
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -92,19 +148,59 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps chromium
 
-      - name: Build
-        run: pnpm build
+      - name: Download production build
+        uses: actions/download-artifact@v7
+        with:
+          name: next-build
+          path: .next
 
-      - name: Run e2e tests
-        run: pnpm test:e2e
+      - name: Run mobile e2e tests
+        run: pnpm exec playwright test --project=mobile
+        env:
+          E2E_SKIP_BUILD: 1
 
       - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: playwright-report
+          name: playwright-report-mobile
           path: playwright-report/
           retention-days: 14
+
+  terminal-browsers:
+    name: Terminal browsers (lynx/w3m/links)
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install terminal browsers
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends lynx w3m links
+
+      - name: Download production build
+        uses: actions/download-artifact@v7
+        with:
+          name: next-build
+          path: .next
+
+      - name: Run terminal browser check
+        run: pnpm check:terminal
