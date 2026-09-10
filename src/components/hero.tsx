@@ -1,4 +1,4 @@
-import { links, profile, resumeUrl } from "@/lib/site";
+import { links, profile, projects, resumeUrl } from "@/lib/site";
 import {
   ArrowUpRightIcon,
   DownloadIcon,
@@ -8,11 +8,14 @@ import {
 } from "@/components/icons";
 
 const stats = [
-  { value: `${profile.cgpa}`, label: "B.Tech CGPA" },
+  { value: `${projects.length}`, label: "featured projects" },
   { value: "'28", label: "graduating class" },
 ];
 
-const facts = [{ label: "Email", value: profile.email, mailto: true }];
+const facts: { label: string; value: string; mailto?: boolean }[] = [
+  { label: "Email", value: profile.email, mailto: true },
+  { label: "College", value: profile.college },
+];
 
 function monogram(name: string): string {
   const [first, second] = name.trim().split(/\s+/);
@@ -99,25 +102,6 @@ export function Hero() {
                   <XIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </a>
               </div>
-              <p className="text-ink-faint flex flex-wrap items-center gap-x-3 gap-y-1 pt-1 text-xs break-all sm:text-sm">
-                <a
-                  href={links.github.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-accent transition-colors"
-                >
-                  {links.github.href.replace(/^https:\/\//, "")}
-                </a>
-                <span aria-hidden="true">·</span>
-                <a
-                  href={links.linkedin.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-accent transition-colors"
-                >
-                  {links.linkedin.href.replace(/^https:\/\//, "")}
-                </a>
-              </p>
             </div>
           </div>
 

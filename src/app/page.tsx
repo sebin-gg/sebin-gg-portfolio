@@ -15,9 +15,9 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <Projects />
       <About />
       <Experience />
-      <Projects />
       <Skills />
       <BlogCta />
     </>

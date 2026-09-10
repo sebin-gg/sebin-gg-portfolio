@@ -18,8 +18,25 @@ comes from the résumé in `docs/` and the GitHub profile. Single page + a "blog
 - `pnpm dev` — dev server on :3000
 - `pnpm check:all` — full local quality gate (lint, typecheck, format, unit+coverage, CRAP, build, e2e)
 - `pnpm test:unit` / `pnpm test:e2e` / `pnpm test:mutation` — Vitest / Playwright / Stryker
-- `pnpm perf:audit` — Lighthouse (simulated slow-4G mobile) against a production server on :3100
+- `pnpm perf:audit` — lhci budgets + floors (slow-4G mobile) against a server on :3100
+- `pnpm perf:matrix` — full Lighthouse matrix (themes × 2G/3G/4G × CPU 1x–20x × mobile/desktop × navigation/timespan/snapshot × routes)
+- `pnpm test:perf` — live Core Web Vitals matrix (real CDP network + CPU throttling)
 - `node scripts/visual-check.mjs` — screenshots into `docs/screenshots/` + overflow check
+
+## Agent skills (use these when working here)
+
+Skills live in `.agents/skills/` and are locked in `skills-lock.json`. Load the skill
+via the `skill` tool before relying on it. The ones this repo expects:
+
+1. **`caveman`** — terse replies. Default mode for agents working in this repo:
+   compressed output, technical substance intact, no filler. `/caveman off` ends it.
+2. **`unslop`** — run an audit pass before and after touching any user-visible copy
+   (site text, blog copy, accessibility statement, llms.txt). The site has a strict
+   human-voice rule; the scanner in `.agents/skills/unslop/scripts/` reports AI tells.
+3. **`designing-beautiful-websites`** — load before any UI/visual redesign work.
+
+Copy conventions go together with rule 2: content lives in `src/lib/site.ts`, keep
+it human-voiced, typographic apostrophes only.
 
 ## Rules
 

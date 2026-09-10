@@ -17,14 +17,13 @@ export const profile = {
   cgpa: 8.6,
   classOf: 2028,
   /** Short line shown under the name in the hero. */
-  tagline:
-    "Building full-stack web applications, browser extensions, and local security tooling. Backend-leaning, privacy by default.",
+  tagline: "Building full-stack web applications, browser extensions, and local security tooling.",
   /** Scannable keyword chips under the tagline. */
   focus: ["cybersecurity", "backend systems", "automation", "privacy-first"],
   /** One paragraph for the About section. */
   bio: [
-    "I’m a Computer Science student at College of Engineering Chengannur (CGPA 8.6). Recent work spans browser-side prompt compression to an edge incident response dashboard powered by local Ollama models.",
-    "I build with zero telemetry, modular architectures, and verified inputs. Outside of coding, I coordinate technical projects for FOCES CEC and run defensive drills—phishing simulations, network mapping with Nmap, and TryHackMe labs.",
+    "I’m a Computer Science student at College of Engineering Chengannur. My recent work spans browser-side prompt compression to an edge incident response dashboard powered by local Ollama models.",
+    "I coordinate technical projects for FOCES CEC.",
   ],
 } as const;
 
@@ -121,7 +120,7 @@ export const projects: Project[] = [
     name: "Aegis",
     tagline: "Cyber threat dashboard with local AI",
     description:
-      "Real-time threat monitoring dashboard. Streaming terminal logs, automated attack simulation, iptables mitigation commands and optional local-AI analysis via Ollama.",
+      "Streaming terminal logs, automated attack simulation, iptables mitigation commands and optional local-AI analysis via Ollama.",
     stack: ["Next.js 15", "React 19", "TypeScript", "Ollama"],
     href: "https://github.com/sebin-gg/Aegis",
     highlight: "security",
@@ -130,7 +129,7 @@ export const projects: Project[] = [
     name: "brevity-prompt",
     tagline: "Chrome extension that trims prompts",
     description:
-      "Compresses prompts in-browser before they hit ChatGPT, Claude or Gemini — 40–65% fewer tokens. Pure client-side regex, zero external dependencies, keeps code blocks intact. 25/25 tests passing.",
+      "Compresses prompts in-browser before they hit ChatGPT, Claude or Gemini — 40–65% fewer tokens. Pure client-side regex, zero external dependencies.",
     stack: ["JavaScript", "Chrome MV3", "regex"],
     href: "https://github.com/sebin-gg/brevity-prompt",
     highlight: "privacy",
@@ -148,7 +147,7 @@ export const projects: Project[] = [
     name: "Kindred",
     tagline: "Community impact tracker",
     description:
-      "Platform where volunteers log impact across six tracks, earn titles and appear in a privacy-controlled directory. Rate-limited REST API with bcrypt auth.",
+      "Platform where volunteers log impact across six tracks, earn titles and appear in a private dashboard. Rate-limited REST API with bcrypt auth.",
     stack: ["Express 5", "React 19", "MongoDB", "JWT"],
     href: "https://github.com/sebin-gg/kindred",
   },
@@ -156,20 +155,19 @@ export const projects: Project[] = [
     name: "TortoiseLang (slowlang)",
     tagline: "A language that punishes fast typing",
     description:
-      "Satirical programming language and IDE that throttles execution when you type too fast — then triggers ASCII turtle rage and poetic haiku feedback. Built for and won TinkerHub Useless Projects 2.0.",
+      "Satirical programming language and IDE that throttles execution when you type too fast — then triggers ASCII turtle rage and poetic haiku feedback.",
     stack: ["Python", "Tkinter", "pytest"],
     href: "https://github.com/sebin-gg/slowlang",
-    highlight: "Winner · TinkerHub 2.0",
+    highlight: "Useless Projects 2.0 by TinkerHub",
   },
 
   {
-    name: "career-bridge",
-    tagline: "Local AI résumé matcher",
+    name: "ShyUI",
+    tagline: "Tray app that hides title bars of maximized windows",
     description:
-      "Matches a résumé against a job description entirely on-device with local AI. Built as a coaching tool that keeps candidate data off remote servers.",
-    stack: ["TypeScript", "Local AI"],
-    href: "https://github.com/sebin-gg/career-bridge",
-    highlight: "privacy",
+      "Lightweight Windows tray app that auto-hides the title bar of maximized windows for a cleaner fullscreen-style view. Single C# file on the Win32 API with per-app control and global hotkeys.",
+    stack: ["C#", "Windows Forms", "Win32 API"],
+    href: "https://github.com/sebin-gg/shyui",
   },
 ] as const;
 
@@ -211,6 +209,23 @@ export const skills: { group: string; items: string[] }[] = [
       "pytest",
       "Chrome MV3",
     ],
+  },
+  {
+    group: "Performance",
+    items: ["Lighthouse", "Core Web Vitals", "Performance budgets"],
+  },
+  {
+    group: "Soft skills",
+    items: [
+      "Project coordination",
+      "Event organization",
+      "Team collaboration",
+      "Community building",
+    ],
+  },
+  {
+    group: "Spoken languages",
+    items: ["English", "Hindi", "Malayalam"],
   },
 ] as const;
 

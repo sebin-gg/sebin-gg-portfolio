@@ -43,6 +43,7 @@ describe("Hero", () => {
     expect(within(card).getByText("SM")).toBeInTheDocument();
     expect(within(card).queryByText(/Education/i)).not.toBeInTheDocument();
     expect(within(card).getByText(profile.email)).toBeInTheDocument();
+    expect(within(card).getByText(profile.college)).toBeInTheDocument();
     expect(within(card).queryByText(/open to internships/i)).not.toBeInTheDocument();
   });
 });
@@ -95,6 +96,16 @@ describe("Skills", () => {
     expect(screen.getByRole("heading", { name: "Toolbox" })).toBeInTheDocument();
     expect(screen.getByText("Languages")).toBeInTheDocument();
     expect(screen.getByText("TypeScript")).toBeInTheDocument();
+  });
+
+  it("lists performance, soft skills and spoken languages", () => {
+    render(<Skills />);
+    expect(screen.getByText("Performance")).toBeInTheDocument();
+    expect(screen.getByText("Core Web Vitals")).toBeInTheDocument();
+    expect(screen.getByText("Soft skills")).toBeInTheDocument();
+    expect(screen.getByText("Project coordination")).toBeInTheDocument();
+    expect(screen.getByText("Spoken languages")).toBeInTheDocument();
+    expect(screen.getByText("Malayalam")).toBeInTheDocument();
   });
 });
 
