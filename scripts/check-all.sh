@@ -5,15 +5,17 @@ set -uo pipefail
 cd "$(dirname "$0")/.."
 
 step() {
+  local label=$1
   echo
   echo "==========================================================="
-  echo "  $1"
+  echo "  $label"
   echo "==========================================================="
 }
 
 fail() {
+  local where=$1
   echo
-  echo "✗ FAILED at: $1"
+  echo "✗ FAILED at: $where"
   exit 1
 }
 
@@ -26,7 +28,7 @@ parallel_failed=""
 wait "$lint_pid" || parallel_failed="${parallel_failed} lint"
 wait "$typecheck_pid" || parallel_failed="${parallel_failed} typecheck"
 wait "$format_pid" || parallel_failed="${parallel_failed} format"
-if [ -n "$parallel_failed" ]; then
+if [[ -n "$parallel_failed" ]]; then
   for job in $parallel_failed; do
     echo "--- $job failed, tail of /tmp/check-$job.log:"
     tail -30 "/tmp/check-$job.log"
@@ -60,7 +62,7 @@ else
   echo "! lynx/w3m/links not installed — skipping terminal browser check"
 fi
 
-if command -v thorium-browser >/dev/null 2>&1 || [ -x /usr/bin/thorium-browser ]; then
+if command -v thorium-browser >/dev/null 2>&1 || [[ -x /usr/bin/thorium-browser ]]; then
   step "Thorium browser check (Puppeteer)"
   pnpm check:thorium || fail "pnpm check:thorium"
 fi
@@ -71,7 +73,7 @@ CHROME_FAMILY=""
 for b in google-chrome google-chrome-stable chromium chromium-browser brave-browser microsoft-edge vivaldi opera; do
   if command -v "$b" >/dev/null 2>&1; then CHROME_FAMILY=1; break; fi
 done
-if [ -n "$CHROME_FAMILY" ]; then
+if [[ -n "$CHROME_FAMILY" ]]; then
   step "Chrome-family sweep (puppeteer-core discovery)"
   pnpm check:browsers || fail "pnpm check:browsers"
 fi

@@ -72,8 +72,9 @@ test.describe("home page", () => {
       for (let i = 0; i < total; i++) {
         const button = buttons.nth(i);
         if (await button.isVisible()) {
+          // Playwright auto-waits for actionability; handlers here are
+          // synchronous, so no fixed sleep is needed.
           await button.click();
-          await page.waitForTimeout(50);
         }
       }
     }
@@ -88,8 +89,11 @@ test.describe("home page", () => {
       if (!(await link.isVisible())) continue;
       const href = await link.getAttribute("href");
       if (!href || href.startsWith("http") || href.startsWith("mailto:")) continue;
+      const before = page.url();
       await link.click();
-      await page.waitForTimeout(30);
+      // Hash clicks and same-document links settle synchronously; real
+      // navigations resolve the URL wait. Either way, no fixed sleep.
+      await page.waitForURL((url) => url.href !== before, { timeout: 2000 }).catch(() => {});
     }
 
     await expect(page.getByText(profile.name).first()).toBeVisible();

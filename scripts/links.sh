@@ -13,11 +13,12 @@ echo "==========================================================="
 echo
 
 open_url() {
-  echo "Opening: $1"
+  local url=$1
+  echo "Opening: $url"
   if command -v xdg-open >/dev/null 2>&1; then
-    xdg-open "$1" >/dev/null 2>&1 &
+    xdg-open "$url" >/dev/null 2>&1 &
   elif command -v open >/dev/null 2>&1; then
-    open "$1"
+    open "$url"
   else
     echo "  (no xdg-open/open found — visit the URL manually)"
   fi
