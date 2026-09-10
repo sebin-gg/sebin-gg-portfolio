@@ -30,7 +30,7 @@
 - Event Tracker: FOCES event platform — FastAPI + React + Tailwind, live at [sebin-gg.github.io/Event-Tracker](https://sebin-gg.github.io/Event-Tracker/) — [github.com/sebin-gg/Event-Tracker](https://github.com/sebin-gg/Event-Tracker)
 - Kindred: volunteer community-impact platform — Express 5 + React 19 + MongoDB + JWT — [github.com/sebin-gg/kindred](https://github.com/sebin-gg/kindred)
 - TortoiseLang (slowlang): satirical programming language punishing fast typing — won TinkerHub Useless Projects 2025 — [github.com/sebin-gg/slowlang](https://github.com/sebin-gg/slowlang)
-- career-bridge: local-AI résumé-to-job matcher that keeps data on-device — [github.com/sebin-gg/career-bridge](https://github.com/sebin-gg/career-bridge)
+- ShyUI: lightweight Windows tray app that auto-hides title bars of maximized windows (C#, WinForms, Win32 API) — [github.com/sebin-gg/shyui](https://github.com/sebin-gg/shyui)
 
 ## Experience highlights
 

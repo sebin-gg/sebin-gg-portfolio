@@ -129,7 +129,7 @@ export const projects: Project[] = [
     name: "brevity-prompt",
     tagline: "Chrome extension that trims prompts",
     description:
-      "Compresses prompts in-browser before they hit ChatGPT, Claude or Gemini — 40–65% fewer tokens. Pure client-side regex, zero external dependencies, keeps code blocks intact. 25/25 tests passing.",
+      "Compresses prompts in-browser before they hit ChatGPT, Claude or Gemini — 40–65% fewer tokens. Pure client-side regex, zero external dependencies.",
     stack: ["JavaScript", "Chrome MV3", "regex"],
     href: "https://github.com/sebin-gg/brevity-prompt",
     highlight: "privacy",
@@ -162,13 +162,12 @@ export const projects: Project[] = [
   },
 
   {
-    name: "career-bridge",
-    tagline: "Local AI résumé matcher",
+    name: "ShyUI",
+    tagline: "Tray app that hides title bars of maximized windows",
     description:
-      "Matches a résumé against a job description entirely on-device with local AI. Built as a coaching tool that keeps candidate data off remote servers.",
-    stack: ["TypeScript", "Local AI"],
-    href: "https://github.com/sebin-gg/career-bridge",
-    highlight: "privacy",
+      "Lightweight Windows tray app that auto-hides the title bar of maximized windows for a cleaner fullscreen-style view. Single C# file on the Win32 API with per-app control and global hotkeys.",
+    stack: ["C#", "Windows Forms", "Win32 API"],
+    href: "https://github.com/sebin-gg/shyui",
   },
 ] as const;
 
