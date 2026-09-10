@@ -22,6 +22,10 @@
     "test:perf": "node scripts/perf-matrix-test.mjs",
     "visual:check": "node scripts/visual-check.mjs",
     "check:thorium": "node scripts/thorium-check.mjs",
+    "check:browsers": "node scripts/browsers-check.mjs",
+    "check:safari": "node scripts/safari-check.mjs",
+    "check:firefox": "node scripts/firefox-check.mjs",
+    "check:terminal": "node scripts/terminal-check.mjs",
     "check:all": "bash scripts/check-all.sh",
     "prepare": "husky"
   },
