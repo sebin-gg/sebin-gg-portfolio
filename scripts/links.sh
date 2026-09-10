@@ -43,13 +43,13 @@ echo "     Config already shipped in .coderabbit.yaml."
 echo
 read -r -p "   Press Enter after installing CodeRabbit…" -n 1 -s && echo
 
-open_url "https://github.com/apps/renovate"
-echo "  4) Renovate (dependency updates) — install on $REPO."
-echo "     Config already shipped in renovate.json."
-echo "     Prefer Dependabot instead? Then skip this and enable Dependabot"
-echo "     in GitHub → Settings → Code security → Dependabot (config shipped)."
+open_url "https://github.com/apps/dependabot"
+echo "  4) Dependabot (dependency updates) — enable in GitHub → Settings → Code security."
+echo "     Config already shipped in .github/dependabot.yml (grouped, majors ignored)."
 echo
-read -r -p "   Press Enter after installing Renovate (or skip)…" -n 1 -s && echoopen_url "https://github.com/apps/sonarcloud"
+read -r -p "   Press Enter after enabling Dependabot…" -n 1 -s && echo
+
+open_url "https://github.com/apps/sonarcloud"
 echo "  5) SonarCloud (free static analysis) — install the GitHub App on $REPO."
 echo "     It analyzes every PR as a check (no workflow needed). Match"
 echo "     sonar-project.properties:"
@@ -61,6 +61,6 @@ echo
 echo "Done. When CI runs on your first push it will exercise:"
 echo "  • CodeRabbit comments on every PR"
 echo "  • SonarCloud PR analysis (GitHub App, already installed)"
-echo "  • CodeQL + Dependabot/Renovate for long-term health"
-echo "  • Lighthouse budgets + Stryker mutation score on main"
-echo "  • Playwright e2e + Vitest coverage on every PR"
+echo "  • CodeQL + Dependabot for long-term health"
+echo "  • Lighthouse budgets + quick subset on PRs, full 288-run matrix nightly"
+echo "  • Playwright e2e (chromium/firefox/webkit/mobile) + Vitest coverage on every PR"

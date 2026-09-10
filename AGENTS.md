@@ -16,12 +16,16 @@ comes from the résumé in `docs/` and the GitHub profile. Single page + a "blog
 ## Commands (pnpm)
 
 - `pnpm dev` — dev server on :3000
-- `pnpm check:all` — full local quality gate (lint, typecheck, format, unit+coverage, CRAP, build, e2e)
+- `pnpm check:all` — full local quality gate (static gates ∥ unit+build+browsers ∥ CRAP → e2e → terminal/thorium)
+- `pnpm test:unit:fast` / `pnpm test:e2e:local` — fast loops (no coverage; chromium+firefox+mobile, no WebKit)
 - `pnpm test:unit` / `pnpm test:e2e` / `pnpm test:mutation` — Vitest / Playwright / Stryker
 - `pnpm perf:audit` — lhci budgets + floors (slow-4G mobile) against a server on :3100
-- `pnpm perf:matrix` — full Lighthouse matrix (themes × 2G/3G/4G × CPU 1x–20x × mobile/desktop × navigation/timespan/snapshot × routes)
+- `pnpm perf:quick` — 8-run Lighthouse subset for local loops (full 288-run `perf:matrix` is nightly CI)
 - `pnpm test:perf` — live Core Web Vitals matrix (real CDP network + CPU throttling)
+- `pnpm check:safari` / `check:firefox` / `check:terminal` / `check:browsers` — engine-specific checks
 - `node scripts/visual-check.mjs` — screenshots into `docs/screenshots/` + overflow check
+
+`main` is branch-protected: land changes via PRs (9 required checks), never direct push.
 
 ## Agent skills (use these when working here)
 
