@@ -62,8 +62,9 @@ it human-voiced, typographic apostrophes only.
 7. Tailwind v4: theme tokens are CSS vars in `globals.css` mapped via `@theme inline`; use the
    semantic utilities (`bg-canvas`, `text-ink-soft`, `border-line`, `text-accent`, …) rather than
    raw palette classes.
-8. **Every PR gets a CodeRabbit review.** CodeRabbit skips auto-review on this repo, so after
-   opening a PR, post `@coderabbitai review` as a PR comment, wait for the review, address every
-   finding (fix valid ones, reply with a reason for the rest), push, and re-trigger if new commits
-   landed. A PR is not done until CodeRabbit plus Sourcery, Greptile, DeepSource and SonarCloud
-   have all reported and their comments are resolved.
+8. **Every PR gets a CodeRabbit review.** CodeRabbit skips auto-review on small repos, so after
+   opening a PR, post `@coderabbitai review` as a PR comment and wait for the review. Address every
+   finding: fix valid ones; for the rest, reply with a reason and resolve the thread. Push fixes and
+   re-trigger if new commits landed. A PR is not done until CodeRabbit has reviewed, the SonarCloud
+   check is green, and all review threads from the enabled bots (Sourcery, Greptile, DeepSource)
+   are resolved. Bots not installed yet do not block.
