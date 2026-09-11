@@ -68,4 +68,5 @@ it human-voiced, typographic apostrophes only.
    re-trigger if new commits landed. A PR is not done until CodeRabbit has reviewed, the SonarCloud
    check is green, and all review threads from the enabled bots (Sourcery, Greptile, DeepSource)
    are resolved. Bots not installed yet do not block. Batch all fixes into as few pushes as
-   possible and re-trigger only once: the free plan rate-limits reviews.
+   possible and re-trigger sparingly (one trigger per round of findings): the free plan
+   rate-limits reviews.
