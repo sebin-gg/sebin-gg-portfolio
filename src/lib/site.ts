@@ -150,6 +150,7 @@ export const projects: Project[] = [
       "Platform where volunteers log impact across six tracks, earn titles and appear in a private dashboard. Rate-limited REST API with bcrypt auth.",
     stack: ["Express 5", "React 19", "MongoDB", "JWT"],
     href: "https://github.com/sebin-gg/kindred",
+    demo: "https://kindred-seven-pi.vercel.app/",
   },
   {
     name: "TortoiseLang (slowlang)",
@@ -158,6 +159,7 @@ export const projects: Project[] = [
       "Satirical programming language and IDE that throttles execution when you type too fast — then triggers ASCII turtle rage and poetic haiku feedback.",
     stack: ["Python", "Tkinter", "pytest"],
     href: "https://github.com/sebin-gg/slowlang",
+    demo: "https://sebin-gg.github.io/slowlang/",
     highlight: "Useless Projects 2.0 by TinkerHub",
   },
 
