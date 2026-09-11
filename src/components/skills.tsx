@@ -1,7 +1,34 @@
 import { skills } from "@/lib/site";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { DEFAULT_LOCALE, type Locale } from "@/lib/locale";
 import { SectionHeading } from "@/components/section-heading";
 
-export function Skills() {
+/**
+ * Semantic lookup keys for translated skill items, positionally aligned with
+ * `skills` in site.ts. Only the prose-like groups have translated items; the
+ * rest fall back to the source data (tool proper nouns stay Latin script).
+ */
+const ITEM_KEYS = [
+  "languages",
+  "backendApis",
+  "frontend",
+  "securitySystems",
+  "dataTooling",
+  "performance",
+  "softSkills",
+  "spokenLanguages",
+] as const;
+
+/**
+ * Skills grid, fully rendered in every locale. Group names come from the
+ * dictionary; the three prose-like groups (Performance, Soft skills, Spoken
+ * languages) also get translated items, keyed by their English group name.
+ * Tech/tool proper nouns in the remaining groups stay in Latin script —
+ * identical across locales — so they fall back to the source data.
+ */
+export function Skills({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+  const dict = getDictionary(locale);
+
   return (
     <section
       id="skills"
@@ -9,26 +36,30 @@ export function Skills() {
       className="border-line/80 bg-panel/40 border-y backdrop-blur-xs"
     >
       <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 2xl:max-w-[90rem]">
-        <SectionHeading id="skills-title" title="Toolbox" />
+        <SectionHeading id="skills-title" title={dict.skills.title} />
 
         <dl className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-          {skills.map((group) => (
-            <div key={group.group}>
-              <dt className="text-ink text-sm font-semibold tracking-wide">{group.group}</dt>
-              <dd className="mt-3.5">
-                <ul className="flex flex-wrap gap-2">
-                  {group.items.map((skill) => (
-                    <li
-                      key={skill}
-                      className="border-line/80 bg-panel/90 text-ink hover:border-accent/60 hover:bg-accent-soft hover:text-accent rounded-lg border px-3.5 py-1.5 text-sm font-medium shadow-xs backdrop-blur-xs transition-all duration-150 hover:-translate-y-0.5 hover:shadow-sm"
-                    >
-                      {skill}
-                    </li>
-                  ))}
-                </ul>
-              </dd>
-            </div>
-          ))}
+          {skills.map((group, index) => {
+            const groupName = dict.skills.groups[index] ?? group.group;
+            const items = dict.skills.translatedItems[ITEM_KEYS[index]] ?? group.items;
+            return (
+              <div key={group.group}>
+                <dt className="text-ink text-sm font-semibold tracking-wide">{groupName}</dt>
+                <dd className="mt-3.5">
+                  <ul className="flex flex-wrap gap-2">
+                    {items.map((skill) => (
+                      <li
+                        key={skill}
+                        className="border-line/80 bg-panel/90 text-ink hover:border-accent/60 hover:bg-accent-soft hover:text-accent rounded-lg border px-3.5 py-1.5 text-sm font-medium shadow-xs backdrop-blur-xs transition-all duration-150 hover:-translate-y-0.5 hover:shadow-sm"
+                      >
+                        {skill}
+                      </li>
+                    ))}
+                  </ul>
+                </dd>
+              </div>
+            );
+          })}
         </dl>
       </div>
     </section>

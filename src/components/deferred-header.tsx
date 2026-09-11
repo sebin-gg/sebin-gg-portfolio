@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import type { ResolvedNavItem } from "@/lib/navigation";
 import { useIdle } from "@/lib/use-idle";
 import { MenuIcon, SunIcon } from "@/components/icons";
 
@@ -45,14 +46,46 @@ const ActiveSectionWidget = dynamic(() => import("./active-section").then((m) =>
   ssr: false,
 });
 
-export function DeferredThemeToggle() {
+export function DeferredThemeToggle({
+  lightLabel,
+  darkLabel,
+}: {
+  lightLabel: string;
+  darkLabel: string;
+}) {
   const ready = useIdle();
-  return ready ? <ThemeToggleWidget /> : <ThemeToggleFallback />;
+  return ready ? (
+    <ThemeToggleWidget lightLabel={lightLabel} darkLabel={darkLabel} />
+  ) : (
+    <ThemeToggleFallback />
+  );
 }
 
-export function DeferredMobileNav() {
+export function DeferredMobileNav({
+  items,
+  mobileLabel,
+  openLabel,
+  closeLabel,
+  resumeLabel,
+}: {
+  items: readonly ResolvedNavItem[];
+  mobileLabel: string;
+  openLabel: string;
+  closeLabel: string;
+  resumeLabel: string;
+}) {
   const ready = useIdle();
-  return ready ? <MobileNavWidget /> : <MobileNavFallback />;
+  return ready ? (
+    <MobileNavWidget
+      items={items}
+      navLabel={mobileLabel}
+      openLabel={openLabel}
+      closeLabel={closeLabel}
+      resumeLabel={resumeLabel}
+    />
+  ) : (
+    <MobileNavFallback />
+  );
 }
 
 export function DeferredActiveSection({ ids }: { ids: string[] }) {

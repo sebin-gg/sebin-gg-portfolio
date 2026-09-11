@@ -1,0 +1,58 @@
+name: i18n
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: i18n-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  translate:
+    name: Refresh translations (General Translation)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.20.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: gt translate
+        env:
+          GT_API_KEY: ${{ secrets.GT_API_KEY }}
+          GT_PROJECT_ID: ${{ secrets.GT_PROJECT_ID }}
+        run: node scripts/i18n-translate.mjs
+
+      - name: Detect changed translations
+        id: diff
+        run: echo "count=$(git status --porcelain -- src/lib/i18n | wc -l)" >> "$GITHUB_OUTPUT"
+
+      - name: Create translation update PR
+        if: steps.diff.outputs.count != '0'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "i18n: refresh translations from General Translation"
+          title: "i18n: translation updates"
+          body: |
+            Automated refresh of `src/lib/i18n/*.json` by the General Translation
+            CLI (`gt translate`). Review diffs, especially for locales whose
+            translation quality matters to you, then merge.
+          branch: i18n/auto-translations
+          delete-branch: true
+          add-labels: i18n

@@ -1,0 +1,176 @@
+{
+  "meta": {
+    "title": "Sebin Mathew — full-stack developer & security tools",
+    "description": "Computer Science student at College of Engineering Chengannur. Building full-stack web applications, Chrome extensions, and local security tooling.",
+    "blogDescription": "Write-ups on security drills, prompt engineering, and shipping fast websites. Coming soon.",
+    "a11yDescription": "Accessibility statement and standards for Sebin Mathew’s portfolio."
+  },
+  "common": {
+    "skipToContent": "Skip to content",
+    "language": "Language",
+    "toLight": "Switch to light mode",
+    "toDark": "Switch to dark mode"
+  },
+  "nav": {
+    "primary": "Primary",
+    "mobile": "Mobile",
+    "about": "About",
+    "experience": "Experience",
+    "projects": "Projects",
+    "skills": "Skills",
+    "blog": "Blog"
+  },
+  "header": {
+    "resumeShort": "Résumé",
+    "downloadResume": "Download résumé",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "hero": {
+    "intro": "Introduction",
+    "focusAreas": "Focus areas",
+    "focus": ["cybersecurity", "backend systems", "automation", "privacy-first"],
+    "viewProjects": "View projects",
+    "downloadResume": "Download résumé",
+    "githubProfile": "GitHub profile",
+    "linkedinProfile": "LinkedIn profile",
+    "xProfile": "X profile",
+    "highlights": "Profile highlights",
+    "emailLabel": "Email",
+    "collegeLabel": "College",
+    "collegeLine": "{short} · class of {year}",
+    "statsProjects": "featured projects",
+    "statsClass": "graduating class"
+  },
+  "about": {
+    "title": "Who I am",
+    "bio": [
+      "I’m a Computer Science student at College of Engineering Chengannur. My recent work spans browser-side prompt compression to an edge incident response dashboard powered by local Ollama models.",
+      "I coordinate technical projects for FOCES CEC."
+    ],
+    "quickFacts": "Quick facts",
+    "degreeLabel": "Degree",
+    "degreeValue": "B.Tech in Computer Science & Engineering",
+    "collegeLabel": "College",
+    "collegeValue": "College of Engineering Chengannur",
+    "cgpaLabel": "CGPA"
+  },
+  "experience": {
+    "title": "Where I’ve worked & trained",
+    "roles": [
+      "Project Coordinator",
+      "Student Ambassador",
+      "Backend & AI Engineer",
+      "Participant",
+      "Hackathon Winner"
+    ],
+    "periods": ["Apr 2026 – present", "Dec 2025 – present", "2025", "2025", "Aug 2025"],
+    "summaries": [
+      [
+        "Coordinate engineering projects and technical workshops for the student computer science association.",
+        "Organize hackathons and community build sessions across campus."
+      ],
+      ["Connect engineering peers with open-source roadmaps, hackathons, and technical bootcamps."],
+      [
+        "Engineered an on-device incident response dashboard with a three-person team during a 10-hour hackathon.",
+        "Integrated local Ollama LLMs to classify simulated attacks and output actionable firewall rules without cloud APIs."
+      ],
+      [
+        "Conducted web vulnerability assessments, OSINT recon, and active network penetration labs.",
+        "Deployed controlled phishing simulations with Gophish and mapped network perimeters with Nmap."
+      ],
+      [
+        "Built TortoiseLang (slowlang) — a satirical programming language and IDE enforcing typing cadence with real-time velocity monitoring and ASCII feedback.",
+        "Won first place at TinkerHub Useless Projects 2.0 for creative software engineering and humorous event-driven architecture."
+      ]
+    ]
+  },
+  "projects": {
+    "title": "Things I’ve built",
+    "taglines": [
+      "A language that punishes fast typing",
+      "FOCES event platform",
+      "Community impact tracker",
+      "Cyber threat dashboard with local AI",
+      "Chrome extension that trims prompts",
+      "Tray app that hides title bars of maximized windows"
+    ],
+    "descriptions": [
+      "Satirical programming language and IDE that throttles execution when you type too fast — then triggers ASCII turtle rage and poetic haiku feedback.",
+      "Full-stack event management for the FOCES Volunteer Project. Pydantic-validated API, search indexing, SQLite persistence, responsive dark/light UI. Live on GitHub Pages.",
+      "Platform where volunteers log impact across six tracks, earn titles and appear in a private dashboard. Rate-limited REST API with bcrypt auth.",
+      "Streaming terminal logs, automated attack simulation, iptables mitigation commands and optional local-AI analysis via Ollama.",
+      "Compresses prompts in-browser before they hit ChatGPT, Claude or Gemini — 40–65% fewer tokens. Pure client-side regex, zero external dependencies.",
+      "Lightweight Windows tray app that auto-hides the title bar of maximized windows for a cleaner fullscreen-style view. Single C# file on the Win32 API with per-app control and global hotkeys."
+    ],
+    "highlights": ["Useless Projects 2.0 by TinkerHub", "", "", "security", "privacy", ""],
+    "liveDemo": "Live demo",
+    "onGithub": "{name} on GitHub",
+    "moreExperiments": "More experiments on"
+  },
+  "skills": {
+    "title": "Toolbox",
+    "groups": [
+      "Languages",
+      "Backend & APIs",
+      "Frontend",
+      "Security & systems",
+      "Data & tooling",
+      "Performance",
+      "Soft skills",
+      "Spoken languages"
+    ],
+    "translatedItems": {
+      "performance": ["Lighthouse", "Core Web Vitals", "Performance budgets"],
+      "softSkills": [
+        "Project coordination",
+        "Event organization",
+        "Team collaboration",
+        "Community building"
+      ],
+      "spokenLanguages": ["English", "Hindi", "Malayalam"]
+    }
+  },
+  "blogCta": {
+    "title": "Notes & write-ups",
+    "comingSoon": "Coming soon",
+    "body": "First posts are planned around OWASP drills, the brevity-prompt extension, and what 2G performance budgets taught me. No newsletter spam — just a feed.",
+    "link": "See what’s planned"
+  },
+  "blog": {
+    "title": "Notes & write-ups",
+    "lede": "Security walkthroughs, project post-mortems, and performance notes.",
+    "emptyTitle": "No posts yet",
+    "emptyBody": "I’m drafting the first few write-ups. They’ll land here as I finish them. If you want to know when that happens, the cheapest way is watching this repo on GitHub.",
+    "pipeline": "In the pipeline",
+    "planned": [
+      "OWASP Bootcamp 2025: what a phishing drill actually taught me",
+      "Inside brevity-prompt: cutting 40–65% of tokens with pure regex",
+      "Shipping a portfolio that loads on 2G — budgets, fonts, trade-offs",
+      "Local AI on the edge: building Aegis’ Ollama pipeline"
+    ],
+    "followGithub": "Follow on GitHub"
+  },
+  "a11y": {
+    "title": "Accessibility statement",
+    "lede": "This portfolio is designed to be lightweight, semantic, and navigable by keyboard, touch, and assistive technologies.",
+    "semanticTitle": "Semantic HTML & ARIA",
+    "semanticBody": "All interactive elements use standard native elements (<button>, <a>, <nav>) with explicit labels, roles, and focus outlines.",
+    "contrastTitle": "Contrast & theme",
+    "contrastBody": "Both dark and light color palettes adhere to WCAG AA contrast thresholds across all typography and interactive states.",
+    "motionTitle": "Motion preferences",
+    "motionBefore": "The site respects system ",
+    "motionAfter": " settings, disabling non-essential animations for users with vestibular sensitivities.",
+    "backToPortfolio": "Return to portfolio"
+  },
+  "footer": {
+    "accessibility": "Accessibility",
+    "sendEmail": "Send an email",
+    "githubProfile": "GitHub profile",
+    "linkedinProfile": "LinkedIn profile",
+    "xProfile": "X profile",
+    "degree": "B.Tech in Computer Science & Engineering",
+    "college": "College of Engineering Chengannur",
+    "location": "Kottayam, Kerala, India"
+  }
+}

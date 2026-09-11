@@ -1,15 +1,19 @@
 import { links, projects } from "@/lib/site";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { DEFAULT_LOCALE, formatString, type Locale } from "@/lib/locale";
 import { SectionHeading } from "@/components/section-heading";
 import { ArrowUpRightIcon, ExternalLinkIcon } from "@/components/icons";
 
-export function Projects() {
+export function Projects({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+  const dict = getDictionary(locale);
+
   return (
     <section
       id="projects"
       aria-labelledby="projects-title"
       className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 2xl:max-w-[90rem]"
     >
-      <SectionHeading id="projects-title" title="Things I’ve built" />
+      <SectionHeading id="projects-title" title={dict.projects.title} />
 
       <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {projects.map((project, index) => (
@@ -24,9 +28,9 @@ export function Projects() {
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <h3 className="text-ink text-lg font-semibold">{project.name}</h3>
-                  {project.highlight ? (
+                  {dict.projects.highlights[index] ? (
                     <span className="border-accent/20 bg-accent-soft text-accent rounded-full border px-2 py-0.5 text-[11px] font-semibold">
-                      {project.highlight}
+                      {dict.projects.highlights[index]}
                     </span>
                   ) : null}
                 </div>
@@ -34,15 +38,17 @@ export function Projects() {
                   href={project.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`${project.name} on GitHub`}
+                  aria-label={formatString(dict.projects.onGithub, { name: project.name })}
                   className="text-ink-faint group-hover:text-accent rounded-md p-1 transition-colors"
                 >
                   <ExternalLinkIcon className="h-4 w-4" />
                 </a>
               </div>
-              <p className="text-accent mt-1 text-sm font-medium">{project.tagline}</p>
+              <p className="text-accent mt-1 text-sm font-medium">
+                {dict.projects.taglines[index]}
+              </p>
               <p className="text-ink-soft mt-2.5 flex-1 text-sm leading-relaxed">
-                {project.description}
+                {dict.projects.descriptions[index]}
               </p>
 
               <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
@@ -63,7 +69,7 @@ export function Projects() {
                     rel="noopener noreferrer"
                     className="bg-accent text-accent-ink hover:bg-accent-strong shadow-accent/20 inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold whitespace-nowrap shadow-md transition-all hover:shadow-lg"
                   >
-                    Live demo
+                    {dict.projects.liveDemo}
                     <ArrowUpRightIcon className="h-4 w-4" />
                   </a>
                 ) : null}
@@ -74,7 +80,7 @@ export function Projects() {
       </ul>
 
       <p className="text-ink-soft mt-8 text-center text-sm">
-        More experiments on{" "}
+        {dict.projects.moreExperiments}{" "}
         <a
           href={links.github.href}
           target="_blank"

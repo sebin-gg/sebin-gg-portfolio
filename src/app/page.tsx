@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { siteUrl } from "@/lib/site";
+import { hreflangAlternates } from "@/lib/locale";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { PageChrome } from "@/components/page-chrome";
 import { Hero } from "@/components/hero";
 import { About } from "@/components/about";
 import { Experience } from "@/components/experience";
@@ -8,18 +11,22 @@ import { Skills } from "@/components/skills";
 import { BlogCta } from "@/components/blog-cta";
 
 export const metadata: Metadata = {
-  alternates: { canonical: siteUrl },
+  alternates: {
+    canonical: siteUrl,
+    languages: hreflangAlternates("/", siteUrl),
+  },
 };
 
 export default function HomePage() {
+  const dict = getDictionary("en");
   return (
-    <>
-      <Hero />
-      <Projects />
-      <About />
-      <Experience />
-      <Skills />
-      <BlogCta />
-    </>
+    <PageChrome locale="en" currentPath="/" skipLabel={dict.common.skipToContent}>
+      <Hero locale="en" />
+      <Projects locale="en" />
+      <About locale="en" />
+      <Experience locale="en" />
+      <Skills locale="en" />
+      <BlogCta locale="en" />
+    </PageChrome>
   );
 }
