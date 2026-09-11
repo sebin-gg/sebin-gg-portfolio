@@ -2,7 +2,7 @@
 # Full local quality gate — the same checks CI runs, minus the slow extras
 # (mutation testing and Lighthouse live in their own workflows).
 set -uo pipefail
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/.." || exit 1
 
 step() {
   local label=$1

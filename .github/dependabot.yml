@@ -4,6 +4,8 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+    cooldown:
+      default-days: 7
     versioning-strategy: increase-if-necessary
     ignore:
       # Renovate (also enabled) handles major bumps deliberately; Dependabot
@@ -39,6 +41,8 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+    cooldown:
+      default-days: 7
     groups:
       actions:
         patterns: ["*"]

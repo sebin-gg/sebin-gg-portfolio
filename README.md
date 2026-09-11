@@ -100,11 +100,10 @@ The repo is set up for agent-friendly work. Skills live in `.agents/skills/` (lo
 `skills-lock.json`); agents load them with the `skill` tool. `AGENTS.md` tells agents which ones
 to use when working here.
 
-| Tool / skill                   | What it does                                                                    | How to use                                                               |
-| ------------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| `caveman`                      | Token-reducing terse mode — cuts output tokens while keeping technical accuracy | Load `skill:caveman`; levels `lite / full / ultra`; `/caveman off` exits |
-| `unslop`                       | Strips AI tells / redundancy from user-visible copy, with bundled scanners      | `skill:unslop`; `scripts/banned_phrase_scan.py` etc. for audits          |
-| `designing-beautiful-websites` | UI/UX design guidance for redesigns                                             | Load before any visual work                                              |
+| Tool / skill | What it does                                                                    | How to use                                                               |
+| ------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `caveman`    | Token-reducing terse mode — cuts output tokens while keeping technical accuracy | Load `skill:caveman`; levels `lite / full / ultra`; `/caveman off` exits |
+| `unslop`     | Strips AI tells / redundancy from user-visible copy, with bundled scanners      | `skill:unslop`; `scripts/banned_phrase_scan.py` etc. for audits          |
 
 Install any community skill into the repo:
 
