@@ -117,22 +117,14 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    name: "Aegis",
-    tagline: "Cyber threat dashboard with local AI",
+    name: "TortoiseLang (slowlang)",
+    tagline: "A language that punishes fast typing",
     description:
-      "Streaming terminal logs, automated attack simulation, iptables mitigation commands and optional local-AI analysis via Ollama.",
-    stack: ["Next.js 15", "React 19", "TypeScript", "Ollama"],
-    href: "https://github.com/sebin-gg/Aegis",
-    highlight: "security",
-  },
-  {
-    name: "brevity-prompt",
-    tagline: "Chrome extension that trims prompts",
-    description:
-      "Compresses prompts in-browser before they hit ChatGPT, Claude or Gemini — 40–65% fewer tokens. Pure client-side regex, zero external dependencies.",
-    stack: ["JavaScript", "Chrome MV3", "regex"],
-    href: "https://github.com/sebin-gg/brevity-prompt",
-    highlight: "privacy",
+      "Satirical programming language and IDE that throttles execution when you type too fast — then triggers ASCII turtle rage and poetic haiku feedback.",
+    stack: ["Python", "Tkinter", "pytest"],
+    href: "https://github.com/sebin-gg/slowlang",
+    demo: "https://sebin-gg.github.io/slowlang/",
+    highlight: "Useless Projects 2.0 by TinkerHub",
   },
   {
     name: "Event Tracker",
@@ -153,16 +145,23 @@ export const projects: Project[] = [
     demo: "https://kindred-seven-pi.vercel.app/",
   },
   {
-    name: "TortoiseLang (slowlang)",
-    tagline: "A language that punishes fast typing",
+    name: "Aegis",
+    tagline: "Cyber threat dashboard with local AI",
     description:
-      "Satirical programming language and IDE that throttles execution when you type too fast — then triggers ASCII turtle rage and poetic haiku feedback.",
-    stack: ["Python", "Tkinter", "pytest"],
-    href: "https://github.com/sebin-gg/slowlang",
-    demo: "https://sebin-gg.github.io/slowlang/",
-    highlight: "Useless Projects 2.0 by TinkerHub",
+      "Streaming terminal logs, automated attack simulation, iptables mitigation commands and optional local-AI analysis via Ollama.",
+    stack: ["Next.js 15", "React 19", "TypeScript", "Ollama"],
+    href: "https://github.com/sebin-gg/Aegis",
+    highlight: "security",
   },
-
+  {
+    name: "brevity-prompt",
+    tagline: "Chrome extension that trims prompts",
+    description:
+      "Compresses prompts in-browser before they hit ChatGPT, Claude or Gemini — 40–65% fewer tokens. Pure client-side regex, zero external dependencies.",
+    stack: ["JavaScript", "Chrome MV3", "regex"],
+    href: "https://github.com/sebin-gg/brevity-prompt",
+    highlight: "privacy",
+  },
   {
     name: "ShyUI",
     tagline: "Tray app that hides title bars of maximized windows",
