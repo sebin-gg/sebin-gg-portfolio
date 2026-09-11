@@ -1,12 +1,15 @@
 import { profile } from "@/lib/site";
+import { getDictionary } from "@/lib/dictionaries";
+import { DEFAULT_LOCALE, type Locale } from "@/lib/locale";
 
-const facts = [
-  { label: "Degree", value: profile.degree },
-  { label: "College", value: profile.college },
-  { label: "CGPA", value: String(profile.cgpa) },
-];
+export function About({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+  const dict = getDictionary(locale);
+  const facts = [
+    { label: dict.degreeLabel, value: dict.degreeValue },
+    { label: dict.collegeLabel, value: dict.collegeValue },
+    { label: dict.cgpaLabel, value: String(profile.cgpa) },
+  ];
 
-export function About() {
   return (
     <section
       id="about"
@@ -17,21 +20,21 @@ export function About() {
         id="about-title"
         className="text-ink mt-1 text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl"
       >
-        Who I am
+        {dict.aboutTitle}
       </h2>
 
       <div className="mt-8 grid gap-10 lg:grid-cols-[1.4fr_1fr] xl:grid-cols-[1.6fr_1fr]">
         <div className="text-ink-soft space-y-4 text-base leading-relaxed sm:text-lg">
-          {profile.bio.map((paragraph) => (
+          {dict.bio.map((paragraph) => (
             <p key={paragraph.slice(0, 24)}>{paragraph}</p>
           ))}
         </div>
 
         <aside
-          aria-label="Quick facts"
+          aria-label={dict.quickFacts}
           className="border-line/80 bg-panel/80 h-fit rounded-xl border p-5 shadow-lg shadow-black/5 backdrop-blur-xs sm:p-6"
         >
-          <h3 className="text-ink mb-4 text-sm font-semibold tracking-wide">Quick facts</h3>
+          <h3 className="text-ink mb-4 text-sm font-semibold tracking-wide">{dict.quickFacts}</h3>
           <dl className="space-y-3">
             {facts.map((fact) => (
               <div key={fact.label} className="flex items-baseline justify-between gap-4">

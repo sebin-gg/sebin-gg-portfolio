@@ -18,16 +18,27 @@ describe("navigation module", () => {
     expect(isHomeRoute("/projects")).toBe(false);
   });
 
+  it("treats localized home routes as home", () => {
+    expect(isHomeRoute("/hi")).toBe(true);
+    expect(isHomeRoute("/ml")).toBe(true);
+    expect(isHomeRoute("/hi/blog")).toBe(false);
+    expect(isHomeRoute("/ml/accessibility")).toBe(false);
+  });
+
   it("resolves logo href based on current route", () => {
     expect(getLogoHref("/")).toBe("#top");
     expect(getLogoHref(null)).toBe("#top");
     expect(getLogoHref("/blog")).toBe("/");
+    expect(getLogoHref("/hi")).toBe("#top");
+    expect(getLogoHref("/ml/blog")).toBe("/ml");
   });
 
   it("resolves nav href for in-page anchors and path routes", () => {
     expect(getNavHref("#about", true)).toBe("#about");
     expect(getNavHref("/blog", true)).toBe("/blog");
     expect(getNavHref("#about", false)).toBe("/#about");
+    expect(getNavHref("#about", false, "hi")).toBe("/hi/#about");
+    expect(getNavHref("#about", false, "ml")).toBe("/ml/#about");
     expect(getNavHref("/blog", false)).toBe("/blog");
   });
 
@@ -70,6 +81,16 @@ describe("navigation module", () => {
     expect(blogEntry?.isCurrent).toBe(true);
     const aboutEntry = list.find((item) => item.rawHref === "#about");
     expect(aboutEntry?.href).toBe("/#about");
+  });
+
+  it("keeps hash anchors inside the active locale off home", () => {
+    const hiList = resolveNavigation("/hi/blog");
+    const hiAbout = hiList.find((item) => item.rawHref === "#about");
+    expect(hiAbout?.href).toBe("/hi/#about");
+
+    const mlList = resolveNavigation("/ml/accessibility");
+    const mlSkills = mlList.find((item) => item.rawHref === "#skills");
+    expect(mlSkills?.href).toBe("/ml/#skills");
   });
 
   it("extracts section IDs correctly", () => {

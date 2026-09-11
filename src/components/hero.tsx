@@ -1,4 +1,6 @@
 import { links, profile, projects, resumeUrl } from "@/lib/site";
+import { getDictionary } from "@/lib/dictionaries";
+import { DEFAULT_LOCALE, formatString, type Locale } from "@/lib/locale";
 import {
   ArrowUpRightIcon,
   DownloadIcon,
@@ -7,24 +9,24 @@ import {
   XIcon,
 } from "@/components/icons";
 
-const stats = [
-  { value: `${projects.length}`, label: "featured projects" },
-  { value: "'28", label: "graduating class" },
-];
-
-const facts: { label: string; value: string; mailto?: boolean }[] = [
-  { label: "Email", value: profile.email, mailto: true },
-  { label: "College", value: profile.college },
-];
-
 function monogram(name: string): string {
   const [first, second] = name.trim().split(/\s+/);
   return (first ? first[0] : "") + (second ? second[0] : "");
 }
 
-export function Hero() {
+export function Hero({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+  const dict = getDictionary(locale);
+  const stats = [
+    { value: `${projects.length}`, label: dict.statsProjects },
+    { value: "'28", label: dict.statsClass },
+  ];
+  const facts: { label: string; value: string; mailto?: boolean }[] = [
+    { label: dict.factsEmail, value: profile.email, mailto: true },
+    { label: dict.factsCollege, value: dict.collegeValue },
+  ];
+
   return (
-    <section id="top" aria-label="Introduction" className="relative overflow-hidden">
+    <section id="top" aria-label={dict.heroIntro} className="relative overflow-hidden">
       {/* Soft radial brand glow, pure CSS so no image download. */}
       <div
         aria-hidden="true"
@@ -37,13 +39,16 @@ export function Hero() {
               {profile.name}
             </h1>
             <p className="text-ink-soft mt-2.5 text-lg font-medium sm:mt-3 sm:text-xl lg:text-2xl">
-              {profile.role}
+              {dict.heroRole}
             </p>
             <p className="text-ink-soft mt-3 max-w-xl text-base leading-relaxed sm:mt-4 sm:text-lg">
-              {profile.tagline}
+              {dict.heroTagline}
             </p>
-            <ul aria-label="Focus areas" className="mt-4 flex flex-wrap gap-1.5 sm:mt-5 sm:gap-2">
-              {profile.focus.map((area) => (
+            <ul
+              aria-label={dict.focusAreas}
+              className="mt-4 flex flex-wrap gap-1.5 sm:mt-5 sm:gap-2"
+            >
+              {dict.heroFocus.map((area) => (
                 <li
                   key={area}
                   className="border-line/80 bg-panel/80 text-ink-soft hover:border-accent/40 hover:text-ink rounded-full border px-3 py-1 text-xs font-medium backdrop-blur-xs transition-colors sm:text-sm"
@@ -60,7 +65,7 @@ export function Hero() {
                   href="#projects"
                   className="bg-accent text-accent-ink hover:bg-accent-strong shadow-accent/20 inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-semibold whitespace-nowrap shadow-md transition-all hover:shadow-lg sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
                 >
-                  View projects
+                  {dict.viewProjects}
                   <ArrowUpRightIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </a>
                 <a
@@ -68,7 +73,7 @@ export function Hero() {
                   className="border-line/80 bg-panel/90 text-ink hover:border-accent hover:text-accent inline-flex items-center justify-center gap-1.5 rounded-lg border px-3.5 py-2 text-xs font-semibold whitespace-nowrap shadow-xs backdrop-blur-xs transition-all sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
                 >
                   <DownloadIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                  Download résumé
+                  {dict.downloadResume}
                 </a>
               </div>
 
@@ -78,7 +83,7 @@ export function Hero() {
                   href={links.github.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="GitHub profile"
+                  aria-label={dict.githubProfile}
                   className="border-line/80 bg-panel/90 text-ink-soft hover:border-accent hover:text-accent flex h-9 w-9 items-center justify-center rounded-lg border shadow-xs backdrop-blur-xs transition-all sm:h-10 sm:w-10"
                 >
                   <GithubIcon className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -87,7 +92,7 @@ export function Hero() {
                   href={links.linkedin.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="LinkedIn profile"
+                  aria-label={dict.linkedinProfile}
                   className="border-line/80 bg-panel/90 text-ink-soft hover:border-accent hover:text-accent flex h-9 w-9 items-center justify-center rounded-lg border shadow-xs backdrop-blur-xs transition-all sm:h-10 sm:w-10"
                 >
                   <LinkedinIcon className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -96,7 +101,7 @@ export function Hero() {
                   href={links.x.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="X profile"
+                  aria-label={dict.xProfile}
                   className="border-line/80 bg-panel/90 text-ink-soft hover:border-accent hover:text-accent flex h-9 w-9 items-center justify-center rounded-lg border shadow-xs backdrop-blur-xs transition-all sm:h-10 sm:w-10"
                 >
                   <XIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
@@ -106,7 +111,7 @@ export function Hero() {
           </div>
 
           <aside
-            aria-label="Profile highlights"
+            aria-label={dict.highlights}
             className="border-line/80 bg-panel/80 relative overflow-hidden rounded-2xl border p-5 shadow-xl shadow-black/5 backdrop-blur-md sm:p-6"
           >
             <div
@@ -121,7 +126,10 @@ export function Hero() {
                 <div>
                   <p className="text-ink text-sm font-semibold">{profile.name}</p>
                   <p className="text-ink-faint text-sm">
-                    {profile.collegeShort} · class of {profile.classOf}
+                    {formatString(dict.collegeLineTemplate, {
+                      short: profile.collegeShort,
+                      year: profile.classOf,
+                    })}
                   </p>
                 </div>
               </div>

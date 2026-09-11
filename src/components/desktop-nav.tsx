@@ -1,14 +1,18 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { getDictionary, localizedNavItems } from "@/lib/dictionaries";
+import { localeFromPathname } from "@/lib/locale";
 import { resolveNavigation } from "@/lib/navigation";
 
 export function DesktopNav() {
   const pathname = usePathname();
-  const items = resolveNavigation(pathname);
+  const locale = localeFromPathname(pathname);
+  const dict = getDictionary(locale);
+  const items = resolveNavigation(pathname, localizedNavItems(dict, locale));
 
   return (
-    <nav aria-label="Primary" className="hidden md:block">
+    <nav aria-label={dict.primaryNav} className="hidden md:block">
       <ul className="flex items-center gap-1">
         {items.map((item) => (
           <li key={item.rawHref}>
