@@ -37,7 +37,6 @@ via the `skill` tool before relying on it. The ones this repo expects:
 2. **`unslop`** — run an audit pass before and after touching any user-visible copy
    (site text, blog copy, accessibility statement, llms.txt). The site has a strict
    human-voice rule; the scanner in `.agents/skills/unslop/scripts/` reports AI tells.
-3. **`designing-beautiful-websites`** — load before any UI/visual redesign work.
 
 Copy conventions go together with rule 2: content lives in `src/lib/site.ts`, keep
 it human-voiced, typographic apostrophes only.
