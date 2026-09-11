@@ -57,9 +57,30 @@ echo "       project key  : sebin-gg_portfolio"
 echo "       organization : sebin-gg"
 echo
 read -r -p "   Press Enter after installing the SonarCloud app…" -n 1 -s && echo
+
+open_url "https://github.com/apps/sourcery-ai"
+echo "  6) Sourcery (free AI review on public repos) — install on $REPO."
+echo "     No config file needed; reviews every PR automatically."
+echo
+read -r -p "   Press Enter after installing Sourcery…" -n 1 -s && echo
+
+open_url "https://github.com/apps/greptile"
+echo "  7) Greptile (free for open source) — install the app, enable $REPO at"
+echo "     app.greptile.com, then claim the open-source plan there."
+echo "     Config already shipped in greptile.json. MIT LICENSE covers the"
+echo "     OSI-license requirement; under 50 stars needs manual approval."
+echo
+read -r -p "   Press Enter after installing Greptile…" -n 1 -s && echo
+
+open_url "https://app.deepsource.com/login?provider=gh"
+echo "  8) DeepSource (free Open Source plan for public repos) — sign in with"
+echo "     GitHub, add $REPO. Config already shipped in .deepsource.toml."
+echo
+read -r -p "   Press Enter after adding DeepSource…" -n 1 -s && echo
 echo
 echo "Done. When CI runs on your first push it will exercise:"
-echo "  • CodeRabbit comments on every PR"
+echo "  • CodeRabbit comments on every PR
+  • Sourcery, Greptile and DeepSource reviews once their apps are installed"
 echo "  • SonarCloud PR analysis (GitHub App, already installed)"
 echo "  • CodeQL + Dependabot for long-term health"
 echo "  • Lighthouse budgets + quick subset on PRs, full 288-run matrix nightly"
