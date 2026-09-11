@@ -12,7 +12,8 @@ reviews:
   auto_review:
     enabled: true
     drafts: false
-    base: main
+    base_branches:
+      - main
   tools:
     eslint:
       enabled: true
