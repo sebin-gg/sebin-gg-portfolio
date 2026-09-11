@@ -4,8 +4,7 @@
   "locales": ["ta", "es", "fr", "de", "pt", "ja", "zh", "ar", "ru", "hi", "ml", "bn", "id"],
   "files": {
     "json": {
-      "include": ["src/lib/i18n/[locale]/*.json"],
-      "exclude": ["src/lib/i18n/[locale]/manifest.json"]
+      "include": ["src/lib/i18n/[locale].json"]
     }
   },
   "options": {

@@ -8,7 +8,7 @@ import { AccessibilityStatement } from "@/components/accessibility-statement";
 const dict = getDictionary("en");
 
 export const metadata: Metadata = {
-  title: "Accessibility",
+  title: dict.a11y.title,
   description: dict.meta.a11yDescription,
   alternates: {
     canonical: `${siteUrl}/accessibility`,
@@ -16,12 +16,12 @@ export const metadata: Metadata = {
   },
   openGraph: {
     url: `${siteUrl}/accessibility`,
-    title: `Accessibility · ${profile.name}`,
+    title: `${dict.a11y.title} · ${profile.name}`,
     description: dict.meta.a11yDescription,
   },
   twitter: {
     card: "summary_large_image",
-    title: `Accessibility · ${profile.name}`,
+    title: `${dict.a11y.title} · ${profile.name}`,
     description: dict.meta.a11yDescription,
   },
 };

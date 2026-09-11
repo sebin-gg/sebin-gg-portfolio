@@ -58,4 +58,4 @@ jobs:
             translation quality matters to you, then merge.
           branch: i18n/auto-translations
           delete-branch: true
-          add-labels: i18n
+          labels: i18n

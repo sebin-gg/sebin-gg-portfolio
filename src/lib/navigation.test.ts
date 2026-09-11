@@ -4,9 +4,11 @@ import {
   getNavHref,
   getSectionIds,
   isHomeRoute,
+  localizedNavItems,
   resolveNavItem,
   resolveNavigation,
 } from "@/lib/navigation";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 
 describe("navigation module", () => {
   it("determines home route correctly", () => {
@@ -70,6 +72,16 @@ describe("navigation module", () => {
     expect(blogEntry?.isCurrent).toBe(true);
     const aboutEntry = list.find((item) => item.rawHref === "#about");
     expect(aboutEntry?.href).toBe("/#about");
+  });
+
+  it("marks the localized blog page active via canonical path", () => {
+    // /ta/blog renders nav href /ta/blog but must match the canonical /blog
+    // item for aria-current (regression: locale prefix broke active state).
+    const items = localizedNavItems(getDictionary("ta"), "ta");
+    const resolved = resolveNavigation("/ta/blog", items);
+    const blog = resolved.find((item) => item.rawHref === "/ta/blog");
+    expect(blog?.href).toBe("/ta/blog");
+    expect(blog?.isCurrent).toBe(true);
   });
 
   it("extracts section IDs correctly", () => {

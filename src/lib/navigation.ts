@@ -59,12 +59,15 @@ export function resolveNavItem(
   const isHome = isHomeRoute(pathname);
   const locale = localeFromPathname(pathname);
   const isHash = item.href.startsWith("#");
+  // Active-state compares canonical (locale-stripped) paths: /ta/blog is the
+  // same page as /blog even though its rendered href carries the prefix.
+  const canonicalPath = stripLocalePrefix(pathname ?? "/");
   return {
     label: item.label,
     rawHref: item.href,
     href: getNavHref(item.href, isHome, locale),
     spyId: isHash ? item.href.slice(1) : undefined,
-    isCurrent: !isHash && pathname === item.href,
+    isCurrent: !isHash && canonicalPath === stripLocalePrefix(item.href),
   };
 }
 
