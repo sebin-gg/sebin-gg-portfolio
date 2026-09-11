@@ -67,4 +67,6 @@ it human-voiced, typographic apostrophes only.
    finding: fix valid ones; for the rest, reply with a reason and resolve the thread. Push fixes and
    re-trigger if new commits landed. A PR is not done until CodeRabbit has reviewed, the SonarCloud
    check is green, and all review threads from the enabled bots (Sourcery, Greptile, DeepSource)
-   are resolved. Bots not installed yet do not block.
+   are resolved. Bots not installed yet do not block. Batch all fixes into as few pushes as
+   possible and re-trigger sparingly (one trigger per round of findings): the free plan
+   rate-limits reviews.
