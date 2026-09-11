@@ -63,7 +63,7 @@ it human-voiced, typographic apostrophes only.
    semantic utilities (`bg-canvas`, `text-ink-soft`, `border-line`, `text-accent`, …) rather than
    raw palette classes.
 8. **Every PR gets a CodeRabbit review.** CodeRabbit skips auto-review on small repos, so after
-   opening a PR, post `@coderabbitai review` as a PR comment and wait for the review. Address every
+   opening a PR, post `@coderabbitai full review` as a PR comment and wait for the review. Address every
    finding: fix valid ones; for the rest, reply with a reason and resolve the thread. Push fixes and
    re-trigger if new commits landed. A PR is not done until CodeRabbit has reviewed, the SonarCloud
    check is green, and all review threads from the enabled bots (Sourcery, Greptile, DeepSource)
