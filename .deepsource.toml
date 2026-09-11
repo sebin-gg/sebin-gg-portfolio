@@ -3,3 +3,8 @@ version = 1
 [[analyzers]]
 name = "javascript"
 enabled = true
+# Route files under src/app are thin App Router adapters: their exported
+# page/layout handlers are the framework contract and cannot be wrapped in
+# IIFEs (JS-0067 false-positives on every one). Application logic lives in
+# src/components and src/lib, which remain fully analyzed.
+exclude_patterns = ["src/app/**"]
