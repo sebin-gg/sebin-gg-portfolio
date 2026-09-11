@@ -17,7 +17,5 @@ reviews:
   tools:
     eslint:
       enabled: true
-    typescript:
-      enabled: true
 chat:
   auto_reply: true
