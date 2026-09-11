@@ -19,7 +19,9 @@ export default function NotFound() {
       >
         {dict.common.skipToContent}
       </a>
-      <SiteHeader locale="en" currentPath="/" />
+      {/* currentPath is a non-home route so the brand link and section
+          anchors target the home page, not this anchor-less document. */}
+      <SiteHeader locale="en" currentPath="/404" />
       <main id="main" className="flex-1">
         <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 lg:px-8 2xl:max-w-[90rem]">
           <p className="text-accent text-7xl font-extrabold tracking-tight sm:text-8xl">404</p>

@@ -65,8 +65,9 @@ export function SiteHeader({
   const dict = getDictionary(locale);
   const rawItems = localizedNavItems(dict, locale);
   // Resolve against the canonical (locale-stripped) path so active-state
-  // logic stays identical across locales.
-  const resolvedItems = resolveNavigation(currentPath, rawItems);
+  // logic stays identical across locales, but pass the real locale so hash
+  // links on off-home pages point at the same locale's home (/ta/#about).
+  const resolvedItems = resolveNavigation(currentPath, rawItems, locale);
 
   return (
     <header

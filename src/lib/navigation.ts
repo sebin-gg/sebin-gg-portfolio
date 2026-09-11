@@ -51,13 +51,18 @@ export function getLogoHref(pathname: string | null | undefined): string {
   return localeHomeBase(localeFromPathname(pathname)) || "/";
 }
 
+/** Scroll-spy target for hash anchors; undefined for route links. */
+function spyIdFor(item: NavItemDef, isHash: boolean): string | undefined {
+  return isHash ? item.href.slice(1) : undefined;
+}
+
 /** Resolves a single navigation item definition against the active route. */
 export function resolveNavItem(
   item: NavItemDef,
   pathname: string | null | undefined,
+  locale: Locale = localeFromPathname(pathname),
 ): ResolvedNavItem {
   const isHome = isHomeRoute(pathname);
-  const locale = localeFromPathname(pathname);
   const isHash = item.href.startsWith("#");
   // Active-state compares canonical (locale-stripped) paths: /ta/blog is the
   // same page as /blog even though its rendered href carries the prefix.
@@ -66,7 +71,7 @@ export function resolveNavItem(
     label: item.label,
     rawHref: item.href,
     href: getNavHref(item.href, isHome, locale),
-    spyId: isHash ? item.href.slice(1) : undefined,
+    spyId: spyIdFor(item, isHash),
     isCurrent: !isHash && canonicalPath === stripLocalePrefix(item.href),
   };
 }
@@ -75,8 +80,13 @@ export function resolveNavItem(
 export function resolveNavigation(
   pathname: string | null | undefined,
   items: readonly NavItemDef[] = navItems,
+  locale?: Locale,
 ): ResolvedNavItem[] {
-  return items.map((item) => resolveNavItem(item, pathname));
+  // Pass the locale explicitly on canonical paths (e.g. the header resolves
+  // "/blog" while rendering /ta/blog) so hash links stay in-locale.
+  return items.map((item) =>
+    locale === undefined ? resolveNavItem(item, pathname) : resolveNavItem(item, pathname, locale),
+  );
 }
 
 /**
