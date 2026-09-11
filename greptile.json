@@ -1,0 +1,11 @@
+{
+  "commentTypes": ["logic", "syntax"],
+  "strictness": 2,
+  "ignorePatterns": ["pnpm-lock.yaml", "*.md", "public/**", ".next/**", "node_modules/**"],
+  "triggerOnUpdates": true,
+  "summarySection": {
+    "included": true,
+    "collapsible": true,
+    "defaultOpen": false
+  }
+}

@@ -119,9 +119,10 @@ formats and lints staged files so pushes stay green.
 
 ## Already set up (was: one-time checklist)
 
-GitHub repo (public), Vercel deploys on `main`, CodeRabbit + SonarCloud GitHub Apps installed,
+GitHub repo (public, MIT), Vercel deploys on `main`, CodeRabbit + SonarCloud GitHub Apps installed,
 CodeQL workflow live, Dependabot grouped updates on, `main` branch-protected with 9 required
-checks. Still manual: uninstall the Renovate app (superseded by Dependabot), click Verify in
+checks. Review bots Sourcery, Greptile and DeepSource need a one-click install each
+(`bash scripts/links.sh` opens them); their configs already ship in the repo. Still manual: uninstall the Renovate app (superseded by Dependabot), click Verify in
 Search Console, import the site into Bing Webmaster.
 
 ## Project layout
