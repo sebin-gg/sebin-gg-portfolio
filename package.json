@@ -19,7 +19,6 @@
     "test:e2e:local": "playwright test --project=chromium --project=firefox --project=mobile",
     "test:mutation": "stryker run",
     "test:all": "pnpm lint && pnpm typecheck && pnpm format:check && pnpm test:unit && pnpm test:e2e",
-    "i18n:translate": "node scripts/i18n-translate.mjs",
     "i18n:check": "node -e \"const m=require('./src/lib/i18n/manifest.json');const fs=require('fs');let bad=0;for(const l of m){const p='./src/lib/i18n/'+l.code+'.json';if(!fs.existsSync(p)){console.error('missing',p);bad=1}}process.exit(bad)\"",
     "crap:gate": "node scripts/crap-gate.mjs",
     "perf:audit": "lhci autorun",

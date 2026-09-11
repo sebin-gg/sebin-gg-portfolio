@@ -33,11 +33,14 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      # Skips quietly while the GT account/secrets are not configured yet;
+      # locales keep their committed translations.
       - name: gt translate
+        if: ${{ secrets.GT_API_KEY != '' }}
         env:
           GT_API_KEY: ${{ secrets.GT_API_KEY }}
           GT_PROJECT_ID: ${{ secrets.GT_PROJECT_ID }}
-        run: node scripts/i18n-translate.mjs
+        run: pnpm exec gt translate
 
       - name: Detect changed translations
         id: diff
