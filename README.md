@@ -116,7 +116,24 @@ Related speed tooling: `pnpm perf:matrix` (the full Lighthouse sweep), `pnpm tes
 (live Core Web Vitals with real throttling), and the pre-commit hook (Husky + lint-staged) that
 formats and lints staged files so pushes stay green.
 
-## Already set up (was: one-time checklist)
+## Translations (i18n)
+
+English is canonical at `/`, `/blog`, `/accessibility`. Other locales prerender
+under their prefix (`/ta`, `/es/blog`, …) from committed JSON dictionaries in
+`src/lib/i18n/` — no client-side translation code, pages stay fully static.
+
+- `src/lib/i18n/en.json` is the source of truth; `manifest.json` lists the live
+  locales (routes, switcher, hreflang and sitemap all derive from it).
+- `gt.config.json` + `.github/workflows/i18n.yml` automate the rest via
+  [General Translation](https://generaltranslation.com): `gt translate` refreshes
+  the JSON files and opens a review PR. Needs `GT_API_KEY` / `GT_PROJECT_ID`
+  secrets (local runs read `.env.local`, which is gitignored).
+- Free-tier quota resets monthly — when it is exhausted the workflow stays green
+  with a warning and retries on the next push/dispatch. Review machine output
+  before merging, especially for locales you care about.
+- Adding a locale: append it to `gt.config.json` `locales`, run `gt translate`,
+  add the file to `manifest.json` and the loader registry. Never publish an
+  untranslated (English-copy) file under a localized URL.
 
 GitHub repo (public, MIT), Vercel deploys on `main`, CodeRabbit + SonarCloud GitHub Apps installed,
 CodeQL workflow live, Dependabot grouped updates on, `main` branch-protected with 9 required
@@ -129,18 +146,20 @@ Search Console, import the site into Bing Webmaster.
 ```
 src/
   app/            # routes: / (hero → projects → about → experience → skills → blog CTA),
-                  # /blog (coming soon), /accessibility, 404, sitemap, robots, icon,
-                  # opengraph-image, manifest
+                  # /blog (coming soon), /accessibility, /[locale]/* (ta/es/fr/de), 404,
+                  # sitemap, robots, icon, opengraph-image, manifest
   components/     # server components + small client islands (header widgets hydrate on idle)
-  lib/            # site.ts (all content), theme.ts (no-FOUC logic)
-e2e/              # Playwright specs (home, blog, theme, mobile-nav)
+  lib/            # site.ts (structure, links, facts), i18n/ (UI copy per locale), theme.ts
+e2e/              # Playwright specs (home, blog, theme, mobile-nav, locales)
 scripts/          # setup, check-all, links, visual-check, crap-gate, prepare-resume,
                   # thorium/browsers/safari/firefox/terminal checks, perf matrices
 docs/             # résumé PDF + screenshots/ (for review)
 public/           # llms.txt, resume.pdf, Search Console verification file
 ```
 
-Content lives in one file — `src/lib/site.ts`. Change copy/links there; components follow.
+Content structure lives in `src/lib/site.ts`; user-visible copy lives in
+`src/lib/i18n/en.json` (translated per locale, see Translations above).
+Change copy/links there; components follow.
 
 ## Notes
 
