@@ -48,11 +48,13 @@ node scripts/visual-check.mjs   # screenshots + horizontal-overflow check
 
 CI (all green required on `main`, which is branch-protected): `ci.yml`
 (lint/typecheck/format/unit/build, e2e matrix across chromium/firefox/webkit/mobile, terminal
-browsers), `perf.yml` (budgets + quick subset on PRs, full matrix nightly), `mutation.yml`,
-`codeql.yml`, `browsers-nightly.yml` (puppeteer-core sweep over installed Chrome-family
-browsers). SonarCloud analyzes pull requests through its GitHub App integration — no workflow
-file (a sonar.yml workflow previously produced phantom zero-job push runs on main, so it was
-removed). Dependabot is the sole dependency bot (grouped updates, majors ignored).
+browsers), `hygiene.yml` (cspell spell check + lychee dead-link), `perf.yml` (budgets + quick
+subset on PRs, full matrix nightly), `mutation.yml`, `codeql.yml`, `browsers-nightly.yml`
+(puppeteer-core sweep over installed Chrome-family browsers), `i18n.yml` (GT translation
+refresh on main push, manual dispatch). SonarCloud analyzes pull requests through its GitHub App
+integration — no workflow file (a sonar.yml workflow previously produced phantom zero-job push
+runs on main, so it was removed). Dependabot is the sole dependency bot (grouped updates,
+majors ignored).
 
 ## Testing
 
@@ -151,13 +153,14 @@ Search Console, import the site into Bing Webmaster.
 ```
 src/
   app/            # routes: / (hero → projects → about → experience → skills → blog CTA),
-                  # /blog (coming soon), /accessibility, /[locale]/* (ta/es/fr/de), 404,
+                  # /blog (coming soon), /accessibility, /[locale]/* (hi/ml), 404,
                   # sitemap, robots, icon, opengraph-image, manifest
   components/     # server components + small client islands (header widgets hydrate on idle)
   lib/            # site.ts (structure, links, facts), i18n/ (UI copy per locale), theme.ts
 e2e/              # Playwright specs (home, blog, theme, mobile-nav, locales)
-scripts/          # setup, check-all, links, visual-check, crap-gate, prepare-resume,
-                  # thorium/browsers/safari/firefox/terminal checks, perf matrices
+scripts/          # setup, verify-fast, check-all, links, visual-check, crap-gate,
+                  # prepare-resume, prod-offline-check, thorium/browsers/safari/firefox/
+                  # terminal checks, perf matrices
 docs/             # résumé PDF + screenshots/ (for review)
 public/           # llms.txt, resume.pdf, Search Console verification file
 ```
