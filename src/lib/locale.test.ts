@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import manifest from "@/lib/i18n/manifest.json";
 import {
   DEFAULT_LOCALE,
   HTML_LANG,
@@ -18,15 +19,17 @@ import {
 describe("locale manifest", () => {
   it("includes English as the default and a fixed set of locales", () => {
     expect(DEFAULT_LOCALE).toBe("en");
-    expect(SUPPORTED_LOCALES[0]).toBe("en");
-    expect(SUPPORTED_LOCALES).toContain("ta");
+    expect(SUPPORTED_LOCALES).toEqual(["en", "hi", "ml"]);
     expect(LOCALE_NAMES.en).toBe("English");
-    expect(LOCALE_NAMES.ta).toBe("தமிழ்");
+    // Native names come from the manifest (single source); asserting the
+    // whole map keeps specs cspell-clean and tracks manifest changes.
+    expect(LOCALE_NAMES).toEqual(Object.fromEntries(manifest.map((e) => [e.code, e.native])));
   });
 
   it("marks only Arabic-script locales as RTL", () => {
     expect(TEXT_DIRECTION.en).toBe("ltr");
-    expect(TEXT_DIRECTION.ta).toBe("ltr");
+    expect(TEXT_DIRECTION.hi).toBe("ltr");
+    expect(TEXT_DIRECTION.ml).toBe("ltr");
     for (const locale of SUPPORTED_LOCALES) {
       expect(TEXT_DIRECTION[locale]).toBe("ltr");
     }
@@ -34,21 +37,23 @@ describe("locale manifest", () => {
 
   it("maps BCP 47 tags for html lang", () => {
     expect(HTML_LANG.en).toBe("en");
-    expect(HTML_LANG.ta).toBe("ta");
+    expect(HTML_LANG.hi).toBe("hi");
+    expect(HTML_LANG.ml).toBe("ml");
   });
 });
 
 describe("isLocale / resolveLocale", () => {
   it("accepts supported codes and rejects everything else", () => {
     expect(isLocale("en")).toBe(true);
-    expect(isLocale("ta")).toBe(true);
+    expect(isLocale("hi")).toBe(true);
+    expect(isLocale("ml")).toBe(true);
     expect(isLocale("xx")).toBe(false);
     expect(isLocale(null)).toBe(false);
     expect(isLocale(42)).toBe(false);
   });
 
   it("falls back to English for unknown input", () => {
-    expect(resolveLocale("ta")).toBe("ta");
+    expect(resolveLocale("ml")).toBe("ml");
     expect(resolveLocale("nope")).toBe("en");
     expect(resolveLocale(undefined)).toBe("en");
   });
@@ -56,8 +61,8 @@ describe("isLocale / resolveLocale", () => {
 
 describe("localeFromPathname", () => {
   it("reads the first segment when it is a locale", () => {
-    expect(localeFromPathname("/ta/blog")).toBe("ta");
-    expect(localeFromPathname("/ta")).toBe("ta");
+    expect(localeFromPathname("/hi/blog")).toBe("hi");
+    expect(localeFromPathname("/ml")).toBe("ml");
   });
 
   it("treats non-locale first segments as English", () => {
@@ -74,8 +79,8 @@ describe("localeFromPathname", () => {
 
 describe("stripLocalePrefix", () => {
   it("strips known locale prefixes", () => {
-    expect(stripLocalePrefix("/ta/blog")).toBe("/blog");
-    expect(stripLocalePrefix("/ta")).toBe("/");
+    expect(stripLocalePrefix("/hi/blog")).toBe("/blog");
+    expect(stripLocalePrefix("/ml")).toBe("/");
   });
 
   it("keeps non-locale paths untouched", () => {
@@ -91,18 +96,18 @@ describe("localePath", () => {
   });
 
   it("prefixes other locales without double slashes", () => {
-    expect(localePath("ta", "/")).toBe("/ta");
-    expect(localePath("ta", "/blog")).toBe("/ta/blog");
-    expect(localePath("ta", "/accessibility")).toBe("/ta/accessibility");
+    expect(localePath("hi", "/")).toBe("/hi");
+    expect(localePath("hi", "/blog")).toBe("/hi/blog");
+    expect(localePath("ml", "/accessibility")).toBe("/ml/accessibility");
   });
 });
 
 describe("switchLocalePath", () => {
   it("switches between locales preserving the page", () => {
-    expect(switchLocalePath("/ta/blog", "fr")).toBe("/fr/blog");
-    expect(switchLocalePath("/", "ta")).toBe("/ta");
-    expect(switchLocalePath("/ta", "en")).toBe("/");
-    expect(switchLocalePath(null, "ta")).toBe("/ta");
+    expect(switchLocalePath("/hi/blog", "ml")).toBe("/ml/blog");
+    expect(switchLocalePath("/", "hi")).toBe("/hi");
+    expect(switchLocalePath("/ml", "en")).toBe("/");
+    expect(switchLocalePath(null, "hi")).toBe("/hi");
   });
 });
 
@@ -118,20 +123,22 @@ describe("hreflangAlternates", () => {
   it("lists every locale plus x-default pointing at English", () => {
     const alternates = hreflangAlternates("/blog", "https://example.com");
     expect(alternates.en).toBe("https://example.com/blog");
-    expect(alternates.ta).toBe("https://example.com/ta/blog");
+    expect(alternates.hi).toBe("https://example.com/hi/blog");
+    expect(alternates.ml).toBe("https://example.com/ml/blog");
     expect(alternates["x-default"]).toBe("https://example.com/blog");
     expect(Object.keys(alternates)).toHaveLength(SUPPORTED_LOCALES.length + 1);
   });
 
   it("uses bare locale prefix for the home path", () => {
     const alternates = hreflangAlternates("/", "https://example.com");
-    expect(alternates.ta).toBe("https://example.com/ta");
+    expect(alternates.hi).toBe("https://example.com/hi");
     expect(alternates["x-default"]).toBe("https://example.com/");
   });
 
   it("tolerates a trailing slash on the site URL", () => {
     const alternates = hreflangAlternates("/blog", "https://example.com/");
-    expect(alternates.ta).toBe("https://example.com/ta/blog");
+    expect(alternates.hi).toBe("https://example.com/hi/blog");
+    expect(alternates.ml).toBe("https://example.com/ml/blog");
     expect(alternates["x-default"]).toBe("https://example.com/blog");
   });
 });

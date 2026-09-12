@@ -75,10 +75,14 @@ it human-voiced, typographic apostrophes only.
    `prefers-reduced-motion` respected (see `globals.css`). No `target="_blank"` without
    `rel="noopener noreferrer"`. No ASCII apostrophes in JSX text.
 6. **Don't put the phone number on the page.** It stays in the résumé PDF only.
-7. Tailwind v4: theme tokens are CSS vars in `globals.css` mapped via `@theme inline`; use the
+7. **Supported locales are English, Hindi and Malayalam — nothing else.** Do not
+   add, suggest or scaffold any other translation (no Tamil, Spanish, French,
+   German, or others). Site copy for these three lives in `src/lib/i18n/` and
+   stays in sync via `gt translate` (see README Translations).
+8. Tailwind v4: theme tokens are CSS vars in `globals.css` mapped via `@theme inline`; use the
    semantic utilities (`bg-canvas`, `text-ink-soft`, `border-line`, `text-accent`, …) rather than
    raw palette classes.
-8. **Every PR gets a CodeRabbit review.** CodeRabbit skips auto-review on small repos, so after
+9. **Every PR gets a CodeRabbit review.** CodeRabbit skips auto-review on small repos, so after
    opening a PR, post `@coderabbitai full review` as a PR comment and wait for the review. Address every
    finding: fix valid ones; for the rest, reply with a reason and resolve the thread. Push fixes and
    re-trigger if new commits landed. A PR is not done until CodeRabbit has reviewed, the SonarCloud
