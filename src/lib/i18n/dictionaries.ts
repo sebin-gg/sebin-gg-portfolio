@@ -13,6 +13,13 @@ import ta from "@/lib/i18n/ta.json";
  * target locale must have a committed file so the import resolves at
  * build time — a missing file fails the build loudly instead of silently
  * rendering English under a localized URL.
+ *
+ * Rule: a locale joins this registry only once a real translated
+ * dictionary exists. Seeding en.json under a new locale code would
+ * publish English content at localized URLs (bad for users and SEO).
+ * To add a language: extend `gt.config.json` locales, run
+ * `GT_API_KEY=… GT_PROJECT_ID=… pnpm exec gt translate`, review the
+ * output, then add the import + entry here and the manifest entry.
  */
 const dictionaries: Record<Locale, Dictionary> = {
   en: enJson,

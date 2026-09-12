@@ -80,15 +80,16 @@ export function SiteHeader({
       lang={locale === DEFAULT_LOCALE ? undefined : locale}
       className="border-line/70 bg-canvas/80 sticky top-0 z-40 border-b backdrop-blur-lg"
     >
-      <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8 2xl:max-w-[90rem]">
+      <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between gap-2 px-4 min-[420px]:gap-4 sm:px-6 lg:px-8 2xl:max-w-[90rem]">
         <BrandAnchor locale={locale} currentPath={currentPath} />
         <DesktopNav items={resolvedItems} ariaLabel={dict.nav.primary} />
 
-        <div className="flex items-center gap-2">
+        <div className="flex min-w-0 shrink items-center gap-1.5">
           <LanguageSwitcher
             currentLocale={locale}
             currentPath={currentPath}
             ariaLabel={dict.common.language}
+            className="max-w-[7.25rem] lg:max-w-none"
           />
           <DeferredThemeToggle lightLabel={dict.common.toLight} darkLabel={dict.common.toDark} />
           <ResumeActions

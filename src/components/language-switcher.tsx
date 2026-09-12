@@ -36,13 +36,19 @@ export function LanguageSwitcher({
   currentLocale,
   currentPath,
   ariaLabel,
+  className = "",
 }: {
   readonly currentLocale: Locale;
   readonly currentPath: string;
   readonly ariaLabel: string;
+  /** Extra width constraints from the caller (mobile caps the switcher). */
+  readonly className?: string;
 }) {
   return (
-    <nav aria-label={ariaLabel} className="flex items-center gap-0.5">
+    <nav
+      aria-label={ariaLabel}
+      className={`flex [scrollbar-width:none] items-center gap-0.5 overflow-x-auto [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${className}`}
+    >
       {SUPPORTED_LOCALES.map((locale) => (
         <SwitchLink
           key={locale}
