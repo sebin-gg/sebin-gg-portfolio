@@ -3,34 +3,17 @@
  *  1. prerendered HTML contains no banner (server snapshot = online)
  *  2. every locale dictionary carries the offline strings
  *  3. the banner code ships in the client chunks
- * Run: node scripts/prod-offline-check.mjs [baseUrl]
+ * Run: node scripts/prod-offline-check.mjs
  *
- * Operator-only tool: baseUrl comes from the invoking operator's argv
- * (local shell or CI workflow input), never from a server request —
- * no SSRF surface. Only the production origin (or localhost for a
- * local build check) is accepted.
+ * Operator-only tool with a hardcoded production origin — no URL input,
+ * no request-derived data, no SSRF surface by construction.
  */
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 
-const DEFAULT_BASE = "https://sebin-gg.vercel.app";
-const rawBase = process.argv[2] ?? DEFAULT_BASE;
-let base;
-try {
-  base = new URL(rawBase);
-} catch {
-  console.log(`FAIL invalid base URL: ${rawBase}`);
-  process.exit(1);
-}
-const isProd = base.origin === new URL(DEFAULT_BASE).origin;
-const isLocal =
-  (base.hostname === "localhost" || base.hostname === "127.0.0.1") &&
-  (base.protocol === "http:" || base.protocol === "https:");
-if (!isProd && !isLocal) {
-  console.log(`FAIL refusing non-production base URL: ${base.origin}`);
-  process.exit(1);
-}
-const target = base.origin + "/";
+// Hardcoded by design: any variable URL (even allowlisted argv) trips
+// Sonar jssecurity:S8703 on new_security_rating. Production origin only.
+const target = "https://sebin-gg.vercel.app/";
 let failures = 0;
 const check = (ok, label) => {
   console.log(`${ok ? "PASS" : "FAIL"} ${label}`);
