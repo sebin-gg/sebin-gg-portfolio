@@ -7,7 +7,7 @@
 export const profile = {
   name: "Sebin Mathew",
   firstName: "Sebin",
-  role: "B.Tech Computer Science student · full-stack & security tooling",
+  role: "Full-stack developer and software engineer",
   location: "Kottayam, Kerala, India",
   email: "Sebinmathew543@gmail.com",
   /** Phone number is deliberately not published on the web page; it stays in the résumé PDF. */
@@ -19,10 +19,17 @@ export const profile = {
   /** Short line shown under the name in the hero. */
   tagline: "Building full-stack web applications, browser extensions, and local security tooling.",
   /** Scannable keyword chips under the tagline. */
-  focus: ["cybersecurity", "backend systems", "automation", "privacy-first"],
+  focus: [
+    "cybersecurity",
+    "backend systems",
+    "automation",
+    "privacy-first",
+    "frontend",
+    "full-stack",
+  ],
   /** One paragraph for the About section. */
   bio: [
-    "I’m a Computer Science student at College of Engineering Chengannur. My recent work spans browser-side prompt compression to an edge incident response dashboard powered by local Ollama models.",
+    "I’m a Computer Science student. My recent work spans browser-side prompt compression, an edge incident response dashboard powered by local Ollama models.",
     "I coordinate technical projects for FOCES CEC.",
   ],
 } as const;
@@ -231,7 +238,6 @@ export const skills: { group: string; items: string[] }[] = [
 ] as const;
 
 export const navItems = [
-  { label: "About", href: "#about" },
   { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
   { label: "Skills", href: "#skills" },
