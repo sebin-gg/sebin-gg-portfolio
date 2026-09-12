@@ -40,7 +40,10 @@ jobs:
         env:
           GT_API_KEY: ${{ secrets.GT_API_KEY }}
           GT_PROJECT_ID: ${{ secrets.GT_PROJECT_ID }}
-        run: pnpm exec gt translate
+        # Pinned: `gt` is CI-only (not a devDependency — its native
+        # tree-sitter build scripts don't belong in every contributor's
+        # install). Pin matches repo zizmor policy for supply-chain safety.
+        run: npx --yes gt@2.21.1 translate
 
       - name: Detect changed translations
         id: diff

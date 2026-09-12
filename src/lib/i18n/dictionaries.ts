@@ -1,5 +1,5 @@
 import type { Dictionary } from "@/lib/i18n/types";
-import { DEFAULT_LOCALE, type Locale } from "@/lib/locale";
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale } from "@/lib/locale";
 
 import de from "@/lib/i18n/de.json";
 import enJson from "@/lib/i18n/en.json";
@@ -21,6 +21,20 @@ const dictionaries: Record<Locale, Dictionary> = {
   fr: fr as Dictionary,
   de: de as Dictionary,
 };
+
+/**
+ * A manifest locale without a committed dictionary would silently render
+ * English under a localized URL — the exact trap of a manifest-driven
+ * pipeline. Fail loudly (and locally, in tests) the moment the two drift.
+ */
+const missing = SUPPORTED_LOCALES.filter((locale) => !(locale in dictionaries));
+if (missing.length > 0) {
+  throw new Error(
+    "i18n manifest locales missing committed dictionaries: " +
+      missing.join(", ") +
+      ". Run `gt translate`, commit the generated files, then retry.",
+  );
+}
 
 /** Returns the dictionary for a locale, falling back to English. */
 export function getDictionary(locale: Locale): Dictionary {

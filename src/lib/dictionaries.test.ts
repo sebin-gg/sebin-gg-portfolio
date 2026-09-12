@@ -21,6 +21,16 @@ describe("dictionaries loader", () => {
   it("falls back to English for unknown locales", () => {
     expect(getDictionary("xx")).toBe(en);
   });
+
+  it("never silently falls back for a manifest locale (drift guard)", () => {
+    // The loader module throws when a manifest locale lacks a committed
+    // dictionary; this assertion catches the same drift if the guard is
+    // removed — the fallback path returns the `en` object by reference.
+    const drifted = SUPPORTED_LOCALES.filter(
+      (locale) => locale !== "en" && getDictionary(locale) === en,
+    );
+    expect(drifted).toEqual([]);
+  });
 });
 
 describe("dictionary shape vs source data", () => {
