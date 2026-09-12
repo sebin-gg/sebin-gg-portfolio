@@ -41,7 +41,9 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       # Skips quietly while the GT account/secrets are not configured yet;
-      # locales keep their committed translations.
+      # locales keep their committed translations. A quota rejection is
+      # expected on the free plan — the run stays green so the workflow can
+      # succeed later in the month when usage resets or the plan upgrades.
       - name: gt translate
         if: ${{ env.HAS_GT_CREDS == 'true' }}
         env:
@@ -49,7 +51,7 @@ jobs:
           GT_PROJECT_ID: ${{ secrets.GT_PROJECT_ID }}
         # Declared devDependency, run via the local binary (Sonar S6505:
         # no on-demand `npx` installs). Pin reviewed on bumps.
-        run: pnpm exec gt translate
+        run: pnpm exec gt translate || echo "::warning::gt translate failed (quota or API error) — committed translations kept"
 
       - name: Detect changed translations
         id: diff
