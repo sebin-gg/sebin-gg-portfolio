@@ -8,3 +8,7 @@ enabled = true
 # IIFEs (JS-0067 false-positives on every one). Application logic lives in
 # src/components and src/lib, which remain fully analyzed.
 exclude_patterns = ["src/app/**"]
+# JS-0067 also fires on every top-level React component declaration; in the
+# component model the named export IS the contract, so the check is noise
+# for this codebase. ESLint (complexity cap ≤ 4) covers real complexity.
+skip_checks = ["JS-0067"]
