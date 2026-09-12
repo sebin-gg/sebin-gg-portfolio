@@ -15,12 +15,14 @@ describe("PageChrome", () => {
     expect(screen.getByRole("contentinfo")).toBeInTheDocument();
   });
 
-  it("marks the main region with the locale lang", () => {
+  it("marks every translated region with the locale lang", () => {
     render(
       <PageChrome locale="ta" currentPath="/" skipLabel="skip">
         <p>body</p>
       </PageChrome>,
     );
     expect(screen.getByRole("main")).toHaveAttribute("lang", "ta");
+    expect(screen.getByRole("banner")).toHaveAttribute("lang", "ta");
+    expect(screen.getByRole("contentinfo")).toHaveAttribute("lang", "ta");
   });
 });
