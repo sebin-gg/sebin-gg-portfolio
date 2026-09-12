@@ -1,7 +1,7 @@
 {
   "$schema": "https://generaltranslation.com/gt.schema.json",
   "defaultLocale": "en",
-  "locales": ["ta", "es", "fr", "de", "pt", "ja", "zh", "ar", "ru", "bn", "id"],
+  "locales": ["ta", "es", "fr", "de"],
   "files": {
     "json": {
       "include": ["src/lib/i18n/[locale].json"]

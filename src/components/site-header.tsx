@@ -84,12 +84,12 @@ export function SiteHeader({
         <BrandAnchor locale={locale} currentPath={currentPath} />
         <DesktopNav items={resolvedItems} ariaLabel={dict.nav.primary} />
 
-        <div className="flex shrink items-center gap-1.5">
+        <div className="flex min-w-0 shrink items-center gap-1.5">
           <LanguageSwitcher
             currentLocale={locale}
             currentPath={currentPath}
             ariaLabel={dict.common.language}
-            className="max-w-[7.25rem] min-[430px]:max-w-none"
+            className="max-w-[7.25rem] lg:max-w-none"
           />
           <DeferredThemeToggle lightLabel={dict.common.toLight} darkLabel={dict.common.toDark} />
           <ResumeActions

@@ -1,26 +1,25 @@
 import type { Dictionary } from "@/lib/i18n/types";
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale } from "@/lib/locale";
 
-import ar from "@/lib/i18n/ar.json";
-import bn from "@/lib/i18n/bn.json";
 import de from "@/lib/i18n/de.json";
 import enJson from "@/lib/i18n/en.json";
 import es from "@/lib/i18n/es.json";
 import fr from "@/lib/i18n/fr.json";
-import id from "@/lib/i18n/id.json";
-import ja from "@/lib/i18n/ja.json";
-import pt from "@/lib/i18n/pt.json";
-import ru from "@/lib/i18n/ru.json";
 import ta from "@/lib/i18n/ta.json";
-import zh from "@/lib/i18n/zh.json";
 
 /**
  * Committed translation files produced and refreshed by `gt translate`
  * (see gt.config.json). English is imported statically; every manifest
  * target locale must have a committed file so the import resolves at
  * build time — a missing file fails the build loudly instead of silently
- * rendering English under a localized URL. New locales are seeded with a
- * copy of en.json until their first `gt translate` run.
+ * rendering English under a localized URL.
+ *
+ * Rule: a locale joins this registry only once a real translated
+ * dictionary exists. Seeding en.json under a new locale code would
+ * publish English content at localized URLs (bad for users and SEO).
+ * To add a language: extend `gt.config.json` locales, run
+ * `GT_API_KEY=… GT_PROJECT_ID=… pnpm exec gt translate`, review the
+ * output, then add the import + entry here and the manifest entry.
  */
 const dictionaries: Record<Locale, Dictionary> = {
   en: enJson,
@@ -28,13 +27,6 @@ const dictionaries: Record<Locale, Dictionary> = {
   es,
   fr,
   de,
-  pt,
-  ja,
-  zh,
-  ar,
-  ru,
-  bn,
-  id,
 };
 
 /**
