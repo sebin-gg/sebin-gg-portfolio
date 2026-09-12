@@ -119,18 +119,23 @@ formats and lints staged files so pushes stay green.
 ## Translations (i18n)
 
 English is canonical at `/`, `/blog`, `/accessibility`. Other locales prerender
-under their prefix (`/ta`, `/es/blog`, …) from committed JSON dictionaries in
+under their prefix (`/hi`, `/ml/blog`, …) from committed JSON dictionaries in
 `src/lib/i18n/` — no client-side translation code, pages stay fully static.
 
-- `src/lib/i18n/en.json` is the source of truth; `manifest.json` lists the live
-  locales (routes, switcher, hreflang and sitemap all derive from it).
+- Translatable prose/UI copy lives in `src/lib/i18n/en.json` (the source of
+  truth); structural data, links, identity and other facts stay in
+  `src/lib/site.ts`. `manifest.json` lists the live locales (routes, switcher,
+  hreflang and sitemap all derive from it).
 - `gt.config.json` + `.github/workflows/i18n.yml` automate the rest via
   [General Translation](https://generaltranslation.com): `gt translate` refreshes
   the JSON files and opens a review PR. Needs `GT_API_KEY` / `GT_PROJECT_ID`
   secrets (local runs read `.env.local`, which is gitignored).
-- Free-tier quota resets monthly — when it is exhausted the workflow stays green
-  with a warning and retries on the next push/dispatch. Review machine output
-  before merging, especially for locales you care about.
+- Quota: the free allowance is one-time and does not reset — when it is
+  exhausted, add a payment method (usage-based) or keep maintaining the seed
+  files by hand. Every `gt translate` failure is non-blocking by design: the
+  workflow logs a warning, keeps the committed translations, and still opens a
+  review PR if any files changed. Review machine output before merging,
+  especially for locales you care about.
 - Adding a locale: append it to `gt.config.json` `locales`, run `gt translate`,
   add the file to `manifest.json` and the loader registry. Never publish an
   untranslated (English-copy) file under a localized URL.
