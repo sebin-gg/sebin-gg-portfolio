@@ -7,7 +7,7 @@ set -uo pipefail
 cd "$(dirname "$0")/.." || exit 1
 
 step() {
-  local label=$1
+  local label="$1"
   echo
   echo "==========================================================="
   echo "  $label"
@@ -15,7 +15,7 @@ step() {
 }
 
 fail() {
-  local where=$1
+  local where="$1"
   echo
   echo "✗ FAILED at: $where"
   exit 1
@@ -25,19 +25,19 @@ step "Lint + typecheck + format + unit:fast (parallel, independent)"
 pnpm lint > /tmp/verify-lint.log 2>&1 & lint_pid=$!
 pnpm typecheck > /tmp/verify-typecheck.log 2>&1 & typecheck_pid=$!
 pnpm format:check > /tmp/verify-format.log 2>&1 & format_pid=$!
-pnpm test:unit:fast > "/tmp/verify-unit:fast.log" 2>&1 & unit_pid=$!
+pnpm test:unit:fast > /tmp/verify-unit-fast.log 2>&1 & unit_pid=$!
 
-parallel_failed=""
-wait "$lint_pid" || parallel_failed="${parallel_failed} lint"
-wait "$typecheck_pid" || parallel_failed="${parallel_failed} typecheck"
-wait "$format_pid" || parallel_failed="${parallel_failed} format"
-wait "$unit_pid" || parallel_failed="${parallel_failed} unit:fast"
-if [[ -n "$parallel_failed" ]]; then
-  for job in $parallel_failed; do
-    echo "--- $job failed, tail of its log:"
-    tail -30 "/tmp/verify-$job.log"
+parallel_failed=()
+wait "$lint_pid" || parallel_failed+=("lint:/tmp/verify-lint.log")
+wait "$typecheck_pid" || parallel_failed+=("typecheck:/tmp/verify-typecheck.log")
+wait "$format_pid" || parallel_failed+=("format:/tmp/verify-format.log")
+wait "$unit_pid" || parallel_failed+=("unit:fast:/tmp/verify-unit-fast.log")
+if ((${#parallel_failed[@]} > 0)); then
+  for entry in "${parallel_failed[@]}"; do
+    echo "--- ${entry%%:*} failed, tail of ${entry##*:}:"
+    tail -30 "${entry##*:}"
   done
-  fail "parallel gates:$parallel_failed"
+  fail "parallel gates"
 fi
 
 echo
