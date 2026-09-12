@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { OfflineBanner } from "@/components/offline-banner";
 
 export const metadata: Metadata = {
   title: "404",
@@ -38,6 +39,7 @@ export default function NotFound() {
         </div>
       </main>
       <SiteFooter locale="en" />
+      <OfflineBanner locale="en" />
     </>
   );
 }

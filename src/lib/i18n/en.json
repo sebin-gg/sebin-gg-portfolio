@@ -173,5 +173,9 @@
     "degree": "B.Tech in Computer Science & Engineering",
     "college": "College of Engineering Chengannur",
     "location": "Kottayam, Kerala, India"
+  },
+  "offline": {
+    "message": "You’re offline",
+    "retryHint": "Pages you already visited still work. Reconnect to load new ones."
   }
 }

@@ -120,6 +120,10 @@ export interface Dictionary {
     college: string;
     location: string;
   };
+  offline: {
+    message: string;
+    retryHint: string;
+  };
 }
 
 export type { Locale } from "@/lib/locale";

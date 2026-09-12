@@ -1,6 +1,7 @@
 import { DEFAULT_LOCALE, TEXT_DIRECTION, type Locale } from "@/lib/locale";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { OfflineBanner } from "@/components/offline-banner";
 
 /**
  * Composes the localized chrome around page content. Every page declares its
@@ -38,6 +39,7 @@ export function PageChrome({
         {children}
       </main>
       <SiteFooter locale={locale} />
+      <OfflineBanner locale={locale} />
     </>
   );
 }
