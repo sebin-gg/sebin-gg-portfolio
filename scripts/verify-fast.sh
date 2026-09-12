@@ -6,6 +6,10 @@
 set -uo pipefail
 cd "$(dirname "$0")/.." || exit 1
 
+# Per-invocation log dir so concurrent runs never share/truncate logs.
+LOGDIR="$(mktemp -d "${TMPDIR:-/tmp}/verify-fast.XXXXXX")"
+trap 'rm -rf "$LOGDIR"' EXIT
+
 step() {
   local label="$1"
   echo
@@ -22,20 +26,20 @@ fail() {
 }
 
 step "Lint + typecheck + format + unit:fast (parallel, independent)"
-pnpm lint > /tmp/verify-lint.log 2>&1 & lint_pid=$!
-pnpm typecheck > /tmp/verify-typecheck.log 2>&1 & typecheck_pid=$!
-pnpm format:check > /tmp/verify-format.log 2>&1 & format_pid=$!
-pnpm test:unit:fast > /tmp/verify-unit-fast.log 2>&1 & unit_pid=$!
+pnpm lint >"$LOGDIR/lint.log" 2>&1 & lint_pid=$!
+pnpm typecheck >"$LOGDIR/typecheck.log" 2>&1 & typecheck_pid=$!
+pnpm format:check >"$LOGDIR/format.log" 2>&1 & format_pid=$!
+pnpm test:unit:fast >"$LOGDIR/unit.log" 2>&1 & unit_pid=$!
 
-parallel_failed=()
-wait "$lint_pid" || parallel_failed+=("lint:/tmp/verify-lint.log")
-wait "$typecheck_pid" || parallel_failed+=("typecheck:/tmp/verify-typecheck.log")
-wait "$format_pid" || parallel_failed+=("format:/tmp/verify-format.log")
-wait "$unit_pid" || parallel_failed+=("unit:fast:/tmp/verify-unit-fast.log")
-if ((${#parallel_failed[@]} > 0)); then
-  for entry in "${parallel_failed[@]}"; do
-    echo "--- ${entry%%:*} failed, tail of ${entry##*:}:"
-    tail -30 "${entry##*:}"
+failed_names=()
+wait "$lint_pid" || failed_names+=("lint")
+wait "$typecheck_pid" || failed_names+=("typecheck")
+wait "$format_pid" || failed_names+=("format")
+wait "$unit_pid" || failed_names+=("unit")
+if ((${#failed_names[@]} > 0)); then
+  for failed_name in "${failed_names[@]}"; do
+    echo "--- $failed_name failed, tail of its log:"
+    tail -30 "$LOGDIR/$failed_name.log"
   done
   fail "parallel gates"
 fi

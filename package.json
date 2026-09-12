@@ -17,7 +17,7 @@
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:local": "playwright test --project=chromium --project=firefox --project=mobile",
-    "test:e2e:chrome": "playwright test --project=chromium",
+    "test:e2e:chrome": "fuser -k 3100/tcp 2>/dev/null; playwright test --project=chromium",
     "verify:fast": "bash scripts/verify-fast.sh",
     "test:mutation": "stryker run",
     "test:all": "pnpm lint && pnpm typecheck && pnpm format:check && pnpm test:unit && pnpm test:e2e",
