@@ -23,7 +23,7 @@ const ENGINES = [
 ];
 
 const MUST_CONTAIN = [
-  ["home", "/", ["Sebin Mathew", "About", "Projects", "Skills", "Experience"]],
+  ["home", "/", ["Sebin Mathew", "Experience", "Projects", "Skills", "Toolbox"]],
   ["blog", "/blog", ["Blog"]],
 ];
 
