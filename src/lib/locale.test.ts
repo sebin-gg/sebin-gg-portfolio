@@ -24,11 +24,12 @@ describe("locale manifest", () => {
     expect(LOCALE_NAMES.ta).toBe("தமிழ்");
   });
 
-  it("marks only Arabic-script locales as RTL", () => {
+  it("marks exactly the Arabic-script locales as RTL", () => {
     expect(TEXT_DIRECTION.en).toBe("ltr");
     expect(TEXT_DIRECTION.ta).toBe("ltr");
     for (const locale of SUPPORTED_LOCALES) {
-      expect(TEXT_DIRECTION[locale]).toBe("ltr");
+      const expected = locale === "ar" ? "rtl" : "ltr";
+      expect(TEXT_DIRECTION[locale]).toBe(expected);
     }
   });
 
