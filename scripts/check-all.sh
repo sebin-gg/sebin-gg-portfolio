@@ -4,6 +4,10 @@
 set -uo pipefail
 cd "$(dirname "$0")/.." || exit 1
 
+# Per-invocation log dir so concurrent runs never share/truncate logs.
+LOGDIR="$(mktemp -d "${TMPDIR:-/tmp}/check-all.XXXXXX")"
+trap 'rm -rf "$LOGDIR"' EXIT
+
 step() {
   local label=$1
   echo
@@ -20,9 +24,9 @@ fail() {
 }
 
 step "Lint + typecheck + format (parallel, independent)"
-pnpm lint > /tmp/check-lint.log 2>&1 & lint_pid=$!
-pnpm typecheck > /tmp/check-typecheck.log 2>&1 & typecheck_pid=$!
-pnpm format:check > /tmp/check-format.log 2>&1 & format_pid=$!
+pnpm lint > $LOGDIR/lint.log 2>&1 & lint_pid=$!
+pnpm typecheck > $LOGDIR/typecheck.log 2>&1 & typecheck_pid=$!
+pnpm format:check > $LOGDIR/format.log 2>&1 & format_pid=$!
 
 parallel_failed=""
 wait "$lint_pid" || parallel_failed="${parallel_failed} lint"
@@ -30,17 +34,17 @@ wait "$typecheck_pid" || parallel_failed="${parallel_failed} typecheck"
 wait "$format_pid" || parallel_failed="${parallel_failed} format"
 if [[ -n "$parallel_failed" ]]; then
   for job in $parallel_failed; do
-    echo "--- $job failed, tail of /tmp/check-$job.log:"
-    tail -30 "/tmp/check-$job.log"
+    echo "--- $job failed, tail of $LOGDIR/$job.log:"
+    tail -30 "$LOGDIR/$job.log"
   done
   fail "parallel gates:$parallel_failed"
 fi
 echo "✔ lint, typecheck and format all passed."
 
 step "Unit tests + build + browsers (parallel, independent)"
-pnpm test:unit > /tmp/check-unit.log 2>&1 & unit_pid=$!
-pnpm build > /tmp/check-build.log 2>&1 & build_pid=$!
-pnpm exec playwright install chromium firefox webkit > /tmp/check-pw.log 2>&1 & pw_pid=$!
+pnpm test:unit > $LOGDIR/unit.log 2>&1 & unit_pid=$!
+pnpm build > $LOGDIR/build.log 2>&1 & build_pid=$!
+pnpm exec playwright install chromium firefox webkit > $LOGDIR/pw.log 2>&1 & pw_pid=$!
 
 parallel_failed=""
 wait "$unit_pid" || parallel_failed="${parallel_failed} unit"
@@ -48,8 +52,8 @@ wait "$build_pid" || parallel_failed="${parallel_failed} build"
 wait "$pw_pid" || parallel_failed="${parallel_failed} playwright-install"
 if [[ -n "$parallel_failed" ]]; then
   for job in $parallel_failed; do
-    echo "--- $job failed, tail of /tmp/check-$job.log:"
-    tail -30 "/tmp/check-$job.log"
+    echo "--- $job failed, tail of $LOGDIR/$job.log:"
+    tail -30 "$LOGDIR/$job.log"
   done
   fail "parallel build:$parallel_failed"
 fi
