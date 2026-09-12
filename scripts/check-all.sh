@@ -24,9 +24,9 @@ fail() {
 }
 
 step "Lint + typecheck + format (parallel, independent)"
-pnpm lint > $LOGDIR/lint.log 2>&1 & lint_pid=$!
-pnpm typecheck > $LOGDIR/typecheck.log 2>&1 & typecheck_pid=$!
-pnpm format:check > $LOGDIR/format.log 2>&1 & format_pid=$!
+pnpm lint >"$LOGDIR/lint.log" 2>&1 & lint_pid=$!
+pnpm typecheck >"$LOGDIR/typecheck.log" 2>&1 & typecheck_pid=$!
+pnpm format:check >"$LOGDIR/format.log" 2>&1 & format_pid=$!
 
 parallel_failed=""
 wait "$lint_pid" || parallel_failed="${parallel_failed} lint"
@@ -42,9 +42,9 @@ fi
 echo "✔ lint, typecheck and format all passed."
 
 step "Unit tests + build + browsers (parallel, independent)"
-pnpm test:unit > $LOGDIR/unit.log 2>&1 & unit_pid=$!
-pnpm build > $LOGDIR/build.log 2>&1 & build_pid=$!
-pnpm exec playwright install chromium firefox webkit > $LOGDIR/pw.log 2>&1 & pw_pid=$!
+pnpm test:unit >"$LOGDIR/unit.log" 2>&1 & unit_pid=$!
+pnpm build >"$LOGDIR/build.log" 2>&1 & build_pid=$!
+pnpm exec playwright install chromium firefox webkit >"$LOGDIR/playwright-install.log" 2>&1 & pw_pid=$!
 
 parallel_failed=""
 wait "$unit_pid" || parallel_failed="${parallel_failed} unit"
