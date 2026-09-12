@@ -64,7 +64,7 @@ test.describe("localized routes", () => {
     // waitForURL (not toHaveURL): under heavy CI load Firefox can resolve the
     // URL assertion against the pre-navigation page; this pins the wait to
     // the navigation itself.
-    await page.waitForURL(new RegExp(`/${first.code}$`));
+    await page.waitForURL((url) => url.pathname === `/${first.code}`);
     await expect(page.getByRole("main")).toHaveAttribute("lang", first.code);
 
     // Same page, second locale — proves cross-locale (not just en-out) switching.
@@ -72,7 +72,7 @@ test.describe("localized routes", () => {
       .getByRole("navigation", { name: first.dict.common.language })
       .getByRole("link", { name: second.native })
       .click();
-    await page.waitForURL(new RegExp(`/${second.code}$`));
+    await page.waitForURL((url) => url.pathname === `/${second.code}`);
     await expect(page.getByRole("main")).toHaveAttribute("lang", second.code);
 
     // The switcher label is localized too — re-locate it in the last locale.
@@ -89,7 +89,7 @@ test.describe("localized routes", () => {
     await page.goto("/blog");
     const switcher = page.getByRole("navigation", { name: getDictionary("en").common.language });
     await switcher.getByRole("link", { name: target.native }).click();
-    await expect(page).toHaveURL(new RegExp(`/${target.code}/blog$`));
+    await page.waitForURL((url) => url.pathname === `/${target.code}/blog`);
     await expect(page.getByRole("main")).toHaveAttribute("lang", target.code);
   });
 
