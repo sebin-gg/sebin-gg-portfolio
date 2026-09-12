@@ -14,6 +14,7 @@ playwright-report
 test-results
 stryker-report
 .stryker-tmp
+tmp/
 lighthouse-results
 .lighthouseci
 
