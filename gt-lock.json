@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "branchId": "brc_dg6h0vs49y3t3c2qyxe8slzx",
+  "entries": [
+    {
+      "fileId": "5e07a01c3fdfd4268c94f418eb63d2f8ccf59a165754e6ae5356b819edf03858",
+      "versionId": "5ab0de90b393828bb13c3f14ebf286ff48db27fd72214c51af43768a108da1ef",
+      "translations": {
+        "hi": {
+          "updatedAt": "2026-09-12T17:59:07.455Z",
+          "fileName": "src/lib/i18n/hi.json",
+          "postProcessHash": "b568b7116992488d235ecd1dc6a2146699ed5eeacd502f6836988d026e6b2157"
+        },
+        "ml": {
+          "updatedAt": "2026-09-12T17:59:07.456Z",
+          "fileName": "src/lib/i18n/ml.json",
+          "postProcessHash": "d661d782c672526c74983aee059fc678d80383389389a0b7e96b15d201778bdc"
+        }
+      },
+      "fileName": "src/lib/i18n/en.json"
+    }
+  ]
+}

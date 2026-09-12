@@ -13,6 +13,7 @@
     "playwright-report/**",
     "docs/screenshots/**",
     "skills-lock.json",
+    "gt-lock.json",
     "pnpm-lock.yaml",
     ".agents/**",
     ".claude/**",
