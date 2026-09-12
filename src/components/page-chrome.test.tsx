@@ -12,6 +12,7 @@ describe("PageChrome", () => {
     expect(screen.getByRole("link", { name: "Skip to content" })).toHaveAttribute("href", "#main");
     expect(screen.getByRole("main")).toBeInTheDocument();
     expect(screen.getByText("page body")).toBeInTheDocument();
+    expect(screen.getByRole("banner")).toBeInTheDocument();
     expect(screen.getByRole("contentinfo")).toBeInTheDocument();
   });
 
