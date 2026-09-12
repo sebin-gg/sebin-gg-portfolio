@@ -11,8 +11,9 @@
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 
-// Hardcoded by design: any variable URL (even allowlisted argv) trips
-// Sonar jssecurity:S8703 on new_security_rating. Production origin only.
+// Hardcoded by design: any variable fetch URL (even allowlisted argv)
+// trips Sonar request-forgery detection on new_security_rating.
+// Production origin only.
 const target = "https://sebin-gg.vercel.app/";
 let failures = 0;
 const check = (ok, label) => {
