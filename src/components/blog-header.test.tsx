@@ -12,8 +12,8 @@ describe("BlogHeader", () => {
   });
 
   it("renders the translated title and lede for another locale", () => {
-    const dict = getDictionary("es");
-    render(<BlogHeader locale="es" />);
+    const dict = getDictionary("hi");
+    render(<BlogHeader locale="hi" />);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(dict.blog.title);
     expect(screen.getByText(dict.blog.lede)).toBeInTheDocument();
   });

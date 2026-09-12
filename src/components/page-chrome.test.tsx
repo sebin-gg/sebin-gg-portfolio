@@ -18,15 +18,15 @@ describe("PageChrome", () => {
 
   it("marks every translated region with the locale lang", () => {
     render(
-      <PageChrome locale="ta" currentPath="/" skipLabel="skip">
+      <PageChrome locale="hi" currentPath="/" skipLabel="skip">
         <p>body</p>
       </PageChrome>,
     );
     const main = screen.getByRole("main");
-    expect(main).toHaveAttribute("lang", "ta");
+    expect(main).toHaveAttribute("lang", "hi");
     expect(main).toHaveAttribute("id", "main");
-    expect(screen.getByRole("link", { name: "skip" })).toHaveAttribute("lang", "ta");
-    expect(screen.getByRole("banner")).toHaveAttribute("lang", "ta");
-    expect(screen.getByRole("contentinfo")).toHaveAttribute("lang", "ta");
+    expect(screen.getByRole("link", { name: "skip" })).toHaveAttribute("lang", "hi");
+    expect(screen.getByRole("banner")).toHaveAttribute("lang", "hi");
+    expect(screen.getByRole("contentinfo")).toHaveAttribute("lang", "hi");
   });
 });
