@@ -38,6 +38,7 @@ export interface Dictionary {
   };
   hero: {
     intro: string;
+    role: string;
     tagline: string;
     focusAreas: string;
     focus: string[];

@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { getDictionary } from "../src/lib/i18n/dictionaries";
+import type { Locale } from "../src/lib/locale";
 import manifest from "../src/lib/i18n/manifest.json";
 
 /**
@@ -11,7 +12,7 @@ import manifest from "../src/lib/i18n/manifest.json";
  * cspell-clean and track dictionary changes automatically.
  */
 
-const LOCALES = (manifest as { code: string; native: string }[])
+const LOCALES = (manifest as { code: Locale; native: string }[])
   .filter((entry) => entry.code !== "en")
   .map((entry) => ({ ...entry, dict: getDictionary(entry.code) }));
 
@@ -53,27 +54,34 @@ test.describe("localized routes", () => {
     });
   }
 
-  test("language switcher navigates to the same page in another locale and back", async ({
-    page,
-  }) => {
+  test("language switcher walks every locale and back", async ({ page }) => {
     const [first, second] = LOCALES;
     await page.goto("/");
-    const switcher = page.getByRole("navigation", { name: getDictionary("en").common.language });
-    await switcher.getByRole("link", { name: first.native }).click();
+    await page
+      .getByRole("navigation", { name: getDictionary("en").common.language })
+      .getByRole("link", { name: first.native })
+      .click();
     // waitForURL (not toHaveURL): under heavy CI load Firefox can resolve the
     // URL assertion against the pre-navigation page; this pins the wait to
     // the navigation itself.
     await page.waitForURL(new RegExp(`/${first.code}$`));
     await expect(page.getByRole("main")).toHaveAttribute("lang", first.code);
 
-    // The switcher label is localized too — re-locate it in the new locale.
+    // Same page, second locale — proves cross-locale (not just en-out) switching.
     await page
       .getByRole("navigation", { name: first.dict.common.language })
+      .getByRole("link", { name: second.native })
+      .click();
+    await page.waitForURL(new RegExp(`/${second.code}$`));
+    await expect(page.getByRole("main")).toHaveAttribute("lang", second.code);
+
+    // The switcher label is localized too — re-locate it in the last locale.
+    await page
+      .getByRole("navigation", { name: second.dict.common.language })
       .getByRole("link", { name: "English" })
       .click();
     await page.waitForURL(/\/$/);
     await expect(page.getByRole("main")).not.toHaveAttribute("lang");
-    expect(second.code).toBeTruthy();
   });
 
   test("switcher preserves the blog route across locales", async ({ page }) => {

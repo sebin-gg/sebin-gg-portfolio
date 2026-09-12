@@ -53,7 +53,7 @@ export function resolveLocale(value: unknown): Locale {
 }
 
 /**
- * Derives the page locale from a pathname (`/hi/blog` -> `ta`).
+ * Derives the page locale from a pathname (`/hi/blog` -> `hi`).
  * Null-safe so unit tests and missing router context fall back to English.
  */
 export function localeFromPathname(pathname: string | null | undefined): Locale {

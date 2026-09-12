@@ -28,6 +28,7 @@
   },
   "hero": {
     "intro": "Introduction",
+    "role": "Full-stack developer and software engineer",
     "tagline": "Building full-stack web applications, browser extensions, and local security tooling.",
     "focusAreas": "Focus areas",
     "focus": [
