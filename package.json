@@ -54,6 +54,7 @@
     "@vitest/coverage-v8": "^4.1.11",
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
+    "gt": "^2.21.1",
     "husky": "^9.1.7",
     "jsdom": "^30.0.1",
     "lighthouse": "^13.4.1",

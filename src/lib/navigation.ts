@@ -51,9 +51,12 @@ export function getLogoHref(pathname: string | null | undefined): string {
   return localeHomeBase(localeFromPathname(pathname)) || "/";
 }
 
-/** Scroll-spy target for hash anchors; undefined for route links. */
-function spyIdFor(item: NavItemDef, isHash: boolean): string | undefined {
-  return isHash ? item.href.slice(1) : undefined;
+/**
+ * Active-state compares canonical (locale-stripped) paths: /ta/blog is the
+ * same page as /blog even though its rendered href carries the prefix.
+ */
+function isCurrentRoute(item: NavItemDef, canonicalPath: string): boolean {
+  return !item.href.startsWith("#") && canonicalPath === stripLocalePrefix(item.href);
 }
 
 /** Resolves a single navigation item definition against the active route. */
@@ -64,15 +67,13 @@ export function resolveNavItem(
 ): ResolvedNavItem {
   const isHome = isHomeRoute(pathname);
   const isHash = item.href.startsWith("#");
-  // Active-state compares canonical (locale-stripped) paths: /ta/blog is the
-  // same page as /blog even though its rendered href carries the prefix.
   const canonicalPath = stripLocalePrefix(pathname ?? "/");
   return {
     label: item.label,
     rawHref: item.href,
     href: getNavHref(item.href, isHome, locale),
-    spyId: spyIdFor(item, isHash),
-    isCurrent: !isHash && canonicalPath === stripLocalePrefix(item.href),
+    spyId: isHash ? item.href.slice(1) : undefined,
+    isCurrent: isCurrentRoute(item, canonicalPath),
   };
 }
 

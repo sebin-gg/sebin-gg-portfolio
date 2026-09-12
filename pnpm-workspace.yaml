@@ -1,3 +1,12 @@
 allowBuilds:
+  # Native build scripts are denied explicitly: none of these are needed
+  # for how this repo uses them.
+  # - esbuild ships platform binaries as optionalDependencies (no postinstall
+  #   needed by vitest/stryker).
+  # - tree-sitter-python is an optional native parser of the `gt` CLI; this
+  #   repo only ever translates flat JSON dictionaries, so the parser is
+  #   never invoked.
+  esbuild: false
   sharp: false
+  tree-sitter-python: false
   unrs-resolver: false
