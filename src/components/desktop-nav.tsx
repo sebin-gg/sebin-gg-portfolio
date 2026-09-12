@@ -11,8 +11,8 @@ export function DesktopNav({
   items,
   ariaLabel,
 }: {
-  items: readonly ResolvedNavItem[];
-  ariaLabel: string;
+  readonly items: readonly ResolvedNavItem[];
+  readonly ariaLabel: string;
 }) {
   return (
     <nav aria-label={ariaLabel} className="hidden md:block">

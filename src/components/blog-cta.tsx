@@ -3,7 +3,7 @@ import { DEFAULT_LOCALE, localePath, type Locale } from "@/lib/locale";
 import { SectionHeading } from "@/components/section-heading";
 import { ArrowUpRightIcon } from "@/components/icons";
 
-export function BlogCta({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+export function BlogCta({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
   const dict = getDictionary(locale);
 
   return (

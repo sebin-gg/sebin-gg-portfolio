@@ -4,7 +4,7 @@ import { DEFAULT_LOCALE, formatString, type Locale } from "@/lib/locale";
 import { SectionHeading } from "@/components/section-heading";
 import { ArrowUpRightIcon, ExternalLinkIcon } from "@/components/icons";
 
-export function Projects({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+export function Projects({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
   const dict = getDictionary(locale);
 
   return (

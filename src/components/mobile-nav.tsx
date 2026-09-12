@@ -5,7 +5,13 @@ import { resumeUrl } from "@/lib/site";
 import type { ResolvedNavItem } from "@/lib/navigation";
 import { CloseIcon, DownloadIcon, MenuIcon } from "@/components/icons";
 
-function NavLink({ item, onClick }: { item: ResolvedNavItem; onClick: () => void }) {
+function NavLink({
+  item,
+  onClick,
+}: {
+  readonly item: ResolvedNavItem;
+  readonly onClick: () => void;
+}) {
   return (
     <li>
       <a
@@ -24,7 +30,7 @@ function NavLink({ item, onClick }: { item: ResolvedNavItem; onClick: () => void
   );
 }
 
-function ToggleIcon({ open }: { open: boolean }) {
+function ToggleIcon({ open }: { readonly open: boolean }) {
   if (open) return <CloseIcon className="h-5 w-5" />;
   return <MenuIcon className="h-5 w-5" />;
 }
@@ -40,11 +46,11 @@ export function MobileNav({
   closeLabel,
   resumeLabel,
 }: {
-  items: readonly ResolvedNavItem[];
-  navLabel: string;
-  openLabel: string;
-  closeLabel: string;
-  resumeLabel: string;
+  readonly items: readonly ResolvedNavItem[];
+  readonly navLabel: string;
+  readonly openLabel: string;
+  readonly closeLabel: string;
+  readonly resumeLabel: string;
 }) {
   const [open, setOpen] = useState(false);
   const label = open ? closeLabel : openLabel;

@@ -1,5 +1,3 @@
-import type { Locale } from "@/lib/locale";
-
 /**
  * One locale's view of every user-visible string. `en.json` is the source of
  * truth; translated JSON files produced by `gt translate` must satisfy the
@@ -124,4 +122,4 @@ export interface Dictionary {
   };
 }
 
-export type { Locale };
+export type { Locale } from "@/lib/locale";

@@ -6,10 +6,10 @@ function SwitchLink({
   currentPath,
   label,
 }: {
-  locale: Locale;
-  currentLocale: Locale;
-  currentPath: string;
-  label: string;
+  readonly locale: Locale;
+  readonly currentLocale: Locale;
+  readonly currentPath: string;
+  readonly label: string;
 }) {
   const current = locale === currentLocale;
   return (
@@ -37,9 +37,9 @@ export function LanguageSwitcher({
   currentPath,
   ariaLabel,
 }: {
-  currentLocale: Locale;
-  currentPath: string;
-  ariaLabel: string;
+  readonly currentLocale: Locale;
+  readonly currentPath: string;
+  readonly ariaLabel: string;
 }) {
   return (
     <nav aria-label={ariaLabel} className="flex items-center gap-0.5">

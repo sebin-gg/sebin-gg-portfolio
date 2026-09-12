@@ -7,7 +7,7 @@ import { PageChrome } from "@/components/page-chrome";
 import { AccessibilityStatement } from "@/components/accessibility-statement";
 
 interface LocalePageProps {
-  params: Promise<{ locale: string }>;
+  readonly params: Promise<{ locale: string }>;
 }
 
 export function generateStaticParams(): { locale: string }[] {

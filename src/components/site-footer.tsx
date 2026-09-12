@@ -4,7 +4,7 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { DEFAULT_LOCALE, localePath, type Locale } from "@/lib/locale";
 import { GithubIcon, LinkedinIcon, MailIcon, XIcon } from "@/components/icons";
 
-export function SiteFooter({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+export function SiteFooter({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
   const dict = getDictionary(locale);
   const year = new Date().getFullYear();
   return (

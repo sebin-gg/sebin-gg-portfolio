@@ -26,7 +26,7 @@ const ITEM_KEYS = [
  * Tech/tool proper nouns in the remaining groups stay in Latin script —
  * identical across locales — so they fall back to the source data.
  */
-export function Skills({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+export function Skills({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
   const dict = getDictionary(locale);
 
   return (

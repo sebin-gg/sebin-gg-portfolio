@@ -8,7 +8,7 @@ function getServerSnapshot(): boolean {
   return false;
 }
 
-function ToggleIcon({ dark }: { dark: boolean }) {
+function ToggleIcon({ dark }: { readonly dark: boolean }) {
   return dark ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />;
 }
 
@@ -16,8 +16,8 @@ export function ThemeToggle({
   lightLabel = "Switch to light mode",
   darkLabel = "Switch to dark mode",
 }: {
-  lightLabel?: string;
-  darkLabel?: string;
+  readonly lightLabel?: string;
+  readonly darkLabel?: string;
 }) {
   const dark = useSyncExternalStore(subscribeTheme, getThemeSnapshot, getServerSnapshot);
   const label = dark ? lightLabel : darkLabel;

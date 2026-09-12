@@ -12,7 +12,7 @@ import { Skills } from "@/components/skills";
 import { BlogCta } from "@/components/blog-cta";
 
 interface LocalePageProps {
-  params: Promise<{ locale: string }>;
+  readonly params: Promise<{ locale: string }>;
 }
 
 /** Prerenders one static page per manifest locale (English excluded — it owns the root). */

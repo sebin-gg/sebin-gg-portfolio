@@ -239,7 +239,7 @@ export const navItems = [
 ] as const;
 
 export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://sebin-gg.vercel.app").replace(
-  /\/+$/,
+  /\/$/,
   "",
 );
 

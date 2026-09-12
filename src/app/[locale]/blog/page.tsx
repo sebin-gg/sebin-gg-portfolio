@@ -8,7 +8,7 @@ import { BlogHeader } from "@/components/blog-header";
 import { BlogEmptyState } from "@/components/blog-empty-state";
 
 interface LocalePageProps {
-  params: Promise<{ locale: string }>;
+  readonly params: Promise<{ locale: string }>;
 }
 
 export function generateStaticParams(): { locale: string }[] {

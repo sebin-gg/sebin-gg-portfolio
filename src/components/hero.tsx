@@ -14,7 +14,7 @@ function monogram(name: string): string {
   return (first ? first[0] : "") + (second ? second[0] : "");
 }
 
-export function Hero({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
   const dict = getDictionary(locale);
   const stats = [
     { value: `${projects.length}`, label: dict.hero.statsProjects },

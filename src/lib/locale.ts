@@ -24,7 +24,7 @@ if (!SUPPORTED_LOCALES.includes(DEFAULT_LOCALE)) {
   throw new Error("i18n manifest must include the default locale: " + DEFAULT_LOCALE);
 }
 
-export type Locale = string;
+export type Locale = (typeof SUPPORTED_LOCALES)[number];
 
 /** Native display name per locale, used for switcher labels. */
 export const LOCALE_NAMES: Record<string, string> = Object.fromEntries(
@@ -60,7 +60,7 @@ export function localeFromPathname(pathname: string | null | undefined): Locale 
   if (!pathname) {
     return DEFAULT_LOCALE;
   }
-  const segment = pathname.split("/").filter(Boolean)[0];
+  const segment = pathname.split("/").find(Boolean);
   return resolveLocale(segment);
 }
 
@@ -112,7 +112,7 @@ export function formatString(template: string, vars: Record<string, string | num
 export function hreflangAlternates(path: string, siteUrl: string): Record<string, string> {
   // Normalize here so a trailing slash on NEXT_PUBLIC_SITE_URL can never
   // leak double slashes into metadata or the sitemap.
-  const base = siteUrl.replace(/\/+$/, "");
+  const base = siteUrl.replace(/\/$/, "");
   const alternates: Record<string, string> = {};
   for (const locale of SUPPORTED_LOCALES) {
     alternates[HTML_LANG[locale]] = `${base}${localePath(locale, path)}`;

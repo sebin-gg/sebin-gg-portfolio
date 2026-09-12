@@ -13,10 +13,10 @@ export function PageChrome({
   skipLabel,
   children,
 }: {
-  locale?: Locale;
-  currentPath: string;
-  skipLabel: string;
-  children: React.ReactNode;
+  readonly locale?: Locale;
+  readonly currentPath: string;
+  readonly skipLabel: string;
+  readonly children: React.ReactNode;
 }) {
   const isDefault = locale === DEFAULT_LOCALE;
   return (

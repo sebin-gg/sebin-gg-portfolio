@@ -2,7 +2,7 @@ import { profile } from "@/lib/site";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/locale";
 
-export function About({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+export function About({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
   const dict = getDictionary(locale);
   const facts = [
     { label: dict.about.degreeLabel, value: dict.about.degreeValue },

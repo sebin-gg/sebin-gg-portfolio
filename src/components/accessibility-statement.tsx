@@ -3,7 +3,7 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { DEFAULT_LOCALE, localePath, type Locale } from "@/lib/locale";
 import { ArrowUpRightIcon } from "@/components/icons";
 
-export function AccessibilityStatement({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+export function AccessibilityStatement({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
   const dict = getDictionary(locale);
 
   return (

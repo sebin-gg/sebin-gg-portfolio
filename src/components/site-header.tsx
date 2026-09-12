@@ -18,8 +18,8 @@ function ResumeActions({
   shortLabel,
   downloadLabel,
 }: {
-  shortLabel: string;
-  downloadLabel: string;
+  readonly shortLabel: string;
+  readonly downloadLabel: string;
 }) {
   return (
     <>
@@ -43,7 +43,13 @@ function ResumeActions({
 }
 
 /** Brand anchor: in-page jump on a home route, same-locale home elsewhere. */
-function BrandAnchor({ locale, currentPath }: { locale: Locale; currentPath: string }) {
+function BrandAnchor({
+  locale,
+  currentPath,
+}: {
+  readonly locale: Locale;
+  readonly currentPath: string;
+}) {
   const href = isHomeRoute(currentPath) ? "#top" : localePath(locale, "/");
   return (
     <a
@@ -59,8 +65,8 @@ export function SiteHeader({
   locale = DEFAULT_LOCALE,
   currentPath = "/",
 }: {
-  locale?: Locale;
-  currentPath?: string;
+  readonly locale?: Locale;
+  readonly currentPath?: string;
 }) {
   const dict = getDictionary(locale);
   const rawItems = localizedNavItems(dict, locale);

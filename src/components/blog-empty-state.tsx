@@ -2,7 +2,7 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/locale";
 import { RssIcon } from "@/components/icons";
 
-export function BlogEmptyState({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+export function BlogEmptyState({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
   const dict = getDictionary(locale);
 
   return (
