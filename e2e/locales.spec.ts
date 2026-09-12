@@ -55,7 +55,10 @@ test.describe("localized routes", () => {
     await page.goto("/");
     const switcher = page.getByRole("navigation", { name: "Language" });
     await switcher.getByRole("link", { name: "தமிழ்" }).click();
-    await expect(page).toHaveURL(/\/ta$/);
+    // waitForURL (not toHaveURL): under heavy CI load Firefox can resolve the
+    // URL assertion against the pre-navigation page; this pins the wait to
+    // the navigation itself.
+    await page.waitForURL(/\/ta$/);
     await expect(page.getByRole("main")).toHaveAttribute("lang", "ta");
 
     // The switcher label is localized too — re-locate it in Tamil.
@@ -63,7 +66,7 @@ test.describe("localized routes", () => {
       .getByRole("navigation", { name: "மொழி" })
       .getByRole("link", { name: "English" })
       .click();
-    await expect(page).toHaveURL(/\/$/);
+    await page.waitForURL(/\/$/);
     await expect(page.getByRole("main")).not.toHaveAttribute("lang");
   });
 

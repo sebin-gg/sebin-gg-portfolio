@@ -128,4 +128,10 @@ describe("hreflangAlternates", () => {
     expect(alternates.ta).toBe("https://example.com/ta");
     expect(alternates["x-default"]).toBe("https://example.com/");
   });
+
+  it("tolerates a trailing slash on the site URL", () => {
+    const alternates = hreflangAlternates("/blog", "https://example.com/");
+    expect(alternates.ta).toBe("https://example.com/ta/blog");
+    expect(alternates["x-default"]).toBe("https://example.com/blog");
+  });
 });

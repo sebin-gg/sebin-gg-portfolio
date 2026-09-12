@@ -15,11 +15,11 @@ import ta from "@/lib/i18n/ta.json";
  * rendering English under a localized URL.
  */
 const dictionaries: Record<Locale, Dictionary> = {
-  en: enJson as Dictionary,
-  ta: ta as Dictionary,
-  es: es as Dictionary,
-  fr: fr as Dictionary,
-  de: de as Dictionary,
+  en: enJson,
+  ta,
+  es,
+  fr,
+  de,
 };
 
 /**
@@ -42,4 +42,4 @@ export function getDictionary(locale: Locale): Dictionary {
 }
 
 /** The English source dictionary, for tests and fallback rendering. */
-export const en = enJson as Dictionary;
+export const en = enJson;

@@ -28,6 +28,7 @@
   },
   "hero": {
     "intro": "Introduction",
+    "tagline": "Création d'applications web full-stack, d'extensions de navigateur et d'outils de sécurité locaux.",
     "focusAreas": "Axes de travail",
     "focus": ["cybersécurité", "systèmes backend", "automatisation", "vie privée d’abord"],
     "viewProjects": "Voir les projets",

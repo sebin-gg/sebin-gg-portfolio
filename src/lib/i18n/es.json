@@ -28,6 +28,7 @@
   },
   "hero": {
     "intro": "Introducción",
+    "tagline": "Creando aplicaciones web full-stack, extensiones de navegador y herramientas de seguridad locales.",
     "focusAreas": "Áreas de enfoque",
     "focus": ["ciberseguridad", "sistemas backend", "automatización", "privacidad primero"],
     "viewProjects": "Ver proyectos",

@@ -28,6 +28,7 @@
   },
   "hero": {
     "intro": "Einführung",
+    "tagline": "Entwicklung von Full-Stack-Web-Apps, Browser-Erweiterungen und lokalen Security-Tools.",
     "focusAreas": "Schwerpunkte",
     "focus": ["Cybersicherheit", "Backend-Systeme", "Automatisierung", "Privatsphäre zuerst"],
     "viewProjects": "Projekte ansehen",

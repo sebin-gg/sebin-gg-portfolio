@@ -28,6 +28,7 @@
   },
   "hero": {
     "intro": "Introduction",
+    "tagline": "Building full-stack web applications, browser extensions, and local security tooling.",
     "focusAreas": "Focus areas",
     "focus": ["cybersecurity", "backend systems", "automation", "privacy-first"],
     "viewProjects": "View projects",

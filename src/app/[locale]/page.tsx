@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import { siteUrl } from "@/lib/site";
 import { SUPPORTED_LOCALES, hreflangAlternates } from "@/lib/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
+import { requireLocaleParam } from "@/app/[locale]/locale-params";
 import { PageChrome } from "@/components/page-chrome";
 import { Hero } from "@/components/hero";
 import { About } from "@/components/about";
@@ -40,10 +40,7 @@ export async function generateMetadata({ params }: LocalePageProps): Promise<Met
 }
 
 export default async function LocalizedHomePage({ params }: LocalePageProps) {
-  const { locale } = await params;
-  if (!SUPPORTED_LOCALES.includes(locale) || locale === "en") {
-    notFound();
-  }
+  const locale = await requireLocaleParam(params);
   const dict = getDictionary(locale);
   return (
     <PageChrome locale={locale} currentPath="/" skipLabel={dict.common.skipToContent}>

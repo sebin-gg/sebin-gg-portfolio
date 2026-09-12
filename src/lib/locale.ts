@@ -110,10 +110,13 @@ export function formatString(template: string, vars: Record<string, string | num
  * (points at English). `path` is the canonical route (`/`, `/blog`, ...).
  */
 export function hreflangAlternates(path: string, siteUrl: string): Record<string, string> {
+  // Normalize here so a trailing slash on NEXT_PUBLIC_SITE_URL can never
+  // leak double slashes into metadata or the sitemap.
+  const base = siteUrl.replace(/\/+$/, "");
   const alternates: Record<string, string> = {};
   for (const locale of SUPPORTED_LOCALES) {
-    alternates[HTML_LANG[locale]] = `${siteUrl}${localePath(locale, path)}`;
+    alternates[HTML_LANG[locale]] = `${base}${localePath(locale, path)}`;
   }
-  alternates["x-default"] = `${siteUrl}${path}`;
+  alternates["x-default"] = `${base}${path}`;
   return alternates;
 }

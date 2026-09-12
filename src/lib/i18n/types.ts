@@ -40,6 +40,7 @@ export interface Dictionary {
   };
   hero: {
     intro: string;
+    tagline: string;
     focusAreas: string;
     focus: string[];
     viewProjects: string;

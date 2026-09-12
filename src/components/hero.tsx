@@ -42,7 +42,7 @@ export function Hero({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
               {profile.role}
             </p>
             <p className="text-ink-faint mt-1.5 text-sm font-medium sm:text-base">
-              {profile.tagline}
+              {dict.hero.tagline}
             </p>
             <p className="text-ink-soft mt-3 max-w-xl text-base leading-relaxed sm:mt-4 sm:text-lg">
               {dict.about.bio[0]}

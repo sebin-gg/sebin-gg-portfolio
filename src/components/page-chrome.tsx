@@ -23,6 +23,7 @@ export function PageChrome({
     <>
       <a
         href="#main"
+        lang={isDefault ? undefined : locale}
         className="focus:bg-accent focus:text-accent-ink sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:px-4 focus:py-2 focus:text-sm focus:font-semibold"
       >
         {skipLabel}
