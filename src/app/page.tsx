@@ -4,7 +4,6 @@ import { hreflangAlternates } from "@/lib/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { PageChrome } from "@/components/page-chrome";
 import { Hero } from "@/components/hero";
-import { About } from "@/components/about";
 import { Experience } from "@/components/experience";
 import { Projects } from "@/components/projects";
 import { Skills } from "@/components/skills";
@@ -23,7 +22,6 @@ export default function HomePage() {
     <PageChrome locale="en" currentPath="/" skipLabel={dict.common.skipToContent}>
       <Hero locale="en" />
       <Projects locale="en" />
-      <About locale="en" />
       <Experience locale="en" />
       <Skills locale="en" />
       <BlogCta locale="en" />

@@ -16,6 +16,10 @@ comes from the résumé in `docs/` and the GitHub profile. Single page + a "blog
 ## Commands (pnpm)
 
 - `pnpm dev` — dev server on :3000
+- `pnpm verify:fast` — **default inner loop while iterating:** lint + typecheck +
+  format:check + unit (no coverage), in parallel. Browser/perf checks excluded.
+- `pnpm test:e2e:chrome` — browser loop (chromium only, still builds + serves).
+  Full matrix (`test:e2e:local`, `test:e2e`) and `check:all` run once pre-PR.
 - `pnpm check:all` — full local quality gate (static gates ∥ unit+build+browsers ∥ CRAP → e2e → terminal/thorium)
 - `pnpm test:unit:fast` / `pnpm test:e2e:local` — fast loops (no coverage; chromium+firefox+mobile, no WebKit)
 - `pnpm test:unit` / `pnpm test:e2e` / `pnpm test:mutation` — Vitest / Playwright / Stryker
@@ -26,6 +30,19 @@ comes from the résumé in `docs/` and the GitHub profile. Single page + a "blog
 - `node scripts/visual-check.mjs` — screenshots into `docs/screenshots/` + overflow check
 
 `main` is branch-protected: land changes via PRs (9 required checks), never direct push.
+
+## Agent inner loop (read this before iterating)
+
+1. Iterate with `pnpm verify:fast` only. Run `test:e2e:chrome` when UI/routes
+   changed. Run full `check:all` once, pre-PR — never per edit.
+2. Never run bare `playwright test`: the config reuses any server already on
+   :3100, so a stale build serves old code and failures lie. Always go through
+   the pnpm e2e scripts (they build first); if results look stale, kill :3100
+   and re-run.
+3. Test strings in non-English scripts must come from `getDictionary(...)`,
+   never as literals — cspell runs strict and flags them.
+4. The unslop scanner is English-only; translated dictionaries are out of its
+   scope, English copy is in scope.
 
 ## Agent skills (use these when working here)
 
@@ -58,10 +75,14 @@ it human-voiced, typographic apostrophes only.
    `prefers-reduced-motion` respected (see `globals.css`). No `target="_blank"` without
    `rel="noopener noreferrer"`. No ASCII apostrophes in JSX text.
 6. **Don't put the phone number on the page.** It stays in the résumé PDF only.
-7. Tailwind v4: theme tokens are CSS vars in `globals.css` mapped via `@theme inline`; use the
+7. **Supported locales are English, Hindi and Malayalam — nothing else.** Do not
+   add, suggest or scaffold any other translation (no Tamil, Spanish, French,
+   German, or others). Site copy for these three lives in `src/lib/i18n/` and
+   stays in sync via `gt translate` (see README Translations).
+8. Tailwind v4: theme tokens are CSS vars in `globals.css` mapped via `@theme inline`; use the
    semantic utilities (`bg-canvas`, `text-ink-soft`, `border-line`, `text-accent`, …) rather than
    raw palette classes.
-8. **Every PR gets a CodeRabbit review.** CodeRabbit skips auto-review on small repos, so after
+9. **Every PR gets a CodeRabbit review.** CodeRabbit skips auto-review on small repos, so after
    opening a PR, post `@coderabbitai full review` as a PR comment and wait for the review. Address every
    finding: fix valid ones; for the rest, reply with a reason and resolve the thread. Push fixes and
    re-trigger if new commits landed. A PR is not done until CodeRabbit has reviewed, the SonarCloud
