@@ -70,18 +70,26 @@ describe("navigation module", () => {
     expect(list.length).toBeGreaterThan(0);
     const blogEntry = list.find((item) => item.rawHref === "/blog");
     expect(blogEntry?.isCurrent).toBe(true);
-    const aboutEntry = list.find((item) => item.rawHref === "#about");
-    expect(aboutEntry?.href).toBe("/#about");
+    const aboutEntry = list.find((item) => item.rawHref === "#experience");
+    expect(aboutEntry?.href).toBe("/#experience");
   });
 
   it("marks the localized blog page active via canonical path", () => {
-    // /ta/blog renders nav href /ta/blog but must match the canonical /blog
+    // /hi/blog renders nav href /hi/blog but must match the canonical /blog
     // item for aria-current (regression: locale prefix broke active state).
-    const items = localizedNavItems(getDictionary("ta"), "ta");
-    const resolved = resolveNavigation("/ta/blog", items);
-    const blog = resolved.find((item) => item.rawHref === "/ta/blog");
-    expect(blog?.href).toBe("/ta/blog");
+    const items = localizedNavItems(getDictionary("hi"), "hi");
+    const resolved = resolveNavigation("/hi/blog", items);
+    const blog = resolved.find((item) => item.rawHref === "/hi/blog");
+    expect(blog?.href).toBe("/hi/blog");
     expect(blog?.isCurrent).toBe(true);
+  });
+
+  it("keeps off-home hash anchors inside the active locale", () => {
+    const items = localizedNavItems(getDictionary("ml"), "ml");
+    const resolved = resolveNavigation("/ml/blog", items);
+    const about = resolved.find((item) => item.rawHref === "#experience");
+    expect(about?.href).toBe("/ml/#experience");
+    expect(about?.isCurrent).toBe(false);
   });
 
   it("extracts section IDs correctly", () => {

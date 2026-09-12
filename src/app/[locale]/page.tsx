@@ -5,7 +5,6 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { requireLocaleParam } from "@/app/[locale]/locale-params";
 import { PageChrome } from "@/components/page-chrome";
 import { Hero } from "@/components/hero";
-import { About } from "@/components/about";
 import { Experience } from "@/components/experience";
 import { Projects } from "@/components/projects";
 import { Skills } from "@/components/skills";
@@ -46,7 +45,6 @@ export default async function LocalizedHomePage({ params }: LocalePageProps) {
     <PageChrome locale={locale} currentPath="/" skipLabel={dict.common.skipToContent}>
       <Hero locale={locale} />
       <Projects locale={locale} />
-      <About locale={locale} />
       <Experience locale={locale} />
       <Skills locale={locale} />
       <BlogCta locale={locale} />

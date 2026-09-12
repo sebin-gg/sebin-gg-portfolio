@@ -44,7 +44,7 @@ describe("OfflineBanner", () => {
 
   it("localizes for a non-default locale", () => {
     setOnline(false);
-    render(<OfflineBanner locale="ta" />);
-    expect(screen.getByRole("status")).toHaveTextContent(getDictionary("ta").offline.message);
+    render(<OfflineBanner locale="hi" />);
+    expect(screen.getByRole("status")).toHaveTextContent(getDictionary("hi").offline.message);
   });
 });

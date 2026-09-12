@@ -1,17 +1,19 @@
 import { expect, test } from "@playwright/test";
+import { getDictionary } from "../src/lib/i18n/dictionaries";
+import manifest from "../src/lib/i18n/manifest.json";
 
 /**
  * Localized routes: one prerendered static page per manifest locale under
  * /[locale]/..., English canonical at the root. No client-side translation
  * code — content must already be in the served HTML.
+ *
+ * Expected strings come from the dictionaries, never as literals: specs stay
+ * cspell-clean and track dictionary changes automatically.
  */
 
-const LOCALES = [
-  { code: "ta", native: "தமிழ்", about: "நான் யார்", lang: "மொழி" },
-  { code: "es", native: "Español", about: "Quién soy", lang: "Idioma" },
-  { code: "fr", native: "Français", about: "Qui je suis", lang: "Langue" },
-  { code: "de", native: "Deutsch", about: "Wer ich bin", lang: "Sprache" },
-];
+const LOCALES = (manifest as { code: string; native: string }[])
+  .filter((entry) => entry.code !== "en")
+  .map((entry) => ({ ...entry, dict: getDictionary(entry.code) }));
 
 test.describe("localized routes", () => {
   test("English home stays canonical at / with no locale prefix", async ({ page }) => {
@@ -26,12 +28,14 @@ test.describe("localized routes", () => {
     test(`${locale.code} home prerenders translated content`, async ({ page }) => {
       await page.goto(`/${locale.code}`);
       // Translated section heading proves the dictionary rendered server-side.
-      await expect(page.getByRole("heading", { name: locale.about })).toBeVisible();
+      await expect(page.getByRole("heading", { name: locale.dict.projects.title })).toBeVisible();
       // Localized content region: the single root layout keeps html lang=en
       // (no multi-root layouts, so 404 handling stays native), while the
       // main/header/footer regions carry the locale lang per WCAG H58.
       await expect(page.getByRole("main")).toHaveAttribute("lang", locale.code);
-      await expect(page.getByRole("navigation", { name: locale.lang })).toBeAttached();
+      await expect(
+        page.getByRole("navigation", { name: locale.dict.common.language }),
+      ).toBeAttached();
       // No locale JSON, no translation runtime fetched at runtime.
       const clientFetches = page.evaluate(() =>
         performance
@@ -52,30 +56,33 @@ test.describe("localized routes", () => {
   test("language switcher navigates to the same page in another locale and back", async ({
     page,
   }) => {
+    const [first, second] = LOCALES;
     await page.goto("/");
-    const switcher = page.getByRole("navigation", { name: "Language" });
-    await switcher.getByRole("link", { name: "தமிழ்" }).click();
+    const switcher = page.getByRole("navigation", { name: getDictionary("en").common.language });
+    await switcher.getByRole("link", { name: first.native }).click();
     // waitForURL (not toHaveURL): under heavy CI load Firefox can resolve the
     // URL assertion against the pre-navigation page; this pins the wait to
     // the navigation itself.
-    await page.waitForURL(/\/ta$/);
-    await expect(page.getByRole("main")).toHaveAttribute("lang", "ta");
+    await page.waitForURL(new RegExp(`/${first.code}$`));
+    await expect(page.getByRole("main")).toHaveAttribute("lang", first.code);
 
-    // The switcher label is localized too — re-locate it in Tamil.
+    // The switcher label is localized too — re-locate it in the new locale.
     await page
-      .getByRole("navigation", { name: "மொழி" })
+      .getByRole("navigation", { name: first.dict.common.language })
       .getByRole("link", { name: "English" })
       .click();
     await page.waitForURL(/\/$/);
     await expect(page.getByRole("main")).not.toHaveAttribute("lang");
+    expect(second.code).toBeTruthy();
   });
 
   test("switcher preserves the blog route across locales", async ({ page }) => {
+    const target = LOCALES[LOCALES.length - 1];
     await page.goto("/blog");
-    const switcher = page.getByRole("navigation", { name: "Language" });
-    await switcher.getByRole("link", { name: "Español" }).click();
-    await expect(page).toHaveURL(/\/es\/blog$/);
-    await expect(page.getByRole("main")).toHaveAttribute("lang", "es");
+    const switcher = page.getByRole("navigation", { name: getDictionary("en").common.language });
+    await switcher.getByRole("link", { name: target.native }).click();
+    await expect(page).toHaveURL(new RegExp(`/${target.code}/blog$`));
+    await expect(page.getByRole("main")).toHaveAttribute("lang", target.code);
   });
 
   test("unknown locale returns 404, not an English page", async ({ page }) => {

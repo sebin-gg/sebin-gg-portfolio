@@ -3,7 +3,7 @@ import manifest from "@/lib/i18n/manifest.json";
 /**
  * Supported page locales. English is the canonical default served from the
  * root routes (`/`, `/blog`); every other locale is prerendered under its
- * prefix (`/ta`, `/ta/blog`, …). Translations come from committed JSON files
+ * prefix (`/hi`, `/hi/blog`, …). Translations come from committed JSON files
  * refreshed by the General Translation CLI (`gt translate`, see
  * gt.config.json), so pages stay fully static with zero client-side
  * translation code.
@@ -53,7 +53,7 @@ export function resolveLocale(value: unknown): Locale {
 }
 
 /**
- * Derives the page locale from a pathname (`/ta/blog` -> `ta`).
+ * Derives the page locale from a pathname (`/hi/blog` -> `ta`).
  * Null-safe so unit tests and missing router context fall back to English.
  */
 export function localeFromPathname(pathname: string | null | undefined): Locale {
@@ -64,7 +64,7 @@ export function localeFromPathname(pathname: string | null | undefined): Locale 
   return resolveLocale(segment);
 }
 
-/** Strips a locale prefix (`/ta/blog` -> `/blog`, `/ta` -> `/`). */
+/** Strips a locale prefix (`/hi/blog` -> `/blog`, `/hi` -> `/`). */
 export function stripLocalePrefix(pathname: string): string {
   const parts = pathname.split("/").filter(Boolean);
   if (parts.length === 0) {
@@ -79,7 +79,7 @@ export function stripLocalePrefix(pathname: string): string {
 
 /**
  * Localizes a site path. English stays on the canonical root routes;
- * every other locale gets a path prefix (`/ta/blog`).
+ * every other locale gets a path prefix (`/hi/blog`).
  */
 export function localePath(locale: Locale, path: string): string {
   if (locale === DEFAULT_LOCALE) {

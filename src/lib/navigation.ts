@@ -17,22 +17,22 @@ export interface ResolvedNavItem {
 
 /**
  * Determines whether the given pathname represents a home route in any locale
- * (`/` and `/ta` are both home; `/blog` and `/ta/blog` are not).
+ * (`/` and `/hi` are both home; `/blog` and `/hi/blog` are not).
  */
 export function isHomeRoute(pathname: string | null | undefined): boolean {
   if (!pathname) return true;
   return stripLocalePrefix(pathname) === "/";
 }
 
-/** Locale home base joined before hash anchors ("" for English, "/ta" otherwise). */
+/** Locale home base joined before hash anchors ("" for English, "/hi" otherwise). */
 function localeHomeBase(locale: Locale): string {
   return locale === DEFAULT_LOCALE ? "" : `/${locale}`;
 }
 
 /**
  * Resolves an anchor href depending on whether user is currently on a home
- * page. Off-home hash links jump to the same locale's home (`/ta/blog` ->
- * `/ta/#about`), never crossing languages.
+ * page. Off-home hash links jump to the same locale's home (`/hi/blog` ->
+ * `/hi/#experience`), never crossing languages.
  */
 export function getNavHref(
   itemHref: string,
@@ -52,7 +52,7 @@ export function getLogoHref(pathname: string | null | undefined): string {
 }
 
 /**
- * Active-state compares canonical (locale-stripped) paths: /ta/blog is the
+ * Active-state compares canonical (locale-stripped) paths: /hi/blog is the
  * same page as /blog even though its rendered href carries the prefix.
  */
 function isCurrentRoute(item: NavItemDef, canonicalPath: string): boolean {
@@ -84,7 +84,7 @@ export function resolveNavigation(
   locale?: Locale,
 ): ResolvedNavItem[] {
   // Pass the locale explicitly on canonical paths (e.g. the header resolves
-  // "/blog" while rendering /ta/blog) so hash links stay in-locale.
+  // "/blog" while rendering /hi/blog) so hash links stay in-locale.
   return items.map((item) =>
     locale === undefined ? resolveNavItem(item, pathname) : resolveNavItem(item, pathname, locale),
   );
@@ -95,13 +95,7 @@ export function resolveNavigation(
  * gets a locale prefix, labels come from the locale dictionary.
  */
 export function localizedNavItems(dict: Dictionary, locale: Locale): NavItemDef[] {
-  const labels = [
-    dict.nav.about,
-    dict.nav.experience,
-    dict.nav.projects,
-    dict.nav.skills,
-    dict.nav.blog,
-  ];
+  const labels = [dict.nav.experience, dict.nav.projects, dict.nav.skills, dict.nav.blog];
   return navItems.map((item, index) => ({
     label: labels[index] ?? item.label,
     href: item.href === "/blog" && locale !== DEFAULT_LOCALE ? `/${locale}/blog` : item.href,

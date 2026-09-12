@@ -23,6 +23,8 @@ export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) 
   const facts: { label: string; value: string; mailto?: boolean }[] = [
     { label: dict.hero.emailLabel, value: profile.email, mailto: true },
     { label: dict.hero.collegeLabel, value: dict.about.collegeValue },
+    { label: dict.about.degreeLabel, value: dict.about.degreeValue },
+    { label: dict.about.cgpaLabel, value: String(profile.cgpa) },
   ];
 
   return (

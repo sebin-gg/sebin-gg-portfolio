@@ -30,7 +30,14 @@
     "intro": "Introduction",
     "tagline": "Building full-stack web applications, browser extensions, and local security tooling.",
     "focusAreas": "Focus areas",
-    "focus": ["cybersecurity", "backend systems", "automation", "privacy-first"],
+    "focus": [
+      "cybersecurity",
+      "backend systems",
+      "automation",
+      "privacy-first",
+      "frontend",
+      "full-stack"
+    ],
     "viewProjects": "View projects",
     "downloadResume": "Download résumé",
     "githubProfile": "GitHub profile",
@@ -46,7 +53,7 @@
   "about": {
     "title": "Who I am",
     "bio": [
-      "I’m a Computer Science student at College of Engineering Chengannur. My recent work spans browser-side prompt compression to an edge incident response dashboard powered by local Ollama models.",
+      "I’m a Computer Science student. My recent work spans browser-side prompt compression, an edge incident response dashboard powered by local Ollama models.",
       "I coordinate technical projects for FOCES CEC."
     ],
     "quickFacts": "Quick facts",
@@ -135,14 +142,14 @@
   "blogCta": {
     "title": "Notes & write-ups",
     "comingSoon": "Coming soon",
-    "body": "First posts are planned around OWASP drills, the brevity-prompt extension, and what 2G performance budgets taught me. No newsletter spam — just a feed.",
+    "body": "First posts are planned around OWASP drills, the brevity-prompt extension, and what 2G performance budgets taught me.",
     "link": "See what’s planned"
   },
   "blog": {
     "title": "Notes & write-ups",
     "lede": "Security walkthroughs, project post-mortems, and performance notes.",
     "emptyTitle": "No posts yet",
-    "emptyBody": "I’m drafting the first few write-ups. They’ll land here as I finish them. If you want to know when that happens, the cheapest way is watching this repo on GitHub.",
+    "emptyBody": "I’m drafting the first few write-ups. They’ll land here as I finish them. If you want to know when that happens, the easiest way is watching this repo on GitHub.",
     "pipeline": "In the pipeline",
     "planned": [
       "OWASP Bootcamp 2025: what a phishing drill actually taught me",

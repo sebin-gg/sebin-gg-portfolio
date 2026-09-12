@@ -1,7 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { act, render, screen, within } from "@testing-library/react";
 import { Hero } from "@/components/hero";
-import { About } from "@/components/about";
 import { Experience } from "@/components/experience";
 import { Projects } from "@/components/projects";
 import { Skills } from "@/components/skills";
@@ -44,17 +43,9 @@ describe("Hero", () => {
     expect(within(card).queryByText(/Education/i)).not.toBeInTheDocument();
     expect(within(card).getByText(profile.email)).toBeInTheDocument();
     expect(within(card).getByText(profile.college)).toBeInTheDocument();
+    expect(within(card).getByText(profile.degree)).toBeInTheDocument();
+    expect(within(card).getByText(String(profile.cgpa))).toBeInTheDocument();
     expect(within(card).queryByText(/open to internships/i)).not.toBeInTheDocument();
-  });
-});
-
-describe("About", () => {
-  it("renders the bio and the quick-facts card", () => {
-    render(<About />);
-    expect(screen.getByRole("heading", { name: "Who I am" })).toBeInTheDocument();
-    expect(screen.getByText(profile.degree)).toBeInTheDocument();
-    expect(screen.queryByText(/Open to work/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/Kottayam, Kerala, India/)).not.toBeInTheDocument();
   });
 });
 
