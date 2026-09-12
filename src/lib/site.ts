@@ -238,10 +238,29 @@ export const navItems = [
   { label: "Blog", href: "/blog" },
 ] as const;
 
-export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://sebin-gg.vercel.app").replace(
-  /\/$/,
-  "",
-);
+const SITE_URL_FALLBACK = "https://sebin-gg.vercel.app";
+
+function parseHttpUrl(raw: string): URL {
+  try {
+    const url = new URL(raw);
+    if (url.protocol !== "https:" && url.protocol !== "http:") throw new Error("not http(s)");
+    return url;
+  } catch {
+    throw new Error(`NEXT_PUBLIC_SITE_URL must be an absolute http(s) URL, got: "${raw}"`);
+  }
+}
+
+/**
+ * Canonical site origin. Validated at the configuration boundary so a bad
+ * NEXT_PUBLIC_SITE_URL (empty or relative) can never leak into metadata,
+ * hreflang alternates, or the sitemap as a relative URL.
+ */
+export function resolveSiteUrl(env: string | undefined): string {
+  const url = parseHttpUrl(env?.trim() || SITE_URL_FALLBACK);
+  return url.pathname === "/" ? url.origin : `${url.origin}${url.pathname.replace(/\/$/, "")}`;
+}
+
+export const siteUrl = resolveSiteUrl(process.env.NEXT_PUBLIC_SITE_URL);
 
 export const siteMeta = {
   title: "Sebin Mathew — full-stack developer & security tools",

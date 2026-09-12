@@ -41,7 +41,7 @@ jobs:
       # Skips quietly while the GT account/secrets are not configured yet;
       # locales keep their committed translations.
       - name: gt translate
-        if: ${{ env.GT_API_KEY != '' }}
+        if: ${{ env.GT_API_KEY != '' && env.GT_PROJECT_ID != '' }}
         # Declared devDependency, run via the local binary (Sonar S6505:
         # no on-demand `npx` installs). Pin reviewed on bumps.
         run: pnpm exec gt translate

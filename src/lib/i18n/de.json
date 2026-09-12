@@ -158,7 +158,7 @@
     "semanticTitle": "Semantisches HTML & ARIA",
     "semanticBody": "Alle interaktiven Elemente nutzen Standard-HTML (<button>, <a>, <nav>) mit expliziten Labels, Rollen und Fokusrändern.",
     "contrastTitle": "Kontrast & Theme",
-    "contrastBody": "Sowohl die dunkle als auch die helle Palette erfüllt WCAG-AA-Kontrastwerte in jeder Typografie und allen interaktiven Zuständen.",
+    "contrastBody": "Sowohl die dunkle als auch die helle Palette erfüllen WCAG-AA-Kontrastwerte in jeder Typografie und allen interaktiven Zuständen.",
     "motionTitle": "Bewegungspräferenzen",
     "motionBefore": "Die Seite respektiert die Systemeinstellung ",
     "motionAfter": " und deaktiviert nicht notwendige Animationen für Nutzer mit vestibulärer Sensibilität.",

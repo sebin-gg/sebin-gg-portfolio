@@ -1,5 +1,37 @@
 import { describe, expect, it } from "vitest";
-import { links, navItems, profile, projects, resumeUrl, timeline } from "@/lib/site";
+import {
+  links,
+  navItems,
+  profile,
+  projects,
+  resolveSiteUrl,
+  resumeUrl,
+  siteUrl,
+  timeline,
+} from "@/lib/site";
+
+describe("siteUrl", () => {
+  it("resolves to an absolute https origin by default", () => {
+    expect(siteUrl).toMatch(/^https:\/\/[\w.-]+$/);
+  });
+
+  it("accepts an absolute URL and strips trailing slash and path", () => {
+    expect(resolveSiteUrl("https://example.com/")).toBe("https://example.com");
+    expect(resolveSiteUrl("https://example.com/sub/")).toBe("https://example.com/sub");
+    expect(resolveSiteUrl("http://localhost:3000")).toBe("http://localhost:3000");
+  });
+
+  it("falls back to the production origin on empty or whitespace input", () => {
+    expect(resolveSiteUrl(undefined)).toBe("https://sebin-gg.vercel.app");
+    expect(resolveSiteUrl("")).toBe("https://sebin-gg.vercel.app");
+    expect(resolveSiteUrl("   ")).toBe("https://sebin-gg.vercel.app");
+  });
+
+  it("rejects relative URLs with a clear error", () => {
+    expect(() => resolveSiteUrl("/blog")).toThrow(/absolute http\(s\) URL/);
+    expect(() => resolveSiteUrl("ftp://example.com")).toThrow(/absolute http\(s\) URL/);
+  });
+});
 
 describe("profile", () => {
   it("has the identity fields populated", () => {
