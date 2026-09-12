@@ -21,6 +21,11 @@ describe("siteUrl", () => {
     expect(resolveSiteUrl("http://localhost:3000")).toBe("http://localhost:3000");
   });
 
+  it("strips repeated trailing slashes from non-root paths", () => {
+    expect(resolveSiteUrl("https://example.com/sub//")).toBe("https://example.com/sub");
+    expect(resolveSiteUrl("https://example.com/sub///")).toBe("https://example.com/sub");
+  });
+
   it("falls back to the production origin on empty or whitespace input", () => {
     expect(resolveSiteUrl(undefined)).toBe("https://sebin-gg.vercel.app");
     expect(resolveSiteUrl("")).toBe("https://sebin-gg.vercel.app");

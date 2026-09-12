@@ -21,7 +21,8 @@ test.describe("blog route", () => {
       page.locator(selector).first().getAttribute(attr);
     expect(await meta('meta[property="og:url"]')).toMatch(/\/blog$/);
     expect(await meta('meta[property="og:type"]')).toBe("article");
-    expect(await meta('meta[name="twitter:title"]')).toMatch(/Blog/);
+    // Title is dictionary-driven ("Notes & write-ups · Sebin Mathew").
+    expect(await meta('meta[name="twitter:title"]')).toMatch(/Notes & write-ups/);
   });
 });
 

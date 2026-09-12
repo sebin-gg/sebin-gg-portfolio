@@ -179,5 +179,10 @@
   "offline": {
     "message": "Estás sin conexión",
     "retryHint": "Las páginas ya visitadas siguen funcionando. Reconéctate para cargar otras nuevas."
+  },
+  "notFound": {
+    "heading": "Esa página no existe",
+    "body": "El enlace está roto o la página se movió. En cualquier caso, la salida es volver al inicio.",
+    "backHome": "Volver al inicio"
   }
 }

@@ -124,6 +124,11 @@ export interface Dictionary {
     message: string;
     retryHint: string;
   };
+  notFound: {
+    heading: string;
+    body: string;
+    backHome: string;
+  };
 }
 
 export type { Locale } from "@/lib/locale";

@@ -257,7 +257,7 @@ function parseHttpUrl(raw: string): URL {
  */
 export function resolveSiteUrl(env: string | undefined): string {
   const url = parseHttpUrl(env?.trim() || SITE_URL_FALLBACK);
-  return url.pathname === "/" ? url.origin : `${url.origin}${url.pathname.replace(/\/$/, "")}`;
+  return url.pathname === "/" ? url.origin : `${url.origin}${url.pathname.replace(/\/+$/, "")}`;
 }
 
 export const siteUrl = resolveSiteUrl(process.env.NEXT_PUBLIC_SITE_URL);

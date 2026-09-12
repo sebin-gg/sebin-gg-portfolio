@@ -17,11 +17,13 @@ jobs:
   translate:
     name: Refresh translations (General Translation)
     runs-on: ubuntu-latest
-    # Job scope so the step condition can read env (the secrets context is
-    # unavailable in step-level `if`).
+    # Step-level `if` cannot read the secrets context, so expose only a
+    # boolean flag here. The actual credentials are scoped to the single
+    # step that needs them (CWE-200: keep secrets off pnpm install and
+    # other actions). Skips quietly while GT secrets are unconfigured;
+    # locales keep their committed translations.
     env:
-      GT_API_KEY: ${{ secrets.GT_API_KEY }}
-      GT_PROJECT_ID: ${{ secrets.GT_PROJECT_ID }}
+      HAS_GT_CREDS: ${{ secrets.GT_API_KEY != '' && secrets.GT_PROJECT_ID != '' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -41,7 +43,10 @@ jobs:
       # Skips quietly while the GT account/secrets are not configured yet;
       # locales keep their committed translations.
       - name: gt translate
-        if: ${{ env.GT_API_KEY != '' && env.GT_PROJECT_ID != '' }}
+        if: ${{ env.HAS_GT_CREDS == 'true' }}
+        env:
+          GT_API_KEY: ${{ secrets.GT_API_KEY }}
+          GT_PROJECT_ID: ${{ secrets.GT_PROJECT_ID }}
         # Declared devDependency, run via the local binary (Sonar S6505:
         # no on-demand `npx` installs). Pin reviewed on bumps.
         run: pnpm exec gt translate

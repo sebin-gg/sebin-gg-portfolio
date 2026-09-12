@@ -177,5 +177,10 @@
   "offline": {
     "message": "Sie sind offline",
     "retryHint": "Bereits besuchte Seiten funktionieren weiter. Verbinden Sie sich erneut, um neue zu laden."
+  },
+  "notFound": {
+    "heading": "Diese Seite existiert nicht",
+    "body": "Der Link ist defekt oder die Seite ist umgezogen. In jedem Fall führt der Weg zurück zur Startseite.",
+    "backHome": "Zurück zur Startseite"
   }
 }

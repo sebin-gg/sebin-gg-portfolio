@@ -179,5 +179,10 @@
   "offline": {
     "message": "Vous êtes hors ligne",
     "retryHint": "Les pages déjà visitées fonctionnent encore. Reconnectez-vous pour en charger de nouvelles."
+  },
+  "notFound": {
+    "heading": "Cette page n’existe pas",
+    "body": "Le lien est rompu ou la page a été déplacée. Dans tous les cas, la sortie c’est le retour à l’accueil.",
+    "backHome": "Retour à l’accueil"
   }
 }

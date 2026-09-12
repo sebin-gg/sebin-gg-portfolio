@@ -15,7 +15,7 @@ export function generateStaticParams(): { locale: string }[] {
 }
 
 export async function generateMetadata({ params }: LocalePageProps): Promise<Metadata> {
-  const { locale } = await params;
+  const locale = await requireLocaleParam(params);
   const dict = getDictionary(locale);
   return {
     title: dict.a11y.title,

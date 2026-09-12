@@ -9,7 +9,7 @@ import { BlogEmptyState } from "@/components/blog-empty-state";
 const dict = getDictionary("en");
 
 export const metadata: Metadata = {
-  title: "Blog",
+  title: dict.blog.title,
   description: dict.meta.blogDescription,
   alternates: {
     canonical: `${siteUrl}/blog`,
@@ -18,12 +18,12 @@ export const metadata: Metadata = {
   openGraph: {
     type: "article",
     url: `${siteUrl}/blog`,
-    title: `Blog · ${profile.name}`,
+    title: `${dict.blog.title} · ${profile.name}`,
     description: dict.meta.blogDescription,
   },
   twitter: {
     card: "summary_large_image",
-    title: `Blog · ${profile.name}`,
+    title: `${dict.blog.title} · ${profile.name}`,
     description: dict.meta.blogDescription,
   },
 };

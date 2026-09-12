@@ -38,7 +38,9 @@ if (missing.length > 0) {
 
 /** Returns the dictionary for a locale, falling back to English. */
 export function getDictionary(locale: Locale): Dictionary {
-  return dictionaries[locale] ?? dictionaries[DEFAULT_LOCALE];
+  // Own-property check: an arbitrary string index could otherwise resolve
+  // to an inherited prototype member ("toString", …) which is no Dictionary.
+  return Object.hasOwn(dictionaries, locale) ? dictionaries[locale] : dictionaries[DEFAULT_LOCALE];
 }
 
 /** The English source dictionary, for tests and fallback rendering. */
