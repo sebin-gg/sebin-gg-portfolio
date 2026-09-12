@@ -30,25 +30,56 @@ try {
   console.log(`FAIL home fetch failed: ${error.cause?.message ?? error.message}`);
   process.exit(1);
 }
-check(response.ok, `home responds HTTP 2xx (got ${response.status})`);
+if (!response.ok) {
+  console.log(`FAIL home responds HTTP 2xx (got ${response.status})`);
+  process.exit(1);
+}
+const contentType = response.headers.get("content-type") ?? "";
+check(
+  contentType.includes("text/html"),
+  `home served as text/html (got ${contentType.split(";")[0].trim()})`,
+);
 const home = await response.text();
+check(
+  home.includes("<html") && home.includes("</html>") && home.includes("Sebin Mathew"),
+  "home HTML is complete and served by this app",
+);
 check(
   !home.includes('role="status"'),
   "home HTML has no offline banner (server snapshot = online)",
 );
 
-// 2. All committed locale dictionaries have the offline strings.
+// 2. Locales declared in manifest.json must ship the offline strings.
+// Manifest is the single source of truth; a missing dictionary or a
+// stale dictionary not declared in it both fail the check.
 const i18nDir = "src/lib/i18n";
-const locales = readdirSync(i18nDir).filter((f) => f.endsWith(".json") && f !== "manifest.json");
-for (const file of locales) {
-  const dict = JSON.parse(readFileSync(join(i18nDir, file), "utf8"));
+const manifest = JSON.parse(readFileSync(join(i18nDir, "manifest.json"), "utf8"));
+const declared = new Set(manifest.map((entry) => entry.code));
+for (const code of declared) {
+  const path = join(i18nDir, `${code}.json`);
+  let dict;
+  try {
+    dict = JSON.parse(readFileSync(path, "utf8"));
+  } catch {
+    check(false, `${code}.json missing`);
+    continue;
+  }
   check(
     typeof dict.offline?.message === "string" &&
       dict.offline.message.length > 0 &&
       typeof dict.offline?.retryHint === "string" &&
       dict.offline.retryHint.length > 0,
-    `${file} has offline.message + offline.retryHint`,
+    `${code}.json has offline.message + offline.retryHint`,
   );
+}
+for (const file of readdirSync(i18nDir)) {
+  if (
+    file.endsWith(".json") &&
+    file !== "manifest.json" &&
+    !declared.has(file.replace(/\.json$/, ""))
+  ) {
+    check(false, `${file} not declared in manifest.json`);
+  }
 }
 
 // 3. The banner component ships in the client bundle.
