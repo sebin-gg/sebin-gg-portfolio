@@ -1,11 +1,9 @@
 import type { Dictionary } from "@/lib/i18n/types";
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale } from "@/lib/locale";
 
-import de from "@/lib/i18n/de.json";
+import hi from "@/lib/i18n/hi.json";
 import enJson from "@/lib/i18n/en.json";
-import es from "@/lib/i18n/es.json";
-import fr from "@/lib/i18n/fr.json";
-import ta from "@/lib/i18n/ta.json";
+import ml from "@/lib/i18n/ml.json";
 
 /**
  * Committed translation files produced and refreshed by `gt translate`
@@ -23,10 +21,8 @@ import ta from "@/lib/i18n/ta.json";
  */
 const dictionaries: Record<Locale, Dictionary> = {
   en: enJson,
-  ta,
-  es,
-  fr,
-  de,
+  hi,
+  ml,
 };
 
 /**
