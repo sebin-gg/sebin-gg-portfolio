@@ -1,12 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { usePathname } from "next/navigation";
 import { resumeUrl } from "@/lib/site";
-import { resolveNavigation, type ResolvedNavItem } from "@/lib/navigation";
+import type { ResolvedNavItem } from "@/lib/navigation";
 import { CloseIcon, DownloadIcon, MenuIcon } from "@/components/icons";
 
-function NavLink({ item, onClick }: { item: ResolvedNavItem; onClick: () => void }) {
+function NavLink({
+  item,
+  onClick,
+}: {
+  readonly item: ResolvedNavItem;
+  readonly onClick: () => void;
+}) {
   return (
     <li>
       <a
@@ -25,16 +30,30 @@ function NavLink({ item, onClick }: { item: ResolvedNavItem; onClick: () => void
   );
 }
 
-function ToggleIcon({ open }: { open: boolean }) {
+function ToggleIcon({ open }: { readonly open: boolean }) {
   if (open) return <CloseIcon className="h-5 w-5" />;
   return <MenuIcon className="h-5 w-5" />;
 }
 
-export function MobileNav() {
+/**
+ * Mobile menu. Local state is the only client concern; labels and the
+ * resolved nav list arrive via props from the server-rendered header.
+ */
+export function MobileNav({
+  items,
+  navLabel,
+  openLabel,
+  closeLabel,
+  resumeLabel,
+}: {
+  readonly items: readonly ResolvedNavItem[];
+  readonly navLabel: string;
+  readonly openLabel: string;
+  readonly closeLabel: string;
+  readonly resumeLabel: string;
+}) {
   const [open, setOpen] = useState(false);
-  const pathname = usePathname();
-  const navList = resolveNavigation(pathname);
-  const label = open ? "Close menu" : "Open menu";
+  const label = open ? closeLabel : openLabel;
 
   function close() {
     setOpen(false);
@@ -56,11 +75,11 @@ export function MobileNav() {
       {open ? (
         <nav
           id="mobile-menu"
-          aria-label="Mobile"
+          aria-label={navLabel}
           className="border-line/80 bg-panel/95 absolute inset-x-0 top-full z-50 mt-2 max-h-[calc(100dvh-5rem)] overflow-y-auto rounded-xl border p-3 shadow-xl backdrop-blur-md"
         >
           <ul className="flex flex-col">
-            {navList.map((item) => (
+            {items.map((item) => (
               <NavLink key={item.rawHref} item={item} onClick={close} />
             ))}
 
@@ -71,7 +90,7 @@ export function MobileNav() {
                 className="border-line/80 text-ink hover:border-accent hover:text-accent mt-1.5 flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm font-medium transition-colors"
               >
                 <DownloadIcon className="h-4 w-4" />
-                Résumé
+                {resumeLabel}
               </a>
             </li>
           </ul>

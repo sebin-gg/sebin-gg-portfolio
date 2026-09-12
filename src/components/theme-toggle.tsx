@@ -8,9 +8,19 @@ function getServerSnapshot(): boolean {
   return false;
 }
 
-export function ThemeToggle() {
+function ToggleIcon({ dark }: { readonly dark: boolean }) {
+  return dark ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />;
+}
+
+export function ThemeToggle({
+  lightLabel = "Switch to light mode",
+  darkLabel = "Switch to dark mode",
+}: {
+  readonly lightLabel?: string;
+  readonly darkLabel?: string;
+}) {
   const dark = useSyncExternalStore(subscribeTheme, getThemeSnapshot, getServerSnapshot);
-  const label = dark ? "Switch to light mode" : "Switch to dark mode";
+  const label = dark ? lightLabel : darkLabel;
 
   return (
     <button
@@ -20,7 +30,7 @@ export function ThemeToggle() {
       title={label}
       className="border-line/80 bg-panel/90 text-ink-soft hover:border-accent hover:text-accent flex h-10 w-10 items-center justify-center rounded-lg border shadow-xs backdrop-blur-xs transition-all"
     >
-      {dark ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
+      <ToggleIcon dark={dark} />
     </button>
   );
 }

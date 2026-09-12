@@ -1,15 +1,14 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { DesktopNav } from "@/components/desktop-nav";
-import { BrandLink } from "@/components/brand-link";
+import { resolveNavigation } from "@/lib/navigation";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 
-vi.mock("next/navigation", () => ({
-  usePathname: () => "/blog",
-}));
-
-describe("DesktopNav & BrandLink", () => {
+describe("DesktopNav", () => {
   it("renders desktop navigation with active state on /blog", () => {
-    render(<DesktopNav />);
+    const dict = getDictionary("en");
+    const items = resolveNavigation("/blog");
+    render(<DesktopNav items={items} ariaLabel={dict.nav.primary} />);
     const blogLink = screen.getByRole("link", { name: "Blog" });
     expect(blogLink).toHaveAttribute("aria-current", "page");
     expect(blogLink).toHaveClass("text-accent");
@@ -18,9 +17,11 @@ describe("DesktopNav & BrandLink", () => {
     expect(aboutLink).not.toHaveAttribute("aria-current");
   });
 
-  it("renders brand logo linking to home root when on /blog", () => {
-    render(<BrandLink />);
-    const brand = screen.getByRole("link", { name: /sebin mathew/i });
-    expect(brand).toHaveAttribute("href", "/");
+  it("keeps hash anchors in-page on a home route", () => {
+    const dict = getDictionary("en");
+    const items = resolveNavigation("/");
+    render(<DesktopNav items={items} ariaLabel={dict.nav.primary} />);
+    expect(screen.getByRole("link", { name: "About" })).toHaveAttribute("href", "#about");
+    expect(screen.queryByRole("link", { name: "Blog" })).not.toHaveAttribute("aria-current");
   });
 });

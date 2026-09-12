@@ -21,7 +21,8 @@ test.describe("blog route", () => {
       page.locator(selector).first().getAttribute(attr);
     expect(await meta('meta[property="og:url"]')).toMatch(/\/blog$/);
     expect(await meta('meta[property="og:type"]')).toBe("article");
-    expect(await meta('meta[name="twitter:title"]')).toMatch(/Blog/);
+    // Title is dictionary-driven ("Notes & write-ups · Sebin Mathew").
+    expect(await meta('meta[name="twitter:title"]')).toMatch(/Notes & write-ups/);
   });
 });
 
@@ -30,7 +31,9 @@ test.describe("unknown route", () => {
     const response = await page.goto("/this-route-does-not-exist");
     expect(response?.status()).toBe(404);
     await expect(page.getByRole("heading", { name: /That page doesn.t exist/ })).toBeVisible();
-    await expect(page.locator('meta[name="robots"]').first()).toHaveAttribute("content", /noindex/);
+    // A page-level noindex must exist; crawlers honor the most restrictive
+    // tag even when a sitewide index directive is also present.
+    await expect(page.locator('meta[name="robots"][content*="noindex"]').first()).toBeAttached();
     await expect(page.getByRole("link", { name: "Back to home" })).toHaveAttribute("href", "/");
   });
 });

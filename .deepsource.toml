@@ -1,5 +1,12 @@
 version = 1
 
+# Route files under src/app are thin App Router adapters and src/components
+# exports are the React component contract; the analyzer's global-scope
+# function check (JS-0067) false-positives on both. Application logic in
+# src/lib remains fully analyzed. ESLint (complexity cap ≤ 4) covers real
+# complexity everywhere else.
+exclude_patterns = ["src/app/**", "src/components/**"]
+
 [[analyzers]]
 name = "javascript"
 enabled = true

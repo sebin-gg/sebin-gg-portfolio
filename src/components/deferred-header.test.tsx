@@ -5,6 +5,7 @@ import {
   DeferredMobileNav,
   DeferredThemeToggle,
 } from "@/components/deferred-header";
+import { resolveNavigation } from "@/lib/navigation";
 import { THEME_DARK_CLASS } from "@/lib/theme";
 
 vi.mock("@/components/active-section", () => ({
@@ -21,7 +22,9 @@ describe("deferred header widgets", () => {
     // The site defaults to dark (class applied by the inline init script).
     document.documentElement.classList.add(THEME_DARK_CLASS);
     vi.useFakeTimers();
-    render(<DeferredThemeToggle />);
+    render(
+      <DeferredThemeToggle lightLabel="Switch to light mode" darkLabel="Switch to dark mode" />,
+    );
     // Before idle there is no button yet — only the same-size placeholder.
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
 
@@ -35,7 +38,15 @@ describe("deferred header widgets", () => {
 
   it("keeps the mobile menu button as a placeholder until idle", async () => {
     vi.useFakeTimers();
-    render(<DeferredMobileNav />);
+    render(
+      <DeferredMobileNav
+        items={resolveNavigation("/")}
+        mobileLabel="Mobile"
+        openLabel="Open menu"
+        closeLabel="Close menu"
+        resumeLabel="Résumé"
+      />,
+    );
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
 
     await act(async () => {

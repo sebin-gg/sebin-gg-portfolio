@@ -1,0 +1,70 @@
+name: i18n
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: i18n-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  translate:
+    name: Refresh translations (General Translation)
+    runs-on: ubuntu-latest
+    # Step-level `if` cannot read the secrets context, so expose only a
+    # boolean flag here. The actual credentials are scoped to the single
+    # step that needs them (CWE-200: keep secrets off pnpm install and
+    # other actions). Skips quietly while GT secrets are unconfigured;
+    # locales keep their committed translations.
+    env:
+      HAS_GT_CREDS: ${{ secrets.GT_API_KEY != '' && secrets.GT_PROJECT_ID != '' }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+        with:
+          version: 11.20.0
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Skips quietly while the GT account/secrets are not configured yet;
+      # locales keep their committed translations.
+      - name: gt translate
+        if: ${{ env.HAS_GT_CREDS == 'true' }}
+        env:
+          GT_API_KEY: ${{ secrets.GT_API_KEY }}
+          GT_PROJECT_ID: ${{ secrets.GT_PROJECT_ID }}
+        # Declared devDependency, run via the local binary (Sonar S6505:
+        # no on-demand `npx` installs). Pin reviewed on bumps.
+        run: pnpm exec gt translate
+
+      - name: Detect changed translations
+        id: diff
+        run: echo "count=$(git status --porcelain -- src/lib/i18n | wc -l)" >> "$GITHUB_OUTPUT"
+
+      - name: Create translation update PR
+        if: steps.diff.outputs.count != '0'
+        uses: peter-evans/create-pull-request@22a9089034f40e5a961c8808d113e2c98fb63676 # v7
+        with:
+          commit-message: "i18n: refresh translations from General Translation"
+          title: "i18n: translation updates"
+          body: |
+            Automated refresh of `src/lib/i18n/*.json` by the General Translation
+            CLI (`gt translate`). Review diffs, especially for locales whose
+            translation quality matters to you, then merge.
+          branch: i18n/auto-translations
+          delete-branch: true
+          labels: i18n

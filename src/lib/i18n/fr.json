@@ -1,0 +1,188 @@
+{
+  "meta": {
+    "title": "Sebin Mathew — développeur full-stack & outils de sécurité",
+    "description": "Étudiant en informatique au College of Engineering Chengannur. Je crée des applications web full-stack, des extensions Chrome et des outils de sécurité locaux.",
+    "blogDescription": "Articles sur les exercices de sécurité, l’ingénierie des prompts et la création de sites rapides. Bientôt disponible.",
+    "a11yDescription": "Déclaration d’accessibilité et normes du portfolio de Sebin Mathew."
+  },
+  "common": {
+    "skipToContent": "Aller au contenu principal",
+    "language": "Langue",
+    "toLight": "Passer en mode clair",
+    "toDark": "Passer en mode sombre"
+  },
+  "nav": {
+    "primary": "Principal",
+    "mobile": "Mobile",
+    "about": "À propos",
+    "experience": "Expérience",
+    "projects": "Projets",
+    "skills": "Compétences",
+    "blog": "Blog"
+  },
+  "header": {
+    "resumeShort": "CV",
+    "downloadResume": "Télécharger le CV",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu"
+  },
+  "hero": {
+    "intro": "Introduction",
+    "tagline": "Création d'applications web full-stack, d'extensions de navigateur et d'outils de sécurité locaux.",
+    "focusAreas": "Axes de travail",
+    "focus": ["cybersécurité", "systèmes backend", "automatisation", "vie privée d’abord"],
+    "viewProjects": "Voir les projets",
+    "downloadResume": "Télécharger le CV",
+    "githubProfile": "Profil GitHub",
+    "linkedinProfile": "Profil LinkedIn",
+    "xProfile": "Profil X",
+    "highlights": "Points clés",
+    "emailLabel": "E-mail",
+    "collegeLabel": "École",
+    "collegeLine": "{short} · promotion {year}",
+    "statsProjects": "projets présentés",
+    "statsClass": "promotion"
+  },
+  "about": {
+    "title": "Qui je suis",
+    "bio": [
+      "Je suis étudiant en informatique au College of Engineering Chengannur. Mes travaux récents vont de la compression de prompts dans le navigateur à un tableau de bord de réponse aux incidents en périphérie, propulsé par des modèles Ollama locaux.",
+      "Je coordonne les projets techniques pour FOCES CEC."
+    ],
+    "quickFacts": "En bref",
+    "degreeLabel": "Diplôme",
+    "degreeValue": "B.Tech en informatique et génie logiciel",
+    "collegeLabel": "École",
+    "collegeValue": "College of Engineering Chengannur",
+    "cgpaLabel": "Moyenne (CGPA)"
+  },
+  "experience": {
+    "title": "Là où j’ai travaillé et me suis formé",
+    "roles": [
+      "Coordinateur de projets",
+      "Ambassadeur étudiant",
+      "Ingénieur backend & IA",
+      "Participant",
+      "Lauréat de hackathon"
+    ],
+    "periods": ["avr. 2026 – aujourd’hui", "déc. 2025 – aujourd’hui", "2025", "2025", "août 2025"],
+    "summaries": [
+      [
+        "Je coordonne les projets d’ingénierie et les ateliers techniques de l’association étudiante d’informatique.",
+        "J’organise des hackathons et des sessions de développement communautaires sur le campus."
+      ],
+      [
+        "Je mets en relation les étudiants en ingénierie avec des parcours open source, des hackathons et des bootcamps techniques."
+      ],
+      [
+        "J’ai conçu un tableau de bord de réponse aux incidents embarqué, avec une équipe de trois personnes, lors d’un hackathon de 10 heures.",
+        "J’ai intégré des LLM Ollama locaux pour classer des attaques simulées et produire des règles de pare-feu actionnables, sans API cloud."
+      ],
+      [
+        "J’ai mené des évaluations de vulnérabilités web, de la reconnaissance OSINT et des laboratoires actifs de test d’intrusion réseau.",
+        "J’ai déployé des simulations de phishing contrôlées avec Gophish et cartographié des périmètres réseau avec Nmap."
+      ],
+      [
+        "J’ai créé TortoiseLang (slowlang) — un langage de programmation satirique et un IDE qui bride l’exécution quand on tape trop vite, avec surveillance de vélocité en temps réel et retours ASCII.",
+        "J’ai remporté la première place à TinkerHub Useless Projects 2.0 pour l’ingénierie logicielle créative et une architecture événementielle pleine d’humour."
+      ]
+    ]
+  },
+  "projects": {
+    "title": "Ce que j’ai construit",
+    "taglines": [
+      "Un langage qui punit la frappe rapide",
+      "Plateforme d’événements de FOCES",
+      "Suivi d’impact communautaire",
+      "Tableau de bord de cybermenaces avec IA locale",
+      "Extension Chrome qui raccourcit les prompts",
+      "App en barre d’état qui masque les barres de titre des fenêtres maximisées"
+    ],
+    "descriptions": [
+      "Langage de programmation satirique et IDE qui bride l’exécution quand on tape trop vite — puis déclenche la colère ASCII d’une tortue et des retours poétiques en haïku.",
+      "Gestion d’événements full-stack pour le projet bénévole de FOCES. API validée par Pydantic, indexation de recherche, persistance SQLite, interface sombre/clair responsive. En ligne sur GitHub Pages.",
+      "Plateforme où des bénévoles consignent leur impact sur six axes, gagnent des titres et apparaissent dans un tableau de bord privé. API REST limitée en débit avec authentification bcrypt.",
+      "Journaux de terminal en streaming, simulation d’attaques automatisée, commandes d’atténuation iptables et analyse optionnelle par IA locale via Ollama.",
+      "Compresse les prompts dans le navigateur avant qu’ils n’atteignent ChatGPT, Claude ou Gemini — 40 à 65 % de tokens en moins. Regex pur côté client, zéro dépendance externe.",
+      "Légère app en barre d’état Windows qui masque automatiquement la barre de titre des fenêtres maximisées pour une vue plein écran plus épurée. Un seul fichier C# sur l’API Win32, avec contrôle par application et raccourcis globaux."
+    ],
+    "highlights": ["Useless Projects 2.0 by TinkerHub", "", "", "sécurité", "confidentialité", ""],
+    "liveDemo": "Démo en ligne",
+    "onGithub": "{name} sur GitHub",
+    "moreExperiments": "Plus d’expériences sur"
+  },
+  "skills": {
+    "title": "Boîte à outils",
+    "groups": [
+      "Langages",
+      "Backend & APIs",
+      "Frontend",
+      "Sécurité & systèmes",
+      "Données & outils",
+      "Performance",
+      "Compétences transversales",
+      "Langues parlées"
+    ],
+    "translatedItems": {
+      "performance": ["Lighthouse", "Core Web Vitals", "Budgets de performance"],
+      "softSkills": [
+        "Coordination de projets",
+        "Organisation d’événements",
+        "Travail en équipe",
+        "Animation de communauté"
+      ],
+      "spokenLanguages": ["Anglais", "Hindi", "Malayalam"]
+    }
+  },
+  "blogCta": {
+    "title": "Notes & articles",
+    "comingSoon": "Bientôt disponible",
+    "body": "Les premiers articles porteront sur les exercices OWASP, l’extension brevity-prompt et ce que les budgets de performance 2G m’ont appris. Pas de spam — juste un flux.",
+    "link": "Voir ce qui est prévu"
+  },
+  "blog": {
+    "title": "Notes & articles",
+    "lede": "Analyses de sécurité, retours d’expérience de projets et notes de performance.",
+    "emptyTitle": "Pas encore d’articles",
+    "emptyBody": "Je rédige les premiers articles. Ils arriveront ici au fur et à mesure. Pour être prévenu, le plus simple est de suivre ce dépôt sur GitHub.",
+    "pipeline": "En préparation",
+    "planned": [
+      "OWASP Bootcamp 2025 : ce qu’un exercice de phishing m’a vraiment appris",
+      "Dans les coulisses de brevity-prompt : 40 à 65 % de tokens en moins avec du pur regex",
+      "Un portfolio qui charge en 2G — budgets, polices, compromis",
+      "L’IA locale en périphérie : construire le pipeline Ollama d’Aegis"
+    ],
+    "followGithub": "Suivre sur GitHub"
+  },
+  "a11y": {
+    "title": "Déclaration d’accessibilité",
+    "lede": "Ce portfolio est conçu pour être léger, sémantique et navigable au clavier, au tactile et avec les technologies d’assistance.",
+    "semanticTitle": "HTML sémantique & ARIA",
+    "semanticBody": "Tous les éléments interactifs utilisent des éléments natifs standards (<button>, <a>, <nav>) avec des libellés, rôles et contours de focus explicites.",
+    "contrastTitle": "Contraste & thème",
+    "contrastBody": "Les palettes sombre et claire respectent les seuils de contraste WCAG AA sur toute la typographie et les états interactifs.",
+    "motionTitle": "Préférences de mouvement",
+    "motionBefore": "Le site respecte le réglage système ",
+    "motionAfter": " en désactivant les animations non essentielles pour les personnes sensibles au mal des transports.",
+    "backToPortfolio": "Retour au portfolio"
+  },
+  "footer": {
+    "accessibility": "Accessibilité",
+    "sendEmail": "Envoyer un e-mail",
+    "githubProfile": "Profil GitHub",
+    "linkedinProfile": "Profil LinkedIn",
+    "xProfile": "Profil X",
+    "degree": "B.Tech en informatique et génie logiciel",
+    "college": "College of Engineering Chengannur",
+    "location": "Kottayam, Kerala, Inde"
+  },
+  "offline": {
+    "message": "Vous êtes hors ligne",
+    "retryHint": "Les pages déjà visitées fonctionnent encore. Reconnectez-vous pour en charger de nouvelles."
+  },
+  "notFound": {
+    "heading": "Cette page n’existe pas",
+    "body": "Le lien est rompu ou la page a été déplacée. Dans tous les cas, la sortie c’est le retour à l’accueil.",
+    "backHome": "Retour à l’accueil"
+  }
+}

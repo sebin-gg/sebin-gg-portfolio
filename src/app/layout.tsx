@@ -1,9 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { links, profile, siteMeta, siteUrl } from "@/lib/site";
+import { hreflangAlternates } from "@/lib/locale";
 import { ThemeInit } from "@/components/theme-init";
-import { SiteHeader } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -48,6 +47,10 @@ export const metadata: Metadata = {
     "web performance",
     "static site",
   ],
+  alternates: {
+    canonical: siteUrl,
+    languages: hreflangAlternates("/", siteUrl),
+  },
   robots: {
     index: true,
     follow: true,
@@ -161,19 +164,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdData) }}
         />
       </head>
-      <body className="bg-canvas text-ink flex min-h-screen flex-col antialiased">
-        <a
-          href="#main"
-          className="focus:bg-accent focus:text-accent-ink sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:px-4 focus:py-2 focus:text-sm focus:font-semibold"
-        >
-          Skip to content
-        </a>
-        <SiteHeader />
-        <main id="main" className="flex-1">
-          {children}
-        </main>
-        <SiteFooter />
-      </body>
+      <body className="bg-canvas text-ink flex min-h-screen flex-col antialiased">{children}</body>
     </html>
   );
 }

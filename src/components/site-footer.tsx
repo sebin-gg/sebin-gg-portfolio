@@ -1,11 +1,14 @@
 import Link from "next/link";
 import { links, profile } from "@/lib/site";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { DEFAULT_LOCALE, localePath, type Locale } from "@/lib/locale";
 import { GithubIcon, LinkedinIcon, MailIcon, XIcon } from "@/components/icons";
 
-export function SiteFooter() {
+export function SiteFooter({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
+  const dict = getDictionary(locale);
   const year = new Date().getFullYear();
   return (
-    <footer className="border-line border-t">
+    <footer lang={locale === DEFAULT_LOCALE ? undefined : locale} className="border-line border-t">
       <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8 2xl:max-w-[90rem]">
         <div className="text-ink-soft flex w-full flex-col items-center justify-between gap-4 text-sm sm:flex-row">
           <p className="flex flex-wrap items-center gap-x-2 gap-y-1">
@@ -13,8 +16,11 @@ export function SiteFooter() {
               © {year} {profile.name}
             </span>
             <span aria-hidden="true">·</span>
-            <Link href="/accessibility" className="hover:text-accent transition-colors">
-              Accessibility
+            <Link
+              href={localePath(locale, "/accessibility")}
+              className="hover:text-accent transition-colors"
+            >
+              {dict.footer.accessibility}
             </Link>
           </p>
 
@@ -23,7 +29,7 @@ export function SiteFooter() {
               href={links.github.href}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="GitHub profile"
+              aria-label={dict.footer.githubProfile}
               className="text-ink-soft hover:text-accent rounded-md p-2 transition-colors"
             >
               <GithubIcon className="h-5 w-5" />
@@ -32,7 +38,7 @@ export function SiteFooter() {
               href={links.linkedin.href}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="LinkedIn profile"
+              aria-label={dict.footer.linkedinProfile}
               className="text-ink-soft hover:text-accent rounded-md p-2 transition-colors"
             >
               <LinkedinIcon className="h-5 w-5" />
@@ -41,14 +47,14 @@ export function SiteFooter() {
               href={links.x.href}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="X profile"
+              aria-label={dict.footer.xProfile}
               className="text-ink-soft hover:text-accent rounded-md p-2 transition-colors"
             >
               <XIcon className="h-4 w-4" />
             </a>
             <a
               href={links.email.href}
-              aria-label="Send an email"
+              aria-label={dict.footer.sendEmail}
               className="text-ink-soft hover:text-accent rounded-md p-2 transition-colors"
             >
               <MailIcon className="h-5 w-5" />
@@ -56,7 +62,7 @@ export function SiteFooter() {
           </div>
         </div>
         <p className="text-ink-faint mt-6 text-center text-xs">
-          {profile.degree} · {profile.college} · {profile.location}
+          {dict.footer.degree} · {dict.footer.college} · {dict.footer.location}
         </p>
       </div>
     </footer>
