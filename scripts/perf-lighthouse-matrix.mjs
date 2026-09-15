@@ -19,11 +19,12 @@
  *     (20x CPU or 2G) are "best effort": reported, never failed — a max score
  *     is impossible there by definition, and we don't want a green gate to
  *     punish the very worst connection the site is designed to survive.
- *   - performance misses retry: each row gets up to 3 attempts and the best
- *     performance score wins. One long task landing inside the timespan
- *     window is routine runner jitter (a single ~250 ms parse drops the
- *     category from 100 to 94), not a regression. a11y/bp/seo failures are
- *     deterministic and never retry — they fail on the first attempt.
+ *   - performance misses retry: each row is gathered at most 3 times in
+ *     total. A run that crashes or only misses the performance floor is
+ *     retried (runner jitter: a single ~250 ms parse inside the timespan
+ *     window drops the category from 100 to 94), and the best run — fewest
+ *     policy issues, then highest performance — is the verdict. a11y/bp/seo
+ *     failures are deterministic and fail on the first attempt.
  *
  * Usage:
  *   node scripts/perf-lighthouse-matrix.mjs                 # full matrix
@@ -103,10 +104,9 @@ const PERF_BEST_EFFORT = (net, cpu) => net.name === "2G" || cpu.rate >= 20;
 const PERF_FLOOR = 0.99;
 const HARD_FLOOR = 0.995;
 
-// Score-retry budget per row. runRowWithRetries already covers thrown errors
-// (3 attempts); this covers the other flake shape — a run that completes but
-// lands one long task inside the timespan window and misses the perf floor.
-const MAX_SCORE_ATTEMPTS = 3;
+// Per-row gather budget, shared by crash retries and score retries — an
+// unlucky row costs at most 3 Lighthouse runs, never more.
+const MAX_ROW_ATTEMPTS = 3;
 
 const PERF_ISSUE = /^performance:/;
 
@@ -377,26 +377,6 @@ function buildMatrix(args) {
   return rows;
 }
 
-async function runRowWithRetries(browser, baseUrl, row) {
-  // Shared CI runners can flake a single navigation; retry before failing.
-  let lhr;
-  let lastError;
-  for (let attempt = 1; attempt <= 3; attempt++) {
-    try {
-      lhr = await runCombo(browser, baseUrl, row);
-      break;
-    } catch (err) {
-      lastError = err;
-      if (attempt < 3) {
-        process.stdout.write(`(retry ${attempt}) `);
-        await new Promise((r) => setTimeout(r, 1500 * attempt));
-      }
-    }
-  }
-  if (!lhr) throw lastError ?? new Error("run failed after retries");
-  return lhr;
-}
-
 function dumpLhr(lhr, row) {
   // Per-run JSON for later inspection.
   const { route, theme, network, cpu, device, mode } = row;
@@ -457,7 +437,13 @@ function emptySummary(mode, err) {
 }
 
 function betterRun(candidate, incumbent) {
-  return (candidate.performance ?? -1) > (incumbent.performance ?? -1);
+  // Fewest policy issues wins; ties break on the higher performance score,
+  // so a completed non-performance failure is never masked by a later
+  // attempt that trades it for a perf miss.
+  if (candidate.issues.length !== incumbent.issues.length) {
+    return candidate.issues.length < incumbent.issues.length;
+  }
+  return (candidate.summary.performance ?? -1) > (incumbent.summary.performance ?? -1);
 }
 
 async function runMatrixRow(browser, baseUrl, row, index, total) {
@@ -466,31 +452,32 @@ async function runMatrixRow(browser, baseUrl, row, index, total) {
   process.stdout.write(`\n${label} … `);
 
   let best = null;
-  for (let attempt = 1; attempt <= MAX_SCORE_ATTEMPTS; attempt++) {
-    let summary;
-    let lhr;
+  for (let attempt = 1; attempt <= MAX_ROW_ATTEMPTS; attempt++) {
+    let lhr = null;
+    let lastError = null;
     try {
-      lhr = await runRowWithRetries(browser, baseUrl, row);
-      summary = summarize(lhr, mode);
+      lhr = await runCombo(browser, baseUrl, row);
     } catch (err) {
-      summary = emptySummary(mode, err);
+      lastError = err;
     }
-    if (best === null || betterRun(summary, best.summary)) best = { lhr, summary };
 
+    const summary = lhr ? summarize(lhr, mode) : emptySummary(mode, lastError);
     const issues = checkRowPolicy(mode, network, cpu, summary);
-    const retryable =
-      issues.length > 0 &&
-      attempt < MAX_SCORE_ATTEMPTS &&
-      issues.every((issue) => PERF_ISSUE.test(issue));
-    if (!retryable) break;
-    process.stdout.write(`(score retry ${attempt}) `);
+    if (best === null || betterRun({ lhr, summary, issues }, best)) {
+      best = { lhr, summary, issues };
+    }
+
+    // Retry a crashed run (the original runner flake) or one whose only
+    // failures are performance misses; anything else is deterministic and
+    // fails on this attempt.
+    const perfOnly = issues.length > 0 && issues.every((i) => PERF_ISSUE.test(i));
+    if (attempt >= MAX_ROW_ATTEMPTS || !(lhr === null || perfOnly)) break;
+    process.stdout.write(`(retry ${attempt}) `);
+    await new Promise((r) => setTimeout(r, 1500 * attempt));
   }
 
-  // Verdict comes from the best attempt, not the last one — a crashed final
-  // attempt must not override an earlier green (or the previous best) run.
-  const { lhr, summary } = best;
+  const { lhr, summary, issues: rowFailures } = best;
   if (lhr) dumpLhr(lhr, row);
-  const rowFailures = checkRowPolicy(mode, network, cpu, summary);
   const ok = printRowResult(summary, rowFailures);
   return {
     result: { mode, device, theme, network, cpu: `${cpu}x`, cpuName, route, ...summary },
