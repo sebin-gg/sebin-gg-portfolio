@@ -29,6 +29,12 @@ export async function generateMetadata({ params }: LocalePageProps): Promise<Met
       title: dict.a11y.title,
       description: dict.meta.a11yDescription,
     },
+    twitter: {
+      card: "summary_large_image",
+      title: dict.a11y.title,
+      description: dict.meta.a11yDescription,
+      images: [`${siteUrl}/opengraph-image`],
+    },
   };
 }
 

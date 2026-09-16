@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { siteUrl } from "@/lib/site";
+import { siteUrl, profile } from "@/lib/site";
 import { SUPPORTED_LOCALES, hreflangAlternates } from "@/lib/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { requireLocaleParam } from "@/app/[locale]/locale-params";
@@ -30,6 +30,12 @@ export async function generateMetadata({ params }: LocalePageProps): Promise<Met
       url: `${siteUrl}/${locale}/blog`,
       title: dict.blog.title,
       description: dict.meta.blogDescription,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${dict.blog.title} · ${profile.name}`,
+      description: dict.meta.blogDescription,
+      images: [`${siteUrl}/opengraph-image`],
     },
   };
 }

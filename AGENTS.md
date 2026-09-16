@@ -33,27 +33,33 @@ comes from the résumé in `docs/` and the GitHub profile. Single page + a "blog
 
 ## Agent inner loop (read this before iterating)
 
-1. Iterate with `pnpm verify:fast` only. Run `test:e2e:chrome` when UI/routes
-   changed. Run full `check:all` once, pre-PR — never per edit.
-2. Never run bare `playwright test`: the config reuses any server already on
+Commands are listed in the table above; this section only adds what the table
+does not say.
+
+1. Never run bare `playwright test`: the config reuses any server already on
    :3100, so a stale build serves old code and failures lie. Always go through
    the pnpm e2e scripts (they build first); if results look stale, kill :3100
    and re-run.
-3. Test strings in non-English scripts must come from `getDictionary(...)`,
+2. Test strings in non-English scripts must come from `getDictionary(...)`,
    never as literals — cspell runs strict and flags them.
-4. The unslop scanner is English-only; translated dictionaries are out of its
+3. The unslop scanner is English-only; translated dictionaries are out of its
    scope, English copy is in scope.
 
 ## Agent skills (use these when working here)
 
-Skills live in `.agents/skills/` and are locked in `skills-lock.json`. Load the skill
-via the `skill` tool before relying on it. The ones this repo expects:
+Skills live in `.agents/skills/` and are locked by hash in `skills-lock.json` (version 1;
+current hashes: `caveman` c4d7354b…, `unslop` c2db46a9…). Load the skill via the `skill`
+tool before relying on it. The ones this repo expects:
 
 1. **`caveman`** — terse replies. Default mode for agents working in this repo:
    compressed output, technical substance intact, no filler. `/caveman off` ends it.
 2. **`unslop`** — run an audit pass before and after touching any user-visible copy
    (site text, blog copy, accessibility statement, llms.txt). The site has a strict
    human-voice rule; the scanner in `.agents/skills/unslop/scripts/` reports AI tells.
+
+The summaries above are derived from each SKILL.md; when a skill's SKILL.md changes,
+`skills-lock.json` records the new hash — update the summary in the same PR so the
+two cannot drift (see rule 10).
 
 Copy conventions go together with rule 2: content lives in `src/lib/site.ts`, keep
 it human-voiced, typographic apostrophes only.
@@ -64,10 +70,13 @@ it human-voiced, typographic apostrophes only.
    is ~2G/3G. Do not add client-side libraries, images, analytics, or heavy JS. New interactive
    UI = tiny isolated client component only. Self-host fonts via `next/font`, never a CDN link.
 2. **Content lives in `src/lib/site.ts`.** Copy, links, projects, experience — update data there,
-   not inside components. Keep copy human-voiced (no AI tells), with typographic apostrophes.
+   not inside components. Keep copy human-voiced (no AI tells), with typographic apostrophes —
+   the unslop skill's `references/core-contract.md` (`.agents/skills/unslop/`) is the standard
+   these words refer to; run its audit pass before and after touching user-visible copy.
 3. **Dark mode is class-based** (`.dark` on `<html>`) and **dark is the default** — light only
-   when the user explicitly stored `theme=light`. Logic lives in `src/lib/theme.ts`; the inline
-   no-FOUC script and the toggle must stay in sync with it.
+   when the user explicitly stored `theme=light`. `src/lib/theme.ts` is the single source of
+   truth for this logic: the inline no-FOUC script and the toggle both read their behavior from
+   it and must never hard-code their own copy of it.
 4. **Quality gates must stay green:** ESLint complexity cap ≤ 4 (`src/**`), Prettier, strict
    TypeScript, coverage ≥ 85 % lines on lib+components, Stryker break threshold 60 %,
    Lighthouse perf ≥ 85 on a median of 3 runs. New code ships with tests.
@@ -82,22 +91,5 @@ it human-voiced, typographic apostrophes only.
 8. Tailwind v4: theme tokens are CSS vars in `globals.css` mapped via `@theme inline`; use the
    semantic utilities (`bg-canvas`, `text-ink-soft`, `border-line`, `text-accent`, …) rather than
    raw palette classes.
-9. **Every PR gets a CodeRabbit review.** CodeRabbit skips auto-review on small repos, so after
-   opening a PR, post `@coderabbitai full review` as a PR comment and wait for the review. Address every
-   finding: fix valid ones; for the rest, reply with a reason and resolve the thread. Push fixes and
-   re-trigger if new commits landed. A PR is not done until CodeRabbit has reviewed, the SonarCloud
-   check is green, and all review threads from the enabled bots (Sourcery, Greptile, DeepSource)
-   are resolved. Bots not installed yet do not block. Batch all fixes into as few pushes as
-   possible and re-trigger sparingly (one trigger per round of findings): the free plan
-   rate-limits reviews.
-10. **PR lifecycle (repeat until merge).** After opening a PR: wait for every enabled
-    reviewer (CodeRabbit, Sourcery, Greptile, DeepSource, SonarCloud — unavailable
-    bots never block, per rule 9), address all findings in
-    one batched push (fix valid ones; reply with a reason and resolve the rest), then
-    wait for the next review round. Repeat until no open threads remain or the bots stop
-    reviewing (free-plan credits exhausted — note it on the PR and move on). If the
-    branch falls behind `main`, update it via the PR update-branch action and let CI
-    re-run before merging. Merge only when every required check is green and the rule-9
-    done-criteria hold. Auto-merge is disabled on this repo, so merge explicitly
-    (`gh pr merge --merge`). Close superseded PRs (e.g. an older Dependabot group update
-    replaced by a newer one) instead of fixing them.
+9. **PR lifecycle (repeat until merge).** After opening a PR: post `@coderabbitai full review` as a PR comment, then wait for every enabled reviewer (CodeRabbit, SonarCloud, Sourcery, Greptile, DeepSource — unavailable bots never block). Address all findings in one batched push: fix valid ones (valid = reproducible in this repo or a real future bug); reply with a reason and resolve the rest. Re-trigger at most once per round of findings (free plan rate-limits); note on the PR when bots stop reviewing (credits exhausted). If the branch falls behind `main`, update it via the PR update-branch action and let CI re-run before merging. Merge only when every required check is green and no open threads remain. Auto-merge is disabled on this repo, so merge explicitly (`gh pr merge --merge`). Close superseded PRs (e.g. an older Dependabot group update replaced by a newer one) instead of fixing them. A PR whose diff changes a rule in this file must state the agent-behavior delta in the PR body — prompt changes are product changes.
+10. **Prompt files are maintained like code.** No addition to `AGENTS.md` (or a skill summary) without naming the rule it replaces, folds into, or deletes — additions must not be purely additive. Rewrite and consolidate when rules overlap; review this file end to end at least once a quarter (or fold into the `check:all` pre-PR ritual).
