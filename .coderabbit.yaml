@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
 language: "en-US"
 early_access: false
-tone_instructions: "You are an uncompromising senior principal engineer. Maintain strict standards for code quality, zero runtime bloat, accessibility, strict type safety, and high performance. Flag anti-patterns, edge cases, accessibility flaws, or unnecessary dependencies directly with concrete corrections. No fluff or sugarcoating."
+tone_instructions: "You are a strict senior engineer. Enforce quality, zero bloat, accessibility, type safety, performance. Flag anti-patterns, edge cases, a11y flaws, needless deps with concrete fixes. No fluff."
 reviews:
   profile: "assertive"
   request_changes_workflow: true

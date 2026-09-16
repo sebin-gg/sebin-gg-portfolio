@@ -108,7 +108,9 @@ const HARD_FLOOR = 0.995;
 // unlucky row costs at most 3 Lighthouse runs, never more.
 const MAX_ROW_ATTEMPTS = 3;
 
-const PERF_ISSUE = /^performance:/;
+function isPerfIssue(issue) {
+  return issue.startsWith("performance:");
+}
 
 // ---------------------------------------------------------------------------
 // CLI filtering
@@ -463,6 +465,12 @@ async function runMatrixRow(browser, baseUrl, row, index, total) {
 
     const summary = lhr ? summarize(lhr, mode) : emptySummary(mode, lastError);
     const issues = checkRowPolicy(mode, network, cpu, summary);
+    // A completed run with a deterministic a11y/bp/seo failure is the final
+    // verdict — report it instead of letting an earlier perf-only attempt win.
+    if (lhr !== null && issues.some((i) => !isPerfIssue(i))) {
+      best = { lhr, summary, issues };
+      break;
+    }
     if (best === null || betterRun({ lhr, summary, issues }, best)) {
       best = { lhr, summary, issues };
     }
@@ -470,7 +478,7 @@ async function runMatrixRow(browser, baseUrl, row, index, total) {
     // Retry a crashed run (the original runner flake) or one whose only
     // failures are performance misses; anything else is deterministic and
     // fails on this attempt.
-    const perfOnly = issues.length > 0 && issues.every((i) => PERF_ISSUE.test(i));
+    const perfOnly = issues.length > 0 && issues.every((i) => isPerfIssue(i));
     if (attempt >= MAX_ROW_ATTEMPTS || !(lhr === null || perfOnly)) break;
     process.stdout.write(`(retry ${attempt}) `);
     await new Promise((r) => setTimeout(r, 1500 * attempt));
