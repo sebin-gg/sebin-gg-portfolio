@@ -90,8 +90,9 @@ it human-voiced, typographic apostrophes only.
    are resolved. Bots not installed yet do not block. Batch all fixes into as few pushes as
    possible and re-trigger sparingly (one trigger per round of findings): the free plan
    rate-limits reviews.
-10. **PR lifecycle (repeat until merge).** After opening a PR: wait for every reviewer
-    (CodeRabbit, Sourcery, Greptile, DeepSource, SonarCloud), address all findings in
+10. **PR lifecycle (repeat until merge).** After opening a PR: wait for every enabled
+    reviewer (CodeRabbit, Sourcery, Greptile, DeepSource, SonarCloud — unavailable
+    bots never block, per rule 9), address all findings in
     one batched push (fix valid ones; reply with a reason and resolve the rest), then
     wait for the next review round. Repeat until no open threads remain or the bots stop
     reviewing (free-plan credits exhausted — note it on the PR and move on). If the
