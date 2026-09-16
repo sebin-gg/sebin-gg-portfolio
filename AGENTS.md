@@ -90,3 +90,13 @@ it human-voiced, typographic apostrophes only.
    are resolved. Bots not installed yet do not block. Batch all fixes into as few pushes as
    possible and re-trigger sparingly (one trigger per round of findings): the free plan
    rate-limits reviews.
+10. **PR lifecycle (repeat until merge).** After opening a PR: wait for every reviewer
+    (CodeRabbit, Sourcery, Greptile, DeepSource, SonarCloud), address all findings in
+    one batched push (fix valid ones; reply with a reason and resolve the rest), then
+    wait for the next review round. Repeat until no open threads remain or the bots stop
+    reviewing (free-plan credits exhausted — note it on the PR and move on). If the
+    branch falls behind `main`, update it via the PR update-branch action and let CI
+    re-run before merging. Merge only when every required check is green and the rule-9
+    done-criteria hold. Auto-merge is disabled on this repo, so merge explicitly
+    (`gh pr merge --merge`). Close superseded PRs (e.g. an older Dependabot group update
+    replaced by a newer one) instead of fixing them.
