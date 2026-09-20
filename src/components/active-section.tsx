@@ -46,12 +46,27 @@ export function ActiveSection({ ids }: ActiveSectionProps) {
     if (sections.length === 0) return;
 
     const observer = new IntersectionObserver(
-      (entries) => applyActive(topmost(entries)?.target.id ?? null),
+      (entries) => {
+        const hit = topmost(entries);
+        // At page bottom no section sits in band; clearing here makes nav flicker.
+        // Keep last active instead. Bottom pin handled by scroll listener below.
+        if (hit) applyActive(hit.target.id);
+      },
       { rootMargin: "-35% 0px -55% 0px", threshold: 0 },
     );
 
+    const pinLastAtBottom = () => {
+      const nearBottom = window.innerHeight + window.scrollY >= document.body.scrollHeight - 2;
+      if (nearBottom && ids.length > 0) applyActive(ids[ids.length - 1]);
+    };
+
     for (const section of sections) observer.observe(section);
-    return () => observer.disconnect();
+    window.addEventListener("scroll", pinLastAtBottom, { passive: true });
+    pinLastAtBottom();
+    return () => {
+      window.removeEventListener("scroll", pinLastAtBottom);
+      observer.disconnect();
+    };
   }, [ids]);
 
   return null;
