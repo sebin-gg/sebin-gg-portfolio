@@ -146,7 +146,8 @@ GitHub repo (public, MIT), Vercel deploys on `main`, CodeRabbit + SonarCloud Git
 CodeQL workflow live, Dependabot grouped updates on, `main` branch-protected with 9 required
 checks. Review bots Sourcery, Greptile and DeepSource need a one-click install each
 (`bash scripts/links.sh` opens them); their configs already ship in the repo. Still manual: uninstall the Renovate app (superseded by Dependabot), click Verify in
-Search Console, import the site into Bing Webmaster.
+Search Console, import the site into Bing Webmaster. Bot-review procedure (CodeRabbit trigger
+ladder, credit limits) lives in AGENTS.md rule 9 and is not repeated here.
 
 ## Project layout
 

@@ -83,13 +83,16 @@ it human-voiced, typographic apostrophes only.
    semantic utilities (`bg-canvas`, `text-ink-soft`, `border-line`, `text-accent`, …) rather than
    raw palette classes.
 9. **Every PR gets a CodeRabbit review.** CodeRabbit skips auto-review on small repos, so after
-   opening a PR, post `@coderabbitai full review` as a PR comment and wait for the review. Address every
+   opening a PR, post `@coderabbitai review` as a PR comment and wait for the review (it covers
+   only what changed, so it costs less than `full review` — reserve `full review` for after a
+   rebase). If it answers that reviews are paused, post `@coderabbitai resume`. Address every
    finding: fix valid ones; for the rest, reply with a reason and resolve the thread. Push fixes and
    re-trigger if new commits landed. A PR is not done until CodeRabbit has reviewed, the SonarCloud
    check is green, and all review threads from the enabled bots (Sourcery, Greptile, DeepSource)
    are resolved. Bots not installed yet do not block. Batch all fixes into as few pushes as
    possible and re-trigger sparingly (one trigger per round of findings): the free plan
-   rate-limits reviews.
+   rate-limits reviews, and review auto-pauses after 5 reviewed commits. If credits are exhausted,
+   note it on the PR and move on.
 10. **PR lifecycle (repeat until merge).** After opening a PR: wait for every enabled
     reviewer (CodeRabbit, Sourcery, Greptile, DeepSource, SonarCloud — unavailable
     bots never block, per rule 9), address all findings in
