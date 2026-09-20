@@ -50,6 +50,9 @@ export function ActiveSection({ ids }: ActiveSectionProps) {
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null);
 
+    if (sections.length === 0) return () => {};
+    if (typeof IntersectionObserver === "undefined") return () => {};
+
     const observer = new IntersectionObserver(
       (entries) => {
         const hit = topmost(entries);
