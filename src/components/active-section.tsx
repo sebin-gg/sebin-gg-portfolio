@@ -37,42 +37,39 @@ function applyActive(id: string | null) {
   }
 }
 
-/** True once a scrollable page is scrolled within 2px of its bottom. */
-function isAtBottom(): boolean {
-  if (document.body.scrollHeight <= window.innerHeight) return false;
-  if (window.scrollY <= 0) return false;
-  return window.innerHeight + window.scrollY >= document.body.scrollHeight - 2;
-}
-
 export function ActiveSection({ ids }: ActiveSectionProps) {
   useEffect(() => {
     const sections = ids
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null);
 
-    if (sections.length === 0) return () => {};
-    if (typeof IntersectionObserver === "undefined") return () => {};
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const hit = topmost(entries);
-        // At page bottom no section sits in band; clearing here makes nav flicker.
-        // Keep last active instead. Bottom pin handled by scroll listener below.
-        if (hit) applyActive(hit.target.id);
-      },
-      { rootMargin: "-35% 0px -55% 0px", threshold: 0 },
-    );
-
     const pinLastAtBottom = () => {
-      if (ids.length > 0 && isAtBottom()) applyActive(ids[ids.length - 1]);
+      const maxScroll = document.body.scrollHeight - window.innerHeight;
+      if (maxScroll > 0 && window.scrollY >= maxScroll - 2 && ids.length > 0) {
+        applyActive(ids[ids.length - 1]);
+      }
     };
 
-    for (const section of sections) observer.observe(section);
-    window.addEventListener("scroll", pinLastAtBottom, { passive: true });
-    pinLastAtBottom();
+    let observer: IntersectionObserver | null = null;
+    let stopPinning: (() => void) | undefined;
+    if (sections.length > 0 && typeof IntersectionObserver !== "undefined") {
+      observer = new IntersectionObserver(
+        (entries) => {
+          const hit = topmost(entries);
+          // At page bottom no section sits in band; clearing here makes nav flicker.
+          // Keep last active instead. Bottom pin handled by scroll listener below.
+          if (hit) applyActive(hit.target.id);
+        },
+        { rootMargin: "-35% 0px -55% 0px", threshold: 0 },
+      );
+      for (const section of sections) observer.observe(section);
+      window.addEventListener("scroll", pinLastAtBottom, { passive: true });
+      pinLastAtBottom();
+      stopPinning = () => window.removeEventListener("scroll", pinLastAtBottom);
+    }
     return () => {
-      window.removeEventListener("scroll", pinLastAtBottom);
-      observer.disconnect();
+      stopPinning?.();
+      observer?.disconnect();
     };
   }, [ids]);
 
