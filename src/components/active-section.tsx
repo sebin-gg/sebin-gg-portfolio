@@ -37,13 +37,18 @@ function applyActive(id: string | null) {
   }
 }
 
+/** True once a scrollable page is scrolled within 2px of its bottom. */
+function isAtBottom(): boolean {
+  if (document.body.scrollHeight <= window.innerHeight) return false;
+  if (window.scrollY <= 0) return false;
+  return window.innerHeight + window.scrollY >= document.body.scrollHeight - 2;
+}
+
 export function ActiveSection({ ids }: ActiveSectionProps) {
   useEffect(() => {
     const sections = ids
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null);
-
-    if (sections.length === 0) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -56,8 +61,7 @@ export function ActiveSection({ ids }: ActiveSectionProps) {
     );
 
     const pinLastAtBottom = () => {
-      const nearBottom = window.innerHeight + window.scrollY >= document.body.scrollHeight - 2;
-      if (nearBottom && ids.length > 0) applyActive(ids[ids.length - 1]);
+      if (ids.length > 0 && isAtBottom()) applyActive(ids[ids.length - 1]);
     };
 
     for (const section of sections) observer.observe(section);

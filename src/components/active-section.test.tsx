@@ -80,4 +80,10 @@ describe("ActiveSection", () => {
     });
     expectLinkActive("about", true);
   });
+
+  it("does not pin the last section on a short, non-scrollable page", () => {
+    render(<ActiveSection ids={["about", "skills"]} />);
+    expectLinkActive("about", false);
+    expectLinkActive("skills", false);
+  });
 });
