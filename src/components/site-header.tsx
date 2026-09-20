@@ -78,7 +78,7 @@ export function SiteHeader({
   return (
     <header
       lang={locale === DEFAULT_LOCALE ? undefined : locale}
-      className="border-line/70 bg-canvas/80 sticky top-0 z-40 border-b backdrop-blur-lg"
+      className="border-line/70 bg-canvas/80 sticky top-0 z-40 transform-gpu border-b backdrop-blur-lg [backface-visibility:hidden]"
     >
       <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between gap-2 px-4 min-[420px]:gap-4 sm:px-6 lg:px-8 2xl:max-w-[90rem]">
         <BrandAnchor locale={locale} currentPath={currentPath} />

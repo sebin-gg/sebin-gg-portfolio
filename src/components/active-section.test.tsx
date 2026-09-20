@@ -71,13 +71,19 @@ describe("ActiveSection", () => {
     expectLinkActive("skills", false);
   });
 
-  it("clears the active state when no section intersects", () => {
+  it("keeps the last active state when no section intersects", () => {
     render(<ActiveSection ids={["about", "skills"]} />);
     const noObserver = {} as IntersectionObserver;
     act(() => {
       callback([entry("about", true, 120)], noObserver);
       callback([entry("about", false, 120), entry("skills", false, 400)], noObserver);
     });
+    expectLinkActive("about", true);
+  });
+
+  it("does not pin the last section on a short, non-scrollable page", () => {
+    render(<ActiveSection ids={["about", "skills"]} />);
     expectLinkActive("about", false);
+    expectLinkActive("skills", false);
   });
 });

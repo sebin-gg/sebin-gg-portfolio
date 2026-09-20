@@ -43,15 +43,34 @@ export function ActiveSection({ ids }: ActiveSectionProps) {
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null);
 
-    if (sections.length === 0) return;
+    const pinLastAtBottom = () => {
+      const maxScroll = document.body.scrollHeight - window.innerHeight;
+      if (maxScroll > 0 && window.scrollY >= maxScroll - 2 && ids.length > 0) {
+        applyActive(ids[ids.length - 1]);
+      }
+    };
 
-    const observer = new IntersectionObserver(
-      (entries) => applyActive(topmost(entries)?.target.id ?? null),
-      { rootMargin: "-35% 0px -55% 0px", threshold: 0 },
-    );
-
-    for (const section of sections) observer.observe(section);
-    return () => observer.disconnect();
+    let observer: IntersectionObserver | null = null;
+    let stopPinning: (() => void) | undefined;
+    if (sections.length > 0 && typeof IntersectionObserver !== "undefined") {
+      observer = new IntersectionObserver(
+        (entries) => {
+          const hit = topmost(entries);
+          // At page bottom no section sits in band; clearing here makes nav flicker.
+          // Keep last active instead. Bottom pin handled by scroll listener below.
+          if (hit) applyActive(hit.target.id);
+        },
+        { rootMargin: "-35% 0px -55% 0px", threshold: 0 },
+      );
+      for (const section of sections) observer.observe(section);
+      window.addEventListener("scroll", pinLastAtBottom, { passive: true });
+      pinLastAtBottom();
+      stopPinning = () => window.removeEventListener("scroll", pinLastAtBottom);
+    }
+    return () => {
+      stopPinning?.();
+      observer?.disconnect();
+    };
   }, [ids]);
 
   return null;
