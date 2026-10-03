@@ -53,7 +53,7 @@ describe("public asset references", () => {
     expect(missing).toEqual([]);
   });
 
-  it("serves the favicon from a stable unhashed path", () => {
+  it("serves the favicon from a stable path", () => {
     // Next.js rewrites `icon.svg` metadata files living inside a route group to
     // a hashed name (`/icon-<hash>.svg`). Layouts and the web manifest pin the
     // stable `/icon.svg`, so the file has to live in `public/` or every page
