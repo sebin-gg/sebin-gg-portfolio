@@ -101,6 +101,18 @@ export interface Dictionary {
     hint: string;
     label: string;
     run: string;
+    /** Per-command reply templates. Placeholders are filled by `site.ts`. */
+    responses: {
+      help: string;
+      whoami: string;
+      about: string;
+      projects: string;
+      skills: string;
+      experience: string;
+      resume: string;
+      contact: string;
+      unknown: string;
+    };
   };
   blogCta: {
     title: string;

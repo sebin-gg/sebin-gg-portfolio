@@ -35,13 +35,24 @@ jobs:
         with:
           persist-credentials: false
 
+      # `src/lib/agent.ts` assembles its links from `src/lib/site.ts` and holds no
+      # URLs of its own, so `site.ts` is the file that actually has to be scanned;
+      # without it the job passes while every project link is unchecked. The
+      # generated `/llms.txt` and `/agent.json` responses are covered by the unit
+      # tests that assert the same site.ts data.
       # LinkedIn and X block bot traffic, so they are excluded to avoid
       # false failures; every other link is checked with retries.
       # (mailto: links are excluded by default in lychee v2.)
+      # `/resume.pdf` is a root-relative path served from `public/`, not a URL
+      # lychee can resolve from the repo checkout.
       - name: Check links
         uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
         with:
-          args: --no-progress --verbose --max-retries 2 --exclude 'linkedin.com' --exclude 'x.com' '**/*.md' 'src/lib/agent.ts'
+          args: >-
+            --no-progress --verbose --max-retries 2
+            --exclude 'linkedin.com' --exclude 'x.com'
+            --exclude '^/resume\.pdf$'
+            '**/*.md' 'src/lib/site.ts'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

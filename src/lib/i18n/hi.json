@@ -70,7 +70,18 @@
     "lede": "इस पेज की हर चीज़ पर एक कमांड लाइन। कुछ भी आपके ब्राउज़र से बाहर नहीं जाता।",
     "hint": "help लिखें और Enter दबाएँ",
     "label": "टर्मिनल कमांड",
-    "run": "चलाएँ"
+    "run": "चलाएँ",
+    "responses": {
+      "help": "यह आज़माएँ: {commands}. कोई कमांड लिखकर Enter दबाएँ।",
+      "whoami": "{name} — {role}, {location}।",
+      "about": "{bio}",
+      "projects": "नवीनतम: {project} — {tagline}। नीचे {count} प्रोजेक्ट।",
+      "skills": "{items} — पूरा टूलबॉक्स नीचे।",
+      "experience": "अभी: {org} में {title}। नीचे {count} पड़ाव।",
+      "resume": "रिज़्यूमे PDF {url} पर है — हेडर बटन भी उसे डाउनलोड करता है।",
+      "contact": "मेल {email} — GitHub {handle}।",
+      "unknown": "अज्ञात कमांड: {command}। help लिखें।"
+    }
   },
   "experience": {
     "periods": ["अप्रैल 2026 – वर्तमान", "दिसंबर 2025 – वर्तमान", "2025", "2025", "अगस्त 2025"],

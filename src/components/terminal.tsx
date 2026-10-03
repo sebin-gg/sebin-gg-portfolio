@@ -32,7 +32,7 @@ export function Terminal({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale
 
   function submit(event: React.FormEvent) {
     event.preventDefault();
-    const { output, anchor, clear } = runTerminalCommand(value);
+    const { output, anchor, clear } = runTerminalCommand(value, dict.terminal.responses);
     if (clear) setEntries([]);
     else {
       setEntries((prev) => [...prev.slice(-7), { command: value.trim() || "help", output }]);

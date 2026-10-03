@@ -93,7 +93,9 @@ it human-voiced, typographic apostrophes only.
    raw palette classes.
 9. **PR lifecycle (repeat until merge).** After opening a PR, post `@coderabbitai review`
    as a PR comment and wait (it covers only what changed, so it costs less than
-   `full review` — reserve `full review` for after a rebase; post
+   `@coderabbitai full review` — reserve `@coderabbitai full review` for after a
+   rebase, and always keep the `@coderabbitai` prefix; the bare phrase `full
+review` does not trigger a run; post
    `@coderabbitai resume` if reviews are paused). Then wait for every enabled
    reviewer (CodeRabbit, SonarCloud, Sourcery, Greptile, DeepSource — unavailable bots never block). Address all findings in one batched push, then wait for the
    next review round. A finding is valid = reproducible in this repo or a real future bug:

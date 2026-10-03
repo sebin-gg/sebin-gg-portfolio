@@ -11,10 +11,11 @@ import {
   runTerminalCommand,
   siteUrl,
   terminalCommands,
+  terminalResponses,
   timeline,
 } from "@/lib/site";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { SUPPORTED_LOCALES } from "@/lib/locale";
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from "@/lib/locale";
 
 describe("siteUrl", () => {
   it("resolves to an absolute https origin by default", () => {
@@ -175,5 +176,54 @@ describe("terminal commands", () => {
 
   it("reports unknown commands without throwing", () => {
     expect(runTerminalCommand("nope").output).toContain("nope");
+  });
+
+  it("treats inherited Object keys as unknown commands", () => {
+    // A plain `table[command]` lookup resolves `constructor`, `toString` and
+    // `__proto__` to inherited members. Those are truthy, so the command would
+    // render with `output === undefined` instead of the unknown-command reply.
+    for (const key of ["constructor", "toString", "__proto__", "valueOf", "hasOwnProperty"]) {
+      const result = runTerminalCommand(key);
+      // `runTerminalCommand` lowercases input, so the echoed token is too.
+      expect(result.output, key).toContain("Unknown command");
+      expect(result.output, key).toContain(key.toLowerCase());
+      expect(result.anchor, key).toBeNull();
+    }
+  });
+
+  it("renders every reply in the active locale", () => {
+    // The terminal used to hard-code English output, so /hi and /ml showed
+    // English replies under localized chrome. Each locale must now drive the
+    // templates, including the unknown-command path. Asserting against the
+    // dictionary's own template keeps this locale-agnostic.
+    for (const locale of SUPPORTED_LOCALES) {
+      const { responses } = getDictionary(locale).terminal;
+      expect(runTerminalCommand("help", responses).output, locale).toBe(
+        responses.help.replace("{commands}", terminalCommands.join("  ")),
+      );
+      expect(runTerminalCommand("nope", responses).output, locale).toBe(
+        responses.unknown.replace("{command}", "nope"),
+      );
+      // Placeholders must all resolve; a leftover `{token}` ships to users.
+      for (const command of terminalCommands) {
+        const output = runTerminalCommand(command, responses).output;
+        expect(output, `${locale}/${command}`).not.toMatch(/\{\w+\}/);
+      }
+      // A locale that silently fell back to the English source would satisfy
+      // every check above, so assert the templates are genuinely translated.
+      if (locale !== DEFAULT_LOCALE) {
+        expect(responses.help, locale).not.toBe(terminalResponses.help);
+        expect(responses.unknown, locale).not.toBe(terminalResponses.unknown);
+      }
+    }
+  });
+
+  it("keeps every locale's response keys in step with the English source", () => {
+    const expected = Object.keys(terminalResponses).sort();
+    for (const locale of SUPPORTED_LOCALES) {
+      expect(Object.keys(getDictionary(locale).terminal.responses).sort(), locale).toEqual(
+        expected,
+      );
+    }
   });
 });

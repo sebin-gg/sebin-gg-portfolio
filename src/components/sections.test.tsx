@@ -11,6 +11,8 @@ import { BlogEmptyState } from "@/components/blog-empty-state";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { communities, links, profile, projects, timeline } from "@/lib/site";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { SUPPORTED_LOCALES } from "@/lib/locale";
 
 describe("Hero", () => {
   it("shows the name, role and primary actions", () => {
@@ -111,6 +113,26 @@ describe("Communities", () => {
       expect(screen.getByText(community.name)).toBeInTheDocument();
     }
     expect(screen.getAllByText(/Project Coordinator/i).length).toBeGreaterThan(0);
+  });
+
+  it("pairs every translated role with its own community in every locale", () => {
+    // Asserting one English role leaves role-to-community drift invisible:
+    // rotating the dictionary array still renders, just against the wrong cards.
+    for (const locale of SUPPORTED_LOCALES) {
+      const dict = getDictionary(locale);
+      const { unmount } = render(<Communities locale={locale} />);
+      const cards = screen.getAllByRole("listitem");
+      expect(cards, `locale ${locale}`).toHaveLength(communities.length);
+      cards.forEach((card, index) => {
+        const community = communities[index];
+        expect(within(card).getByText(community.name), `${locale}/${community.name}`).toBeVisible();
+        expect(
+          within(card).getByText(dict.communities.roles[index]),
+          `${locale}/${community.name} role`,
+        ).toBeVisible();
+      });
+      unmount();
+    }
   });
 });
 
