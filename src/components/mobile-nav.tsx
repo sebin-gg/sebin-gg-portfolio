@@ -86,6 +86,7 @@ export function MobileNav({
             <li>
               <a
                 href={resumeUrl}
+                download="Sebin-Mathew-Resume.pdf"
                 onClick={close}
                 className="border-line/80 text-ink hover:border-accent hover:text-accent mt-1.5 flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm font-medium transition-colors"
               >

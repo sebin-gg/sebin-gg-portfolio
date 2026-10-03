@@ -34,6 +34,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.3,
     },
     {
+      // agent.json — full structured snapshot for AI agents (one fetch).
+      url: `${siteUrl}/agent.json`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.3,
+    },
+    {
+      // rss.xml — blog feed (empty until the first post ships).
+      url: `${siteUrl}/rss.xml`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.4,
+    },
+    {
       url: `${siteUrl}/resume.pdf`,
       lastModified: new Date(),
       changeFrequency: "monthly",

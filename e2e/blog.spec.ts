@@ -9,10 +9,14 @@ test.describe("blog route", () => {
     await expect(page.getByText(/OWASP Bootcamp 2025/i)).toBeVisible();
   });
 
-  test("offers a follow-on-GitHub action", async ({ page }) => {
+  test("offers follow and RSS actions", async ({ page }) => {
     await page.goto("/blog");
     const follow = page.getByRole("link", { name: "Follow on GitHub" });
     await expect(follow).toHaveAttribute("href", "https://github.com/sebin-gg");
+    await expect(page.getByRole("link", { name: "Subscribe via RSS" })).toHaveAttribute(
+      "href",
+      "/rss.xml",
+    );
   });
 
   test("exposes its own share tags with the blog URL", async ({ page }) => {

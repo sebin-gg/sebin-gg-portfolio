@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import OpengraphImage, { alt, contentType, size } from "@/app/opengraph-image";
+import OpengraphImage, { alt, contentType, size } from "@/app/(root)/opengraph-image";
 
 describe("opengraph-image", () => {
   it("exports LinkedIn-ready metadata (1200x630 png with alt)", () => {

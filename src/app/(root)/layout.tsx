@@ -69,21 +69,16 @@ export const metadata: Metadata = {
     title: siteMeta.title,
     description: siteMeta.description,
     siteName: `${profile.name} — portfolio`,
-    images: [
-      {
-        url: "/opengraph-image",
-        width: 1200,
-        height: 630,
-        alt: `${profile.name} — portfolio`,
-      },
-    ],
+    // No `images` here on purpose: the sibling `opengraph-image.tsx` file
+    // convention owns `og:image` and wins over configured metadata. Listing a
+    // URL here would be silently ignored and read as if it were live.
   },
   twitter: {
     card: "summary_large_image",
     title: siteMeta.title,
     description: siteMeta.description,
     creator: links.x.handle,
-    images: ["/opengraph-image"],
+    images: ["/og-image"],
   },
   icons: {
     icon: "/icon.svg",
@@ -158,6 +153,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     >
       <head>
         <link rel="llms.txt" href="/llms.txt" />
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title={`${profile.name} — blog`}
+          href="/rss.xml"
+        />
         <ThemeInit />
         <script
           type="application/ld+json"

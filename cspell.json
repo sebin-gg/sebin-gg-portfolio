@@ -18,6 +18,7 @@
     "pnpm-lock.yaml",
     ".agents/**",
     ".claude/**",
+    "tmp/**",
     ".git/**"
   ],
   "files": ["**/*.{md,mdx,ts,tsx,mjs,cjs,json,yml,yaml,sh,toml,txt,css}"],

@@ -75,6 +75,8 @@ export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) 
                 </a>
                 <a
                   href={resumeUrl}
+                  download="Sebin-Mathew-Resume.pdf"
+                  title={dict.hero.downloadResume}
                   className="border-line/80 bg-panel/90 text-ink hover:border-accent hover:text-accent inline-flex items-center justify-center gap-1.5 rounded-lg border px-3.5 py-2 text-xs font-semibold whitespace-nowrap shadow-xs backdrop-blur-xs transition-all sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
                 >
                   <DownloadIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
@@ -89,6 +91,7 @@ export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) 
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={dict.hero.githubProfile}
+                  title={`${links.github.label} — ${links.github.handle}`}
                   className="border-line/80 bg-panel/90 text-ink-soft hover:border-accent hover:text-accent flex h-9 w-9 items-center justify-center rounded-lg border shadow-xs backdrop-blur-xs transition-all sm:h-10 sm:w-10"
                 >
                   <GithubIcon className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -98,6 +101,7 @@ export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) 
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={dict.hero.linkedinProfile}
+                  title={`${links.linkedin.label} — ${links.linkedin.handle}`}
                   className="border-line/80 bg-panel/90 text-ink-soft hover:border-accent hover:text-accent flex h-9 w-9 items-center justify-center rounded-lg border shadow-xs backdrop-blur-xs transition-all sm:h-10 sm:w-10"
                 >
                   <LinkedinIcon className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -107,6 +111,7 @@ export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) 
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={dict.hero.xProfile}
+                  title={`${links.x.label} — ${links.x.handle}`}
                   className="border-line/80 bg-panel/90 text-ink-soft hover:border-accent hover:text-accent flex h-9 w-9 items-center justify-center rounded-lg border shadow-xs backdrop-blur-xs transition-all sm:h-10 sm:w-10"
                 >
                   <XIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />

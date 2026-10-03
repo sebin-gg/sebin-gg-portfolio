@@ -5,7 +5,7 @@ export const alt = `${profile.name} — portfolio`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OpengraphImage() {
+export function renderOpenGraphImage() {
   return new ImageResponse(
     <div
       style={{
@@ -42,4 +42,8 @@ export default function OpengraphImage() {
     </div>,
     { ...size },
   );
+}
+
+export default function OpengraphImage() {
+  return renderOpenGraphImage();
 }

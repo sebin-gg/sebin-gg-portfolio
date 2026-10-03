@@ -1,0 +1,92 @@
+"use client";
+
+import { useState } from "react";
+import { runTerminalCommand, terminalCommands } from "@/lib/site";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { DEFAULT_LOCALE, type Locale } from "@/lib/locale";
+import { SectionHeading } from "@/components/section-heading";
+
+type Entry = { command: string; output: string };
+
+function prefersReducedMotion() {
+  return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+}
+
+function scrollTargetIntoView(target: Element) {
+  target.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth" });
+}
+
+function scrollToAnchor(anchor: string | null) {
+  const target = anchor ? document.querySelector(anchor) : null;
+  if (target) scrollTargetIntoView(target);
+}
+
+/**
+ * Playground terminal. Tiny client island: commands resolve from a static
+ * table in site.ts, no network, no parsing.
+ */
+export function Terminal({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
+  const dict = getDictionary(locale);
+  const [entries, setEntries] = useState<Entry[]>([]);
+  const [value, setValue] = useState("");
+
+  function submit(event: React.FormEvent) {
+    event.preventDefault();
+    const { output, anchor, clear } = runTerminalCommand(value, dict.terminal.responses);
+    if (clear) setEntries([]);
+    else {
+      setEntries((prev) => [...prev.slice(-7), { command: value.trim() || "help", output }]);
+      scrollToAnchor(anchor);
+    }
+    setValue("");
+  }
+
+  return (
+    <section
+      id="terminal"
+      aria-labelledby="terminal-title"
+      className="mx-auto w-full max-w-7xl scroll-mt-20 px-4 py-6 sm:px-6 sm:py-8 lg:px-8 2xl:max-w-[90rem]"
+    >
+      <SectionHeading id="terminal-title" title={dict.terminal.title} lede={dict.terminal.lede} />
+      <div className="border-line/80 bg-panel/90 max-w-2xl rounded-xl border p-4 font-mono text-sm shadow-sm backdrop-blur-xs sm:p-5">
+        <div aria-live="polite" className="space-y-2">
+          {entries.length === 0 ? <p className="text-ink-faint">$ {dict.terminal.hint}</p> : null}
+          {entries.map((entry, index) => (
+            <div key={`${entry.command}-${index}`}>
+              <p className="text-ink">
+                <span aria-hidden="true" className="text-accent mr-2">
+                  $
+                </span>
+                {entry.command}
+              </p>
+              <p className="text-ink-soft mt-0.5">{entry.output}</p>
+            </div>
+          ))}
+        </div>
+        <form onSubmit={submit} className="mt-4 flex items-center gap-2">
+          <label htmlFor="terminal-input" className="sr-only">
+            {dict.terminal.label}
+          </label>
+          <span aria-hidden="true" className="text-accent">
+            $
+          </span>
+          <input
+            id="terminal-input"
+            value={value}
+            onChange={(event) => setValue(event.target.value)}
+            placeholder={terminalCommands.join("  ")}
+            autoComplete="off"
+            spellCheck={false}
+            className="bg-canvas border-line/80 text-ink placeholder:text-ink-faint focus:border-accent min-w-0 flex-1 rounded-lg border px-3 py-2 outline-none"
+          />
+          <button
+            type="submit"
+            className="bg-accent text-accent-ink hover:bg-accent-strong shrink-0 rounded-lg px-4 py-2 text-sm font-semibold transition-colors"
+          >
+            {dict.terminal.run}
+          </button>
+        </form>
+      </div>
+    </section>
+  );
+}

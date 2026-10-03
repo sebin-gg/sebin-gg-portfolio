@@ -45,7 +45,6 @@ docs/screenshots/*
 # local agent skills & tooling
 .agents
 .claude
-skills-lock.json
 
 # firecrawl local cache (untrusted web content, never commit)
 .firecrawl/

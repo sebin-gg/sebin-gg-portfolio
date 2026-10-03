@@ -32,6 +32,14 @@ const eslintConfig = defineConfig([
       complexity: ["error", { max: 4 }],
     },
   },
+  {
+    // AGENTS.md rule 5: no ASCII apostrophes/quotes in JSX text. Backstop the
+    // prose rule mechanically — typographic ’ and “” are fine, ASCII are not.
+    files: ["src/**/*.tsx"],
+    rules: {
+      "react/no-unescaped-entities": ["error", { forbid: [">", "}", '"', "'"] }],
+    },
+  },
 ]);
 
 export default eslintConfig;

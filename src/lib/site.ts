@@ -240,9 +240,151 @@ export const skills: { group: string; items: string[] }[] = [
 export const navItems = [
   { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
+  { label: "Communities", href: "#communities" },
   { label: "Skills", href: "#skills" },
+  { label: "Terminal", href: "#terminal" },
   { label: "Blog", href: "/blog" },
 ] as const;
+
+/**
+ * Communities and programs from Sebin’s work outside the classroom.
+ */
+export const communities = [
+  { name: "FOCES CEC", role: "Project Coordinator" },
+  { name: "CampusCrew", role: "Student Ambassador" },
+  { name: "OWASP Kerala", role: "Bootcamp trainee 2025" },
+  { name: "TinkerHub", role: "Hackathon winner, Useless Projects 2.0" },
+] as const;
+
+/**
+ * Recommendations from people Sebin has worked with. The section stays
+ * hidden until he has a real quote to share.
+ */
+export type Recommendation = {
+  quote: string;
+  name: string;
+  context: string;
+};
+
+export const recommendations: Recommendation[] = [];
+
+/**
+ * English terminal reply templates. Every other locale mirrors this shape in
+ * `src/lib/i18n/<locale>.json`; `fill()` substitutes the `{placeholder}` tokens.
+ * Command tokens themselves stay untranslated.
+ */
+export const terminalResponses = {
+  help: "Try: {commands}. Type a command and press Enter.",
+  whoami: "{name} — {role}, {location}.",
+  about: "{bio}",
+  projects: "Latest: {project} — {tagline}. {count} projects below.",
+  skills: "{items} — full toolbox below.",
+  experience: "Now: {title} at {org}. {count} stops below.",
+  resume: "Resume PDF is at {url} — header button downloads it too.",
+  contact: "Mail {email} — GitHub {handle}.",
+  unknown: "Unknown command: {command}. Type help.",
+} as const;
+
+export type TerminalResponseKey = keyof typeof terminalResponses;
+
+export type TerminalResponses = Record<TerminalResponseKey, string>;
+
+function fill(template: string, values: Record<string, string | number>): string {
+  return template.replace(/\{(\w+)\}/g, (match, key: string) =>
+    key in values ? String(values[key]) : match,
+  );
+}
+
+/**
+ * Commands the playground terminal understands. Static lookup table, no
+ * parsing cost.
+ */
+export const terminalCommands = [
+  "help",
+  "whoami",
+  "about",
+  "projects",
+  "skills",
+  "experience",
+  "resume",
+  "contact",
+  "clear",
+] as const;
+
+export type TerminalCommand = (typeof terminalCommands)[number];
+
+type TerminalResult = { output: string; anchor: string | null; clear?: boolean };
+
+function terminalTable(responses: TerminalResponses): Record<TerminalCommand, TerminalResult> {
+  return {
+    help: {
+      output: fill(responses.help, { commands: terminalCommands.join("  ") }),
+      anchor: null,
+    },
+    whoami: {
+      output: fill(responses.whoami, {
+        name: profile.name,
+        role: profile.role,
+        location: profile.location,
+      }),
+      anchor: "#top",
+    },
+    about: {
+      output: fill(responses.about, { bio: profile.bio[0] }),
+      anchor: "#top",
+    },
+    projects: {
+      output: fill(responses.projects, {
+        project: projects[0].name,
+        tagline: projects[0].tagline,
+        count: projects.length,
+      }),
+      anchor: "#projects",
+    },
+    skills: {
+      output: fill(responses.skills, { items: skills[0].items.slice(0, 4).join(", ") }),
+      anchor: "#skills",
+    },
+    experience: {
+      output: fill(responses.experience, {
+        title: timeline[0].title,
+        org: timeline[0].org,
+        count: timeline.length,
+      }),
+      anchor: "#experience",
+    },
+    resume: {
+      output: fill(responses.resume, { url: resumeUrl }),
+      anchor: null,
+    },
+    contact: {
+      output: fill(responses.contact, { email: profile.email, handle: links.github.handle }),
+      anchor: null,
+    },
+    clear: { output: "", anchor: null, clear: true },
+  };
+}
+
+function normalizeCommand(raw: string): string {
+  const command = raw.trim().toLowerCase();
+  return command === "" ? "help" : command;
+}
+
+function unknownResult(command: string, responses: TerminalResponses): TerminalResult {
+  return { output: fill(responses.unknown, { command }), anchor: null };
+}
+
+export function runTerminalCommand(
+  raw: string,
+  responses: TerminalResponses = terminalResponses,
+): TerminalResult {
+  const command = normalizeCommand(raw);
+  const table: Record<string, TerminalResult> = terminalTable(responses);
+  // `Object.hasOwn` keeps prototype keys (`constructor`, `toString`,
+  // `__proto__`) from resolving to inherited members, which would otherwise be
+  // truthy and surface as a result with `output === undefined`.
+  return Object.hasOwn(table, command) ? table[command] : unknownResult(command, responses);
+}
 
 const SITE_URL_FALLBACK = "https://sebin-gg.vercel.app";
 

@@ -1,22 +1,20 @@
 import type { Metadata } from "next";
 import { siteUrl } from "@/lib/site";
-import { SUPPORTED_LOCALES, hreflangAlternates } from "@/lib/locale";
+import { hreflangAlternates } from "@/lib/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { requireLocaleParam } from "@/app/[locale]/locale-params";
 import { PageChrome } from "@/components/page-chrome";
 import { Hero } from "@/components/hero";
 import { Experience } from "@/components/experience";
 import { Projects } from "@/components/projects";
+import { Communities } from "@/components/communities";
+import { Recommendations } from "@/components/recommendations";
 import { Skills } from "@/components/skills";
+import { Terminal } from "@/components/terminal";
 import { BlogCta } from "@/components/blog-cta";
 
 interface LocalePageProps {
   readonly params: Promise<{ locale: string }>;
-}
-
-/** Prerenders one static page per manifest locale (English excluded — it owns the root). */
-export function generateStaticParams(): { locale: string }[] {
-  return SUPPORTED_LOCALES.filter((locale) => locale !== "en").map((locale) => ({ locale }));
 }
 
 export async function generateMetadata({ params }: LocalePageProps): Promise<Metadata> {
@@ -34,6 +32,20 @@ export async function generateMetadata({ params }: LocalePageProps): Promise<Met
       url: `${siteUrl}/${locale}`,
       title: dict.meta.title,
       description: dict.meta.description,
+      images: [
+        {
+          url: "/og-image",
+          width: 1200,
+          height: 630,
+          alt: "Sebin Mathew — portfolio",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: dict.meta.title,
+      description: dict.meta.description,
+      images: [`${siteUrl}/og-image`],
     },
   };
 }
@@ -46,7 +58,10 @@ export default async function LocalizedHomePage({ params }: LocalePageProps) {
       <Hero locale={locale} />
       <Projects locale={locale} />
       <Experience locale={locale} />
+      <Communities locale={locale} />
+      <Recommendations locale={locale} />
       <Skills locale={locale} />
+      <Terminal locale={locale} />
       <BlogCta locale={locale} />
     </PageChrome>
   );

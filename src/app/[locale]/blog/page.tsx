@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { siteUrl } from "@/lib/site";
-import { SUPPORTED_LOCALES, hreflangAlternates } from "@/lib/locale";
+import { siteUrl, profile } from "@/lib/site";
+import { hreflangAlternates } from "@/lib/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { requireLocaleParam } from "@/app/[locale]/locale-params";
 import { PageChrome } from "@/components/page-chrome";
@@ -9,10 +9,6 @@ import { BlogEmptyState } from "@/components/blog-empty-state";
 
 interface LocalePageProps {
   readonly params: Promise<{ locale: string }>;
-}
-
-export function generateStaticParams(): { locale: string }[] {
-  return SUPPORTED_LOCALES.filter((locale) => locale !== "en").map((locale) => ({ locale }));
 }
 
 export async function generateMetadata({ params }: LocalePageProps): Promise<Metadata> {
@@ -30,6 +26,20 @@ export async function generateMetadata({ params }: LocalePageProps): Promise<Met
       url: `${siteUrl}/${locale}/blog`,
       title: dict.blog.title,
       description: dict.meta.blogDescription,
+      images: [
+        {
+          url: "/og-image",
+          width: 1200,
+          height: 630,
+          alt: "Sebin Mathew — portfolio",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${dict.blog.title} · ${profile.name}`,
+      description: dict.meta.blogDescription,
+      images: [`${siteUrl}/og-image`],
     },
   };
 }
