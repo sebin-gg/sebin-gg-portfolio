@@ -109,6 +109,13 @@ review` does not trigger a run; post
    threads remain. Auto-merge is disabled on this repo, so merge explicitly
    (`gh pr merge --merge`). Close superseded PRs (e.g. an older Dependabot group
    update replaced by a newer one) instead of fixing them.
+   Once CodeRabbit's hourly allowance runs out it stops emitting review states, so
+   `reviewDecision` can stay `CHANGES_REQUESTED` on a commit several pushes behind
+   HEAD even with every finding fixed. Do not dismiss such a review by hand — the
+   `Clear stale reviews` workflow re-asserts the gate from evidence and dismisses
+   only when the reviewed commit is behind HEAD, every CodeRabbit thread is
+   resolved, and every required check is green on the current head. Push normally
+   and let it run; if it reports what it is waiting on, fix that instead.
 10. **Prompt files are maintained like code.** No addition to `AGENTS.md` (or a skill
     summary) without naming the rule it replaces, folds into, or deletes — additions
     must not be purely additive. Rewrite and consolidate when rules overlap; review this
