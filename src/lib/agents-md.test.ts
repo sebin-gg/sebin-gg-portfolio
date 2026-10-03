@@ -60,15 +60,16 @@ describe("AGENTS.md invariants", () => {
     };
     expect(lock.skills.caveman.computedHash).toMatch(/^[0-9a-f]{64}$/);
     expect(lock.skills.unslop.computedHash).toMatch(/^[0-9a-f]{64}$/);
-    // Bind each hash prefix to its own skill and require a word boundary, so a
-    // swapped pair (caveman's prefix documented under unslop and vice versa)
-    // fails instead of passing on "both prefixes appear somewhere".
-    for (const [name, hash] of Object.entries(lock.skills)) {
-      const prefix = hash.computedHash.slice(0, 8);
-      const documented = new RegExp(`\\b${prefix}\\b[^\\n]*${name}|${name}[^\\n]*\\b${prefix}\\b`);
-      expect(agents, `${name} prefix ${prefix} must be documented with its name`).toMatch(
-        documented,
-      );
-    }
+    // `AGENTS.md` documents every hash on one line, so asserting each prefix
+    // merely "appears near its name" also passes when the two are swapped. Parse
+    // the actual `name` -> `prefix` pairs out of the line and compare the whole
+    // map, so a transposition fails.
+    const documented = new Map(
+      [...agents.matchAll(/`(\w+)`\s+([0-9a-f]{8})\b/g)].map(([, name, prefix]) => [name, prefix]),
+    );
+    const expected = new Map(
+      Object.entries(lock.skills).map(([name, hash]) => [name, hash.computedHash.slice(0, 8)]),
+    );
+    expect([...documented.entries()].sort()).toEqual([...expected.entries()].sort());
   });
 });
