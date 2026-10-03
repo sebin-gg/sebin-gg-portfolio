@@ -67,6 +67,8 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 4.5rem;
+  overflow-x: clip;
+  overscroll-behavior-y: none;
 }
 
 body {

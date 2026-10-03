@@ -91,5 +91,25 @@ it human-voiced, typographic apostrophes only.
 8. Tailwind v4: theme tokens are CSS vars in `globals.css` mapped via `@theme inline`; use the
    semantic utilities (`bg-canvas`, `text-ink-soft`, `border-line`, `text-accent`, …) rather than
    raw palette classes.
-9. **PR lifecycle (repeat until merge).** After opening a PR: post `@coderabbitai full review` as a PR comment, then wait for every enabled reviewer (CodeRabbit, SonarCloud, Sourcery, Greptile, DeepSource — unavailable bots never block). Address all findings in one batched push: fix valid ones (valid = reproducible in this repo or a real future bug); reply with a reason and resolve the rest. Re-trigger at most once per round of findings (free plan rate-limits); note on the PR when bots stop reviewing (credits exhausted). If the branch falls behind `main`, update it via the PR update-branch action and let CI re-run before merging. Merge only when every required check is green and no open threads remain. Auto-merge is disabled on this repo, so merge explicitly (`gh pr merge --merge`). Close superseded PRs (e.g. an older Dependabot group update replaced by a newer one) instead of fixing them. A PR whose diff changes a rule in this file must state the agent-behavior delta in the PR body — prompt changes are product changes.
-10. **Prompt files are maintained like code.** No addition to `AGENTS.md` (or a skill summary) without naming the rule it replaces, folds into, or deletes — additions must not be purely additive. Rewrite and consolidate when rules overlap; review this file end to end at least once a quarter (or fold into the `check:all` pre-PR ritual).
+9. **PR lifecycle (repeat until merge).** After opening a PR, post `@coderabbitai review`
+   as a PR comment and wait (it covers only what changed, so it costs less than
+   `full review` — reserve `full review` for after a rebase; post
+   `@coderabbitai resume` if reviews are paused). Then wait for every enabled
+   reviewer (CodeRabbit, SonarCloud, Sourcery, Greptile, DeepSource — unavailable bots never block). Address all findings in one batched push, then wait for the
+   next review round. A finding is valid = reproducible in this repo or a real future bug:
+   fix those; reply with a reason and resolve the rest. Re-trigger
+   at most once per round of findings — the free plan rate-limits reviews and
+   auto-pauses after 5 reviewed commits, so if credits are exhausted, note it on
+   the PR and move on. A PR is not done until CodeRabbit has reviewed, the
+   SonarCloud check is green, and all review threads are resolved. If the branch
+   falls behind `main`, update it via the PR update-branch action and let CI
+   re-run before merging. Merge only when every required check is green and no open
+   threads remain. Auto-merge is disabled on this repo, so merge explicitly
+   (`gh pr merge --merge`). Close superseded PRs (e.g. an older Dependabot group
+   update replaced by a newer one) instead of fixing them.
+10. **Prompt files are maintained like code.** No addition to `AGENTS.md` (or a skill
+    summary) without naming the rule it replaces, folds into, or deletes — additions
+    must not be purely additive. Rewrite and consolidate when rules overlap; review this
+    file end to end at least once a quarter (or fold into the `check:all` pre-PR
+    ritual). A PR whose diff changes a rule here must state the agent-behavior delta in
+    the PR body — prompt changes are product changes.
