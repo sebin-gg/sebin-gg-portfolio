@@ -1,0 +1,29 @@
+# Normalize line endings to LF in the repository and keep them LF on
+# checkout on every platform, including Windows.
+#
+# Without this, Git for Windows defaults core.autocrlf=true, which rewrites
+# LF -> CRLF on checkout. `.editorconfig` (end_of_line = lf) and prettier
+# (endOfLine: lf, the prettier default) both expect LF, so every checked-out
+# file reads as mis-formatted and `prettier --check .` fails on Windows only.
+# That is what broke the Windows CI leg. LF everywhere satisfies all three.
+* text=auto eol=lf
+
+# Windows scripts must be CRLF: cmd.exe and PowerShell both mis-parse LF-only
+# .cmd/.bat files.
+*.bat text eol=crlf
+*.cmd  text eol=crlf
+*.ps1  text eol=crlf
+
+# Binary assets — never touched by line-ending conversion.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.pdf  binary
+*.zip  binary
+*.gz   binary
+*.woff  binary
+*.woff2 binary
+*.mp3  binary
+*.mp4  binary
