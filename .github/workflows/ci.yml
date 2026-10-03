@@ -232,3 +232,102 @@ jobs:
 
       - name: Run terminal browser check
         run: pnpm check:terminal
+
+  # ---------------------------------------------------------------------------
+  # Cross-platform parity: Windows x64 and Windows ARM64.
+  #
+  # These are ADDITIVE on purpose. `main` is branch-protected with required
+  # status checks pinned to the literal job names "Lint, typecheck, format &
+  # unit tests" and "Production build". Converting those two jobs into a matrix
+  # would rename their check contexts to "Quality (windows-latest)" etc., the
+  # pinned contexts would never report, and the PR could never be merged.
+  # So the Ubuntu jobs above stay exactly as they were, and the extra
+  # platforms live in their own jobs here.
+  #
+  # windows-11-arm is real ARM64 hardware (Snapdragon), so it also catches
+  # 64-bit alignment/pointer assumptions a cross-build would miss.
+  # All standard runners -> free while the repo is public.
+  # ---------------------------------------------------------------------------
+  quality-crossplatform:
+    name: Quality (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+      actions: write
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, windows-11-arm]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Format check
+        run: pnpm format:check
+
+      - name: Unit tests
+        run: pnpm test:unit
+
+      - name: Record platform result
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "### \`${{ matrix.os }}\` — ${{ job.status }}"
+            echo "| key | value |"
+            echo "| --- | --- |"
+            echo "| arch | \`$(node -p 'process.arch')\` |"
+            echo "| platform | \`$(node -p 'process.platform')\` |"
+            echo "| node | \`$(node --version)\` |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  build-crossplatform:
+    name: Production build (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    needs: quality-crossplatform
+    permissions:
+      contents: read
+      actions: write
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, windows-11-arm]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      # `rm -rf` is not a cmd.exe builtin, hence the explicit bash shell.
+      - name: Prune build cache
+        shell: bash
+        run: rm -rf .next/cache
