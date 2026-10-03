@@ -112,7 +112,7 @@ test.describe("home page", () => {
     expect(await meta('meta[property="og:image:height"]')).toBe("630");
     expect(await meta('meta[property="og:image:alt"]')).toMatch(/Sebin Mathew/);
     expect(await meta('meta[name="twitter:card"]')).toBe("summary_large_image");
-    expect(await meta('meta[name="twitter:image"]')).toMatch(/opengraph-image/);
+    expect(await meta('meta[name="twitter:image"]')).toMatch(/og-image/);
   });
 
   test("social profile links point at the real profiles", async ({ page }) => {

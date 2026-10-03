@@ -25,6 +25,7 @@ function ResumeActions({
     <>
       <a
         href={resumeUrl}
+        download="Sebin-Mathew-Resume.pdf"
         aria-label={downloadLabel}
         title={downloadLabel}
         className="bg-accent text-accent-ink hover:bg-accent-strong shadow-accent/20 hidden h-10 w-10 items-center justify-center rounded-lg shadow-sm transition-all hover:shadow-md md:flex lg:hidden"
@@ -33,6 +34,7 @@ function ResumeActions({
       </a>
       <a
         href={resumeUrl}
+        download="Sebin-Mathew-Resume.pdf"
         className="bg-accent text-accent-ink hover:bg-accent-strong shadow-accent/20 hidden items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold shadow-sm transition-all hover:shadow-md lg:flex"
       >
         <DownloadIcon className="h-4 w-4" />

@@ -1,0 +1,15 @@
+import type { MetadataRoute } from "next";
+import { siteUrl } from "@/lib/site";
+
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: [
+      { userAgent: "*", allow: "/" },
+      {
+        userAgent: ["GPTBot", "ClaudeBot", "PerplexityBot", "Google-Extended"],
+        allow: ["/", "/llms.txt", "/agent.json"],
+      },
+    ],
+    sitemap: `${siteUrl}/sitemap.xml`,
+  };
+}

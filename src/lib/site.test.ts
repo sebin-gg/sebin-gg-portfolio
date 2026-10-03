@@ -1,14 +1,20 @@
 import { describe, expect, it } from "vitest";
 import {
+  communities,
   links,
   navItems,
   profile,
   projects,
+  recommendations,
   resolveSiteUrl,
   resumeUrl,
+  runTerminalCommand,
   siteUrl,
+  terminalCommands,
   timeline,
 } from "@/lib/site";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { SUPPORTED_LOCALES } from "@/lib/locale";
 
 describe("siteUrl", () => {
   it("resolves to an absolute https origin by default", () => {
@@ -64,7 +70,7 @@ describe("links", () => {
 
 describe("navigation", () => {
   it("anchors to sections that exist on the home page", () => {
-    const sectionIds = ["about", "experience", "projects", "skills"];
+    const sectionIds = ["top", "experience", "projects", "communities", "skills", "terminal"];
     const anchors = navItems.filter((item) => item.href.startsWith("#"));
     for (const item of anchors) {
       expect(sectionIds).toContain(item.href.slice(1));
@@ -112,5 +118,62 @@ describe("timeline", () => {
 describe("resume", () => {
   it("is served from a stable public path", () => {
     expect(resumeUrl).toBe("/resume.pdf");
+  });
+});
+
+describe("communities", () => {
+  it("lists real communities with a role each", () => {
+    expect(communities.length).toBeGreaterThanOrEqual(3);
+    for (const community of communities) {
+      expect(community.name).toBeTruthy();
+      expect(community.role).toBeTruthy();
+    }
+  });
+
+  it("keeps one dictionary role line per community", () => {
+    for (const locale of SUPPORTED_LOCALES) {
+      expect(getDictionary(locale).communities.roles).toHaveLength(communities.length);
+    }
+  });
+});
+
+describe("recommendations", () => {
+  it("ships no invented praise while the list is empty", () => {
+    expect(recommendations).toEqual([]);
+  });
+});
+
+describe("terminal commands", () => {
+  it("answers every advertised command with output (clear resets instead)", () => {
+    for (const command of terminalCommands) {
+      const result = runTerminalCommand(command);
+      if (command === "clear") {
+        expect(result.clear).toBe(true);
+        expect(result.output).toBe("");
+      } else {
+        expect(result.output.length).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  it("treats empty input as help and ignores case and padding", () => {
+    expect(runTerminalCommand("")).toEqual(runTerminalCommand("help"));
+    expect(runTerminalCommand("  WHOAMI  ")).toEqual(runTerminalCommand("whoami"));
+  });
+
+  it("only points anchors at sections that exist on the home page", () => {
+    const sectionIds = ["top", "experience", "projects", "skills"];
+    for (const command of terminalCommands) {
+      const { anchor } = runTerminalCommand(command);
+      if (anchor) expect(sectionIds).toContain(anchor.slice(1));
+    }
+  });
+
+  it("flags clear so the client can reset the transcript", () => {
+    expect(runTerminalCommand("clear").clear).toBe(true);
+  });
+
+  it("reports unknown commands without throwing", () => {
+    expect(runTerminalCommand("nope").output).toContain("nope");
   });
 });

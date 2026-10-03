@@ -27,7 +27,9 @@ export interface Dictionary {
     about: string;
     experience: string;
     projects: string;
+    communities: string;
     skills: string;
+    terminal: string;
     blog: string;
   };
   header: {
@@ -84,6 +86,22 @@ export interface Dictionary {
     groups: string[];
     translatedItems: Record<string, string[]>;
   };
+  communities: {
+    title: string;
+    lede: string;
+    /** Role line per entry of `communities` in site.ts, same order. */
+    roles: string[];
+  };
+  recommendations: {
+    title: string;
+  };
+  terminal: {
+    title: string;
+    lede: string;
+    hint: string;
+    label: string;
+    run: string;
+  };
   blogCta: {
     title: string;
     comingSoon: string;
@@ -98,6 +116,8 @@ export interface Dictionary {
     pipeline: string;
     planned: string[];
     followGithub: string;
+    rssFeed: string;
+    subscribeRss: string;
   };
   a11y: {
     title: string;

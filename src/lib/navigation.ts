@@ -92,12 +92,20 @@ export function resolveNavigation(
 
 /**
  * Builds route-aware nav items: hash anchors stay canonical, the blog route
- * gets a locale prefix, labels come from the locale dictionary.
+ * gets a locale prefix, labels come from the locale dictionary (looked up by
+ * href so inserting a nav item cannot shift labels onto the wrong link).
  */
 export function localizedNavItems(dict: Dictionary, locale: Locale): NavItemDef[] {
-  const labels = [dict.nav.experience, dict.nav.projects, dict.nav.skills, dict.nav.blog];
-  return navItems.map((item, index) => ({
-    label: labels[index] ?? item.label,
+  const labels: Record<string, string> = {
+    "#experience": dict.nav.experience,
+    "#projects": dict.nav.projects,
+    "#communities": dict.nav.communities,
+    "#skills": dict.nav.skills,
+    "#terminal": dict.nav.terminal,
+    "/blog": dict.nav.blog,
+  };
+  return navItems.map((item) => ({
+    label: labels[item.href] ?? item.label,
     href: item.href === "/blog" && locale !== DEFAULT_LOCALE ? `/${locale}/blog` : item.href,
   }));
 }

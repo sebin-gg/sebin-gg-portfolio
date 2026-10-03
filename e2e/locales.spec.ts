@@ -25,11 +25,18 @@ test.describe("localized routes", () => {
     await expect(page.locator("html")).toHaveAttribute("lang", "en");
   });
 
+  test("shared Open Graph image URL returns a PNG", async ({ request }) => {
+    const response = await request.get("/og-image");
+    expect(response.status()).toBe(200);
+    expect(response.headers()["content-type"]).toContain("image/png");
+  });
+
   for (const locale of LOCALES) {
     test(`${locale.code} home prerenders translated content`, async ({ page }) => {
       await page.goto(`/${locale.code}`);
       // Translated section heading proves the dictionary rendered server-side.
       await expect(page.getByRole("heading", { name: locale.dict.projects.title })).toBeVisible();
+      await expect(page.locator('meta[property="og:image"]')).toHaveCount(1);
       // Localized content region: the single root layout keeps html lang=en
       // (no multi-root layouts, so 404 handling stays native), while the
       // main/header/footer regions carry the locale lang per WCAG H58.
@@ -51,6 +58,13 @@ test.describe("localized routes", () => {
       await page.goto(`/${locale.code}/blog`);
       await expect(page.getByRole("main")).toHaveAttribute("lang", locale.code);
       await expect(page.getByRole("contentinfo")).toBeVisible();
+      await expect(page.locator('meta[property="og:image"]')).toHaveCount(1);
+    });
+
+    test(`${locale.code} accessibility page has localized metadata image`, async ({ page }) => {
+      await page.goto(`/${locale.code}/accessibility`);
+      await expect(page.getByRole("main")).toHaveAttribute("lang", locale.code);
+      await expect(page.locator('meta[property="og:image"]')).toHaveCount(1);
     });
   }
 
@@ -96,6 +110,12 @@ test.describe("localized routes", () => {
   test("unknown locale returns 404, not an English page", async ({ page }) => {
     const response = await page.goto("/xx");
     expect(response?.status()).toBe(404);
+    await expect(
+      page.getByRole("heading", { name: getDictionary("en").notFound.heading }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: getDictionary("en").notFound.backHome }),
+    ).toHaveAttribute("href", "/");
   });
 
   test("hreflang alternates cover every locale on the home page", async ({ page }) => {

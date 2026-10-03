@@ -240,9 +240,99 @@ export const skills: { group: string; items: string[] }[] = [
 export const navItems = [
   { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
+  { label: "Communities", href: "#communities" },
   { label: "Skills", href: "#skills" },
+  { label: "Terminal", href: "#terminal" },
   { label: "Blog", href: "/blog" },
 ] as const;
+
+/**
+ * Communities and programs from Sebin’s work outside the classroom.
+ */
+export const communities = [
+  { name: "FOCES CEC", role: "Project Coordinator" },
+  { name: "CampusCrew", role: "Student Ambassador" },
+  { name: "OWASP Kerala", role: "Bootcamp trainee 2025" },
+  { name: "TinkerHub", role: "Hackathon winner, Useless Projects 2.0" },
+] as const;
+
+/**
+ * Recommendations from people Sebin has worked with. The section stays
+ * hidden until he has a real quote to share.
+ */
+export type Recommendation = {
+  quote: string;
+  name: string;
+  context: string;
+};
+
+export const recommendations: Recommendation[] = [];
+
+/**
+ * Commands the playground terminal understands. Static lookup table, no
+ * parsing cost. Output strings stay English: they quote commands.
+ */
+export const terminalCommands = [
+  "help",
+  "whoami",
+  "about",
+  "projects",
+  "skills",
+  "experience",
+  "resume",
+  "contact",
+  "clear",
+] as const;
+
+export type TerminalCommand = (typeof terminalCommands)[number];
+
+type TerminalResult = { output: string; anchor: string | null; clear?: boolean };
+
+function terminalTable(): Record<TerminalCommand, TerminalResult> {
+  return {
+    help: {
+      output: `Try: ${terminalCommands.join("  ")}. Type a command and press Enter.`,
+      anchor: null,
+    },
+    whoami: {
+      output: `${profile.name} — ${profile.role}, ${profile.location}.`,
+      anchor: "#top",
+    },
+    about: {
+      output: `${profile.bio[0]}`,
+      anchor: "#top",
+    },
+    projects: {
+      output: `Latest: ${projects[0].name} — ${projects[0].tagline}. ${projects.length} projects below.`,
+      anchor: "#projects",
+    },
+    skills: {
+      output: `${skills[0].items.slice(0, 4).join(", ")} — full toolbox below.`,
+      anchor: "#skills",
+    },
+    experience: {
+      output: `Now: ${timeline[0].title} at ${timeline[0].org}. ${timeline.length} stops below.`,
+      anchor: "#experience",
+    },
+    resume: {
+      output: `Resume PDF is at ${resumeUrl} — header button downloads it too.`,
+      anchor: null,
+    },
+    contact: {
+      output: `Mail ${profile.email} — GitHub ${links.github.handle}.`,
+      anchor: null,
+    },
+    clear: { output: "", anchor: null, clear: true },
+  };
+}
+
+export function runTerminalCommand(raw: string): TerminalResult {
+  const command = raw.trim().toLowerCase();
+  if (command === "" || command === "help") return terminalTable().help;
+  const hit = (terminalTable() as Record<string, TerminalResult>)[command];
+  if (hit) return hit;
+  return { output: `Unknown command: ${command}. Type help.`, anchor: null };
+}
 
 const SITE_URL_FALLBACK = "https://sebin-gg.vercel.app";
 
