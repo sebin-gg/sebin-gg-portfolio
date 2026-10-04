@@ -2,6 +2,11 @@
 
 import { useEffect } from "react";
 
+// DeepSource's JS-0067 flags every module-scope declaration as a global
+// one, but this is an ES module: `export`/`import` makes these
+// module-scoped and they cannot leak into a global scope. Suppressed per
+// declaration below because the analyzer's exclude_patterns does not take
+// effect on this repository. Remove these if DeepSource ever fixes the rule.
 type ActiveSectionProps = {
   /** Section ids to watch, in document order. */
   ids: string[];
@@ -38,7 +43,7 @@ const DEFAULT_CLASS = "text-ink-soft";
  * Returns null before the first section is reached, i.e. while the reader is
  * still in the hero and has not arrived anywhere yet.
  */
-export function pickActiveSection(
+export function pickActiveSection( // skipcq: JS-0067
   sections: readonly SpySection[],
   readingLine: number,
   atPageBottom: boolean,
@@ -48,10 +53,12 @@ export function pickActiveSection(
 }
 
 function lastSectionId(sections: readonly SpySection[]): string | null {
+  // skipcq: JS-0067
   return sections.length > 0 ? sections[sections.length - 1].id : null;
 }
 
 function lastReachedId(sections: readonly SpySection[], readingLine: number): string | null {
+  // skipcq: JS-0067
   let reached: string | null = null;
   for (const section of sections) {
     if (section.top <= readingLine) reached = section.id;
@@ -60,6 +67,7 @@ function lastReachedId(sections: readonly SpySection[], readingLine: number): st
 }
 
 function applyActive(id: string) {
+  // skipcq: JS-0067
   for (const link of Array.from(document.querySelectorAll<HTMLAnchorElement>("a[data-spy]"))) {
     const isActive = link.dataset.spy === id;
     link.classList.toggle(ACTIVE_CLASS, isActive);
@@ -73,6 +81,7 @@ function applyActive(id: string) {
 }
 
 export function ActiveSection({ ids }: ActiveSectionProps) {
+  // skipcq: JS-0067
   useEffect(() => {
     if (typeof window === "undefined") return;
     const elements = ids

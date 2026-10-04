@@ -1,5 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
+  // DeepSource's JS-0067 flags every module-scope declaration as a global
+  // one, but this is an ES module: `export`/`import` makes these module-scoped
+  // and they cannot leak into a global scope. Suppressed per declaration below
+  // because the analyzer's exclude_patterns does not take effect on this
+  // repository. Remove these if DeepSource ever fixes the rule.
   DARK_SCHEME_QUERY,
   THEME_DARK_CLASS,
   THEME_STORAGE_KEY,
@@ -14,6 +19,7 @@ import {
 } from "@/lib/theme";
 
 function makeStorage(initial: Record<string, string> = {}) {
+  // skipcq: JS-0067
   const map = new Map(Object.entries(initial));
   return {
     getItem: vi.fn((key: string) => map.get(key) ?? null),
@@ -88,6 +94,7 @@ describe("htmlHasDarkClass", () => {
 
 /** Runs the init script with a stubbed matchMedia reporting `dark`. */
 function runInitWithDevice(dark: boolean) {
+  // skipcq: JS-0067
   const listeners = new Set<() => void>();
   vi.stubGlobal("matchMedia", (query: string) => ({
     matches: dark,
