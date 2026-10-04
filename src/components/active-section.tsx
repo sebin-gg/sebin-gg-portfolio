@@ -83,8 +83,6 @@ function applyActive(id: string) {
 
 // skipcq: JS-0067
 export function ActiveSection({ ids }: ActiveSectionProps) {
-  // skipcq: JS-0045 — a useEffect callback legitimately returns its cleanup
-  // function; the rule expects a plain void return here.
   useEffect(() => {
     if (typeof window === "undefined") return;
     const elements = ids
@@ -115,6 +113,8 @@ export function ActiveSection({ ids }: ActiveSectionProps) {
     schedule();
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule, { passive: true });
+    // skipcq: JS-0045 — an effect callback legitimately returns its cleanup
+    // function; the rule expects a plain void return here.
     return () => {
       if (frame !== 0) window.cancelAnimationFrame(frame);
       window.removeEventListener("scroll", schedule);
