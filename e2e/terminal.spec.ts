@@ -85,6 +85,21 @@ test.describe("playground terminal", () => {
       .toBeGreaterThan(0.99);
   });
 
+  test("runs a command from a chip without errors", async ({ page }) => {
+    // Covers the chips that the exhaustive tour in home.spec.ts skips: several
+    // in a row is exactly the interaction that made that tour unstable.
+    const errors: string[] = [];
+    page.on("pageerror", (err) => errors.push(err.message));
+    await page.goto("/");
+    await page.locator("#terminal").scrollIntoViewIfNeeded();
+
+    for (const command of ["whoami", "skills", "contact"]) {
+      await page.getByRole("button", { name: `Run command: ${command}`, exact: true }).click();
+    }
+    await expect(page.locator(ROW)).toHaveCount(3);
+    expect(errors).toEqual([]);
+  });
+
   test("does not animate when reduced motion is preferred", async ({ browser }) => {
     const context = await browser.newContext({ reducedMotion: "reduce" });
     const page = await context.newPage();
