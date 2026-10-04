@@ -18,8 +18,8 @@ import {
   toggleTheme,
 } from "@/lib/theme";
 
+// skipcq: JS-0067
 function makeStorage(initial: Record<string, string> = {}) {
-  // skipcq: JS-0067
   const map = new Map(Object.entries(initial));
   return {
     getItem: vi.fn((key: string) => map.get(key) ?? null),
@@ -93,8 +93,8 @@ describe("htmlHasDarkClass", () => {
 });
 
 /** Runs the init script with a stubbed matchMedia reporting `dark`. */
+// skipcq: JS-0067
 function runInitWithDevice(dark: boolean) {
-  // skipcq: JS-0067
   const listeners = new Set<() => void>();
   vi.stubGlobal("matchMedia", (query: string) => ({
     matches: dark,

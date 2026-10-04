@@ -4,19 +4,23 @@
 // `skipcq` because the analyzer's exclude_patterns does not take effect on this
 // repository. Drop them if DeepSource ever fixes the rule.
 
-export const THEME_STORAGE_KEY = "theme"; // skipcq: JS-0067
-export const THEME_DARK_CLASS = "dark"; // skipcq: JS-0067
-export const THEME_EVENT = "themechange"; // skipcq: JS-0067
+// skipcq: JS-0067
+export const THEME_STORAGE_KEY = "theme";
+// skipcq: JS-0067
+export const THEME_DARK_CLASS = "dark";
+// skipcq: JS-0067
+export const THEME_EVENT = "themechange";
 
 // because the analyzer's exclude_patterns does not take effect on this
 /** Media query carrying the device's own light/dark preference. */
-export const DARK_SCHEME_QUERY = "(prefers-color-scheme: dark)"; // skipcq: JS-0067
+// skipcq: JS-0067
+export const DARK_SCHEME_QUERY = "(prefers-color-scheme: dark)";
 
 export type Theme = "dark" | "light";
 
 /** Reads the stored preference; returns null when nothing is stored. */
+// skipcq: JS-0067
 export function storedTheme(storage: Pick<Storage, "getItem">): Theme | null {
-  // skipcq: JS-0067
   try {
     const value = storage.getItem(THEME_STORAGE_KEY);
     return value === "dark" || value === "light" ? value : null;
@@ -26,8 +30,8 @@ export function storedTheme(storage: Pick<Storage, "getItem">): Theme | null {
 }
 
 /** Runs a media query defensively, for environments without matchMedia. */
+// skipcq: JS-0067
 function queryMatches(win: Pick<Window, "matchMedia"> | null, query: string): boolean {
-  // skipcq: JS-0067
   const matchMedia = win?.matchMedia;
   if (typeof matchMedia !== "function") return false;
   try {
@@ -42,8 +46,8 @@ function queryMatches(win: Pick<Window, "matchMedia"> | null, query: string): bo
  * without matchMedia (jsdom stubs, very old browsers): those are treated as
  * light rather than throwing during the pre-paint script.
  */
+// skipcq: JS-0067
 export function prefersDarkScheme(win: Pick<Window, "matchMedia"> | null = globalThis.window) {
-  // skipcq: JS-0067
   return queryMatches(win, DARK_SCHEME_QUERY);
 }
 
@@ -52,7 +56,8 @@ export function prefersDarkScheme(win: Pick<Window, "matchMedia"> | null = globa
  * preference decides, so first-time visitors on a light-mode phone get the
  * light theme instead of being forced onto the dark default.
  */
-export function resolveThemeIsDark( // skipcq: JS-0067
+// skipcq: JS-0067
+export function resolveThemeIsDark(
   stored: Theme | null,
   systemDark = prefersDarkScheme(),
 ): boolean {
@@ -62,14 +67,14 @@ export function resolveThemeIsDark( // skipcq: JS-0067
 }
 
 /** Whether the <html> element currently carries the dark class. */
+// skipcq: JS-0067
 export function htmlHasDarkClass(doc: { documentElement: { classList: DOMTokenList } }): boolean {
-  // skipcq: JS-0067
   return doc.documentElement.classList.contains(THEME_DARK_CLASS);
 }
 
 /** Subscribes to theme change events on the window. */
+// skipcq: JS-0067
 export function subscribeTheme(onStoreChange: () => void): () => void {
-  // skipcq: JS-0067
   if (typeof window === "undefined") {
     return () => {};
   }
@@ -78,16 +83,16 @@ export function subscribeTheme(onStoreChange: () => void): () => void {
 }
 
 /** Reads the current theme snapshot from document. */
+// skipcq: JS-0067
 export function getThemeSnapshot(): boolean {
-  // skipcq: JS-0067
   if (typeof document === "undefined") {
     return false;
   }
   return htmlHasDarkClass(document);
 }
 
+// skipcq: JS-0067
 function persistThemePreference(dark: boolean): void {
-  // skipcq: JS-0067
   try {
     localStorage.setItem(THEME_STORAGE_KEY, dark ? "dark" : "light");
   } catch {
@@ -95,16 +100,16 @@ function persistThemePreference(dark: boolean): void {
   }
 }
 
+// skipcq: JS-0067
 function dispatchThemeEvent(): void {
-  // skipcq: JS-0067
   if (typeof window !== "undefined") {
     window.dispatchEvent(new Event(THEME_EVENT));
   }
 }
 
 /** Toggles between light and dark, updating DOM, localStorage and dispatching event. */
+// skipcq: JS-0067
 export function toggleTheme(): boolean {
-  // skipcq: JS-0067
   if (typeof document === "undefined") {
     return false;
   }
@@ -126,8 +131,8 @@ export function toggleTheme(): boolean {
  * The logic is duplicated from resolveThemeIsDark/storedTheme on purpose: it
  * cannot import them before the bundle loads.
  */
+// skipcq: JS-0067
 export function themeInitScriptSource(): string {
-  // skipcq: JS-0067
   const key = JSON.stringify(THEME_STORAGE_KEY);
   const darkClass = JSON.stringify(THEME_DARK_CLASS);
   const query = JSON.stringify(DARK_SCHEME_QUERY);

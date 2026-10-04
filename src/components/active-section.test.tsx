@@ -8,13 +8,13 @@ import { ActiveSection, pickActiveSection } from "@/components/active-section";
 // because the analyzer's exclude_patterns does not take effect on this
 // repository. Remove these if DeepSource ever fixes the rule.
 
+// skipcq: JS-0067
 function spyLink(id: string): HTMLAnchorElement {
-  // skipcq: JS-0067
   return document.querySelector(`a[data-spy="${id}"]`) as HTMLAnchorElement;
 }
 
+// skipcq: JS-0067
 function expectLinkActive(id: string, active: boolean): void {
-  // skipcq: JS-0067
   const link = spyLink(id);
   expect(link.classList.contains("text-accent")).toBe(active);
   expect(link.getAttribute("aria-current")).toBe(active ? "true" : null);
@@ -138,8 +138,9 @@ describe("ActiveSection", () => {
       return nextFrameId++;
     });
     // Frames are never left pending after a flush, so cancellation is a no-op.
-    // Written as a named no-op rather than `() => {}` to keep it non-empty.
-    vi.stubGlobal("cancelAnimationFrame", (handle: number) => void handle);
+    // Returns undefined explicitly rather than using an empty body or `void`,
+    // both of which trip DeepSource (JS-0321 / JS-0098).
+    vi.stubGlobal("cancelAnimationFrame", () => undefined);
     window.scrollY = 0;
     window.innerHeight = 1000;
     // Reading line is 30% of 1000px = 300. Start with every section below it,

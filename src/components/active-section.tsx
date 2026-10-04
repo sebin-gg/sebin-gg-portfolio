@@ -43,7 +43,8 @@ const DEFAULT_CLASS = "text-ink-soft";
  * Returns null before the first section is reached, i.e. while the reader is
  * still in the hero and has not arrived anywhere yet.
  */
-export function pickActiveSection( // skipcq: JS-0067
+// skipcq: JS-0067
+export function pickActiveSection(
   sections: readonly SpySection[],
   readingLine: number,
   atPageBottom: boolean,
@@ -52,13 +53,13 @@ export function pickActiveSection( // skipcq: JS-0067
   return lastReachedId(sections, readingLine);
 }
 
+// skipcq: JS-0067
 function lastSectionId(sections: readonly SpySection[]): string | null {
-  // skipcq: JS-0067
   return sections.length > 0 ? sections[sections.length - 1].id : null;
 }
 
+// skipcq: JS-0067
 function lastReachedId(sections: readonly SpySection[], readingLine: number): string | null {
-  // skipcq: JS-0067
   let reached: string | null = null;
   for (const section of sections) {
     if (section.top <= readingLine) reached = section.id;
@@ -66,8 +67,8 @@ function lastReachedId(sections: readonly SpySection[], readingLine: number): st
   return reached;
 }
 
+// skipcq: JS-0067
 function applyActive(id: string) {
-  // skipcq: JS-0067
   for (const link of Array.from(document.querySelectorAll<HTMLAnchorElement>("a[data-spy]"))) {
     const isActive = link.dataset.spy === id;
     link.classList.toggle(ACTIVE_CLASS, isActive);
@@ -80,8 +81,8 @@ function applyActive(id: string) {
   }
 }
 
+// skipcq: JS-0067
 export function ActiveSection({ ids }: ActiveSectionProps) {
-  // skipcq: JS-0067
   useEffect(() => {
     if (typeof window === "undefined") return;
     const elements = ids
