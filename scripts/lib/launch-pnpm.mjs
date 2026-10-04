@@ -1,6 +1,6 @@
 import { spawnSync, spawn } from "node:child_process";
 import { existsSync, readFileSync, realpathSync, statSync } from "node:fs";
-import { resolve, win32 } from "node:path";
+import { dirname, isAbsolute, join, resolve, win32 } from "node:path";
 
 /**
  * Spawn the repo's package manager without PATH lookup (Sonar S4036).
@@ -45,16 +45,54 @@ function resolveSymlinkTarget(p) {
   }
 }
 
-export function resolveWindowsShimTarget(shim, contents = readFileSync(shim, "utf8")) {
-  // npm's Windows command shim invokes the real entrypoint as the quoted
-  // %dp0%-relative argument immediately before %*. Do not assume a sibling
-  // .cjs exists: pnpm's shim can point into its versioned global install.
+/**
+ * Find pnpm's real JavaScript entrypoint starting from its command shim.
+ *
+ * The shim's `%dp0%` argument is version- and install-layout dependent, so
+ * parse it first and, when that path is not on disk, walk up from the shim
+ * looking for the installed `pnpm` package's own bin entry. Every candidate
+ * is checked with existsSync/isFile, so a stale or spoofed shim still fails
+ * closed rather than falling back to a PATH search.
+ *
+ * Parsing the shim text always uses win32 semantics so the result does not
+ * depend on the host; the filesystem walk uses native helpers, and only ever
+ * runs on Windows where those already are win32 semantics.
+ */
+export function resolveWindowsShimTarget(shim, contents) {
+  const parsed = shimTargetFromContents(shim, contents);
+  if (parsed && isAbsolute(parsed) && commandExists(parsed)) return parsed;
+  return findPnpmEntryFromShim(shim);
+}
+
+/** The quoted `%dp0%`-relative argument npm's cmd-shim invokes just before `%*`. */
+export function shimTargetFromContents(shim, contents = readFileSync(shim, "utf8")) {
   const invocation = contents
     .split(/\r?\n/)
-    .find((line) => line.includes("%*") && /"%dp0%[\\/][^"]+"\s+%\*/i.test(line));
-  const match = invocation?.match(/"%dp0%[\\/]([^"]+)"\s+%\*/i);
+    .find((line) => line.includes("%*") && /"%dp0%[\\/][^"]+"\s+%*/i.test(line));
+  const match = invocation?.match(/"%dp0%[\\/]([^"]+)"\s+%*/i);
   if (!match) return "";
   return win32.resolve(win32.dirname(shim), match[1].replaceAll("/", "\\"));
+}
+
+// pnpm ships a .cjs or .mjs entrypoint depending on version.
+const PNPM_ENTRYPOINTS = ["bin/pnpm.cjs", "bin/pnpm.mjs", "bin/pnpm.js"];
+
+/**
+ * Walk up from the shim's directory for an installed `pnpm` package. Bounded so
+ * a symlinked or unusual layout cannot turn this into an unbounded scan.
+ */
+function findPnpmEntryFromShim(shim) {
+  let dir = dirname(shim);
+  for (let depth = 0; depth < 8; depth += 1) {
+    for (const relative of PNPM_ENTRYPOINTS) {
+      const candidate = join(dir, "node_modules", "pnpm", ...relative.split("/"));
+      if (isAbsolute(candidate) && commandExists(candidate)) return candidate;
+    }
+    const parent = dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  return "";
 }
 
 function probePATHCandidates() {
@@ -110,7 +148,7 @@ export function resolvePnpmBin() {
       // directly so spawn never needs shell:true.
       const found = windowsCandidate(candidates);
       const target = /\.exe$/i.test(found) ? found : resolveWindowsShimTarget(found);
-      if (win32.isAbsolute(target) && commandExists(target)) {
+      if (isAbsolute(target) && commandExists(target)) {
         if (/\.(?:c|m)?js$/i.test(target)) {
           return { command: process.execPath, prefixArgs: [target] };
         }

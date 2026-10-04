@@ -1,5 +1,6 @@
 import { spawnSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, isAbsolute, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
@@ -35,14 +36,39 @@ describe("scripts/lib/launch-pnpm.mjs", () => {
     expect(result.stdout.trim().length).toBeGreaterThan(0);
   }, 30_000);
 
-  it("resolves pnpm's versioned Windows command-shim target", async () => {
-    const { resolveWindowsShimTarget } = await import(HELPER);
+  it("parses the %dp0% entry argument out of a Windows command shim", async () => {
+    const { shimTargetFromContents } = await import(HELPER);
     const shim = "C:\\actions\\setup-pnpm\\node_modules\\.bin\\pnpm.CMD";
-    const actual = resolveWindowsShimTarget(
+    const parsed = shimTargetFromContents(
       shim,
       '@ECHO off\r\n"%dp0%\\..\\pnpm\\bin\\pnpm.mjs" %*\r\n',
     );
-    expect(actual).toBe("C:\\actions\\setup-pnpm\\node_modules\\pnpm\\bin\\pnpm.mjs");
+    // win32 semantics always, so this assertion holds on any dev machine.
+    expect(parsed).toBe("C:\\actions\\setup-pnpm\\node_modules\\pnpm\\bin\\pnpm.mjs");
+    expect(shimTargetFromContents(shim, "@ECHO off\r\n")).toBe("");
+  });
+
+  it("falls back to the installed pnpm package when the shim target is stale", async () => {
+    const { resolveWindowsShimTarget: resolveTarget } = await import(HELPER);
+    // Reproduce the runner layout: PNPM_HOME/bin/pnpm.CMD whose %dp0% argument
+    // points at a path that does not exist, with the real pnpm package living
+    // further up the tree. The resolver must find the on-disk entrypoint.
+    const root = mkdtempSync(join(tmpdir(), "launch-pnpm-"));
+    const binDir = join(root, "node_modules", ".bin", "bin");
+    const pkgDir = join(root, "node_modules", "pnpm", "bin");
+    try {
+      mkdirSync(binDir, { recursive: true });
+      mkdirSync(pkgDir, { recursive: true });
+      const entry = join(pkgDir, "pnpm.cjs");
+      writeFileSync(entry, "// pnpm\n");
+      writeFileSync(join(binDir, "pnpm.CMD"), '@ECHO off\r\n"%dp0%\\..\\missing\\pnpm.cjs" %*\r\n');
+      const shim = join(binDir, "pnpm.CMD");
+      expect(resolveTarget(shim, undefined)).not.toBe("");
+      expect(existsSync(resolveTarget(shim, undefined))).toBe(true);
+      expect(resolveTarget(shim, undefined)).toContain("pnpm.cjs");
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
   });
 
   it("skips the extensionless sh shim that cmd's where lists first", async () => {
