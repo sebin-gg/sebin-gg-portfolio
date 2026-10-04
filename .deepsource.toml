@@ -16,11 +16,10 @@ version = 1
 # these globs in the `**/path/**` form.
 #
 # `scripts/` holds Node CLI tooling that this analyzer parses with
-# `sourceType: script` and then rejects every `import`/`export` (JS-0833:
-# "'import' and 'export' may appear only with 'sourceType: module'"). A file it
-# cannot parse yields no findings anyway, so excluding the tree removes the
-# false alarm without losing coverage. Those scripts stay covered by ESLint,
-# `node --check`, CodeQL, and SonarCloud.
+# `sourceType: script` and then rejects every `import`/`export` (JS-0833).
+# `exclude_patterns` does not suppress a parse error, so the affected files
+# silence it inline with DeepSource's own `skipcq` keyword instead. Those
+# scripts stay covered by ESLint, `node --check`, CodeQL, and SonarCloud.
 #
 # Test sources get the same treatment: a top-level `function` in a Vitest spec
 # is module-scoped, so JS-0067 ("unexpected function declaration in the global
@@ -30,7 +29,6 @@ exclude_patterns = [
   "**/src/app/**",
   "**/src/components/**",
   "**/src/**/*.test.*",
-  "**/scripts/**",
 ]
 
 [[analyzers]]

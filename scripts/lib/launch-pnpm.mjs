@@ -1,4 +1,4 @@
-import { spawnSync, spawn } from "node:child_process";
+import { spawnSync, spawn } from "node:child_process"; // skipcq: JS-0833 — ESM parsed with sourceType: script
 import { existsSync, readFileSync, realpathSync, statSync } from "node:fs";
 import { dirname, isAbsolute, join, resolve, win32 } from "node:path";
 
