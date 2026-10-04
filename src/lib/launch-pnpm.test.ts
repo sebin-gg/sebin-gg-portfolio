@@ -1,11 +1,16 @@
 import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { dirname, isAbsolute, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 const SCRIPTS_DIR = resolve(dirname(fileURLToPath(import.meta.url)), "../../scripts");
 const HELPER = join(SCRIPTS_DIR, "lib", "launch-pnpm.mjs");
+
+function getInvocation(target: string | { command: string; prefixArgs?: string[] }) {
+  if (typeof target === "string") return { command: target, args: [] };
+  return { command: target.command, args: target.prefixArgs ?? [] };
+}
 
 /**
  * S4036 contract: script-launched package-manager commands must never be
@@ -13,20 +18,32 @@ const HELPER = join(SCRIPTS_DIR, "lib", "launch-pnpm.mjs");
  * and every script spawn site consults the helper instead of naming `pnpm`.
  */
 describe("scripts/lib/launch-pnpm.mjs", () => {
-  it("resolves an absolute executable path (never a bare command name)", async () => {
-    const { resolvePnpmBin } = await import(HELPER);
-    const bin = resolvePnpmBin();
-    expect(bin).not.toBe("pnpm");
-    expect(bin.endsWith("pnpm.mjs") || bin.endsWith("pnpm.js") || bin.endsWith("pnpm")).toBe(true);
-    if (process.platform !== "win32") expect(bin.startsWith("/")).toBe(true);
+  it("resolves an absolute executable target (never a bare command name)", async () => {
+    const mod = await import(HELPER);
+    const { command } = getInvocation(mod.resolvePnpmBin());
+    expect(command).not.toBe("pnpm");
+    expect(isAbsolute(command)).toBe(true);
   });
 
-  it("the resolved entrypoint actually executes (exit 0 on --version)", async () => {
-    const { resolvePnpmBin } = await import(HELPER);
-    const result = spawnSync(resolvePnpmBin(), ["--version"], { encoding: "utf8" });
+  it("the resolved target actually executes (exit 0 on --version)", async () => {
+    const mod = await import(HELPER);
+    const { command, args } = getInvocation(mod.resolvePnpmBin());
+    const result = spawnSync(command, [...args, "--version"], {
+      encoding: "utf8",
+    });
     expect(result.status).toBe(0);
     expect(result.stdout.trim().length).toBeGreaterThan(0);
   }, 30_000);
+
+  it("resolves pnpm's versioned Windows command-shim target", async () => {
+    const { resolveWindowsShimTarget } = await import(HELPER);
+    const shim = "C:\\actions\\setup-pnpm\\node_modules\\.bin\\pnpm.CMD";
+    const actual = resolveWindowsShimTarget(
+      shim,
+      '@ECHO off\r\n"%dp0%\\..\\pnpm\\bin\\pnpm.mjs" %*\r\n',
+    );
+    expect(actual).toBe("C:\\actions\\setup-pnpm\\node_modules\\pnpm\\bin\\pnpm.mjs");
+  });
 
   it("throws a clear error before spawning when no pnpm entrypoint resolves", async () => {
     // Empty PATH + no corepack/user-agent env leaves nothing verifiable.

@@ -1,7 +1,6 @@
 import { spawnSync, spawn } from "node:child_process";
-import { existsSync, realpathSync, statSync } from "node:fs";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { existsSync, readFileSync, realpathSync, statSync } from "node:fs";
+import { resolve, win32 } from "node:path";
 
 /**
  * Spawn the repo's package manager without PATH lookup (Sonar S4036).
@@ -27,7 +26,6 @@ import { fileURLToPath } from "node:url";
  * clear error instead of falling through to a PATH search.
  */
 
-const here = dirname(fileURLToPath(import.meta.url));
 const isWindows = process.platform === "win32";
 
 function commandExists(p) {
@@ -44,6 +42,18 @@ function resolveSymlinkTarget(p) {
   } catch {
     return p;
   }
+}
+
+export function resolveWindowsShimTarget(shim, contents = readFileSync(shim, "utf8")) {
+  // npm's Windows command shim invokes the real entrypoint as the quoted
+  // %dp0%-relative argument immediately before %*. Do not assume a sibling
+  // .cjs exists: pnpm's shim can point into its versioned global install.
+  const invocation = contents
+    .split(/\r?\n/)
+    .find((line) => line.includes("%*") && /"%dp0%[\\/][^"]+"\s+%\*/i.test(line));
+  const match = invocation?.match(/"%dp0%[\\/]([^"]+)"\s+%\*/i);
+  if (!match) return "";
+  return win32.resolve(win32.dirname(shim), match[1].replaceAll("/", "\\"));
 }
 
 function probePATHLookup() {
@@ -70,15 +80,31 @@ export function resolvePnpmBin() {
     // Corepack keeps one directory per package-manager version; the pnpm
     // entry point is the absolute file inside it.
     const entry = resolve(corepackRoot, `pnpm/${version}/lib/pnpm.js`);
-    if (commandExists(entry)) return entry;
+    if (commandExists(entry)) {
+      return isWindows ? { command: process.execPath, prefixArgs: [entry] } : entry;
+    }
     errors.push(`corepack entry missing: ${entry}`);
   }
   try {
     const found = probePATHLookup();
     if (found) {
-      const absolute = isWindows ? found : found.startsWith("/") ? resolveSymlinkTarget(found) : "";
-      if (commandExists(absolute)) return absolute;
-      errors.push(`PATH entry failed verification: ${found}`);
+      if (isWindows) {
+        // cmd's `where` prints the wrapper, not necessarily its versioned
+        // target. Resolve the wrapper's fixed entrypoint and launch JS with
+        // Node directly so spawn never needs shell:true.
+        const target = /\.exe$/i.test(found) ? found : resolveWindowsShimTarget(found);
+        if (win32.isAbsolute(target) && commandExists(target)) {
+          if (/\.(?:c|m)?js$/i.test(target)) {
+            return { command: process.execPath, prefixArgs: [target] };
+          }
+          if (/\.exe$/i.test(target)) return target;
+        }
+        errors.push(`PATH entry failed verification: ${found}`);
+      } else {
+        const absolute = found.startsWith("/") ? resolveSymlinkTarget(found) : "";
+        if (commandExists(absolute)) return absolute;
+        errors.push(`PATH entry failed verification: ${found}`);
+      }
     } else {
       errors.push("PATH lookup found no pnpm");
     }
@@ -90,12 +116,24 @@ export function resolvePnpmBin() {
   );
 }
 
+/**
+ * Split the resolved target into an executable plus fixed prefix args so
+ * both platforms share one call shape: string on POSIX, { command,
+ * prefixArgs } on Windows where Node itself must launch the verified pnpm JS entrypoint.
+ */
+function invocation(target) {
+  if (typeof target === "string") return { command: target, prefixArgs: [] };
+  return target;
+}
+
 /** Async `spawn(pnpm, args, options)` with the command pinned to an absolute path. */
 export function spawnPnpm(args, options) {
-  return spawn(resolvePnpmBin(), args, options);
+  const { command, prefixArgs } = invocation(resolvePnpmBin());
+  return spawn(command, [...prefixArgs, ...args], options);
 }
 
 /** Sync `spawnSync(pnpm, args, options)` with the command pinned to an absolute path. */
 export function spawnSyncPnpm(args, options) {
-  return spawnSync(resolvePnpmBin(), args, options);
+  const { command, prefixArgs } = invocation(resolvePnpmBin());
+  return spawnSync(command, [...prefixArgs, ...args], options);
 }
