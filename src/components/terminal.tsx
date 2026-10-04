@@ -74,7 +74,7 @@ export function Terminal({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale
             <div
               key={entry.id}
               style={fadeStyle(index)}
-              className="motion-safe:animate-[terminal-fade_320ms_ease-out] motion-safe:[animation-delay:var(--fade-delay)]"
+              className="motion-safe:animate-[terminal-fade_320ms_ease-out_both] motion-safe:[animation-delay:var(--fade-delay)]"
             >
               <p className="text-ink">
                 <span aria-hidden="true" className="text-accent mr-2">
