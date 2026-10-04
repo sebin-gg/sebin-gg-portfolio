@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: LocalePageProps): Promise<Met
           url: "/og-image",
           width: 1200,
           height: 630,
-          alt: "Sebin Mathew — portfolio",
+          alt: dict.a11y.title,
         },
       ],
     },

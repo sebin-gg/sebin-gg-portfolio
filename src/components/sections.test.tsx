@@ -188,6 +188,41 @@ describe("Terminal", () => {
     fireEvent.click(screen.getByRole("button", { name: "Run" }));
     expect(screen.getByText(/type help and press Enter/i)).toBeInTheDocument();
   });
+
+  it("centers the terminal panel in the section", () => {
+    const { container } = render(<Terminal />);
+    expect(container.querySelector(".font-mono")).toHaveClass("mx-auto");
+  });
+
+  it("fades each printed line in only when motion is allowed", () => {
+    const { container } = render(<Terminal />);
+    const input = screen.getByLabelText("Terminal command");
+    fireEvent.change(input, { target: { value: "whoami" } });
+    fireEvent.click(screen.getByRole("button", { name: "Run" }));
+
+    const line = container.querySelector(
+      ".motion-safe\\:animate-\\[terminal-fade_320ms_ease-out\\]",
+    );
+    expect(line).not.toBeNull();
+    expect(line).toHaveClass("motion-safe:[animation-delay:var(--fade-delay)]");
+    expect(line?.getAttribute("style")).toContain("--fade-delay: 0ms");
+  });
+
+  it("staggers the fade per line and keeps keys stable across runs", () => {
+    const { container } = render(<Terminal />);
+    const input = screen.getByLabelText("Terminal command");
+    fireEvent.change(input, { target: { value: "whoami" } });
+    fireEvent.click(screen.getByRole("button", { name: "Run" }));
+    const firstKey = container.querySelector(".font-mono > div")?.firstElementChild?.textContent;
+    fireEvent.change(input, { target: { value: "skills" } });
+    fireEvent.click(screen.getByRole("button", { name: "Run" }));
+
+    const lines = container.querySelectorAll(".font-mono > div > div");
+    expect(lines).toHaveLength(2);
+    expect(lines[0]).toHaveAttribute("style", expect.stringContaining("--fade-delay: 0ms"));
+    expect(lines[1]).toHaveAttribute("style", expect.stringContaining("--fade-delay: 45ms"));
+    expect(lines[0]?.textContent).toBe(firstKey);
+  });
 });
 
 describe("BlogEmptyState", () => {
