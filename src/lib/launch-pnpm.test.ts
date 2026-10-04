@@ -63,9 +63,10 @@ describe("scripts/lib/launch-pnpm.mjs", () => {
       writeFileSync(entry, "// pnpm\n");
       writeFileSync(join(binDir, "pnpm.CMD"), '@ECHO off\r\n"%dp0%\\..\\missing\\pnpm.cjs" %*\r\n');
       const shim = join(binDir, "pnpm.CMD");
-      expect(resolveTarget(shim, undefined)).not.toBe("");
-      expect(existsSync(resolveTarget(shim, undefined))).toBe(true);
-      expect(resolveTarget(shim, undefined)).toContain("pnpm.cjs");
+      const resolved = resolveTarget(shim);
+      expect(resolved).not.toBe("");
+      expect(existsSync(resolved)).toBe(true);
+      expect(resolved).toContain("pnpm.cjs");
     } finally {
       rmSync(root, { recursive: true, force: true });
     }
