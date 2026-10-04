@@ -14,7 +14,22 @@ version = 1
 # terminalTable, normalizeCommand, unknownResult, runTerminalCommand) as soon
 # as a pull request touched those files. DeepSource's own documentation writes
 # these globs in the `**/path/**` form.
-exclude_patterns = ["**/src/app/**", "**/src/components/**"]
+#
+# `scripts/` holds Node CLI tooling that this analyzer parses with
+# `sourceType: script` and then rejects every `import`/`export` (JS-0833).
+# `exclude_patterns` does not suppress a parse error, so the affected files
+# silence it inline with DeepSource's own `skipcq` keyword instead. Those
+# scripts stay covered by ESLint, `node --check`, CodeQL, and SonarCloud.
+#
+# Test sources get the same treatment: a top-level `function` in a Vitest spec
+# is module-scoped, so JS-0067 ("unexpected function declaration in the global
+# scope") false-positives there exactly as it does in the component and App
+# Router trees above.
+exclude_patterns = [
+  "**/src/app/**",
+  "**/src/components/**",
+  "**/src/**/*.test.*",
+]
 
 [[analyzers]]
 name = "javascript"

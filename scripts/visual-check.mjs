@@ -7,7 +7,7 @@
  * Usage: pnpm build && node scripts/visual-check.mjs
  * Output: docs/screenshots/*.png — review them and send feedback.
  */
-import { spawn } from "node:child_process";
+import { spawnPnpm } from "./lib/launch-pnpm.mjs";
 import { existsSync, mkdirSync } from "node:fs";
 import { resolve } from "node:path";
 import { chromium } from "@playwright/test";
@@ -21,7 +21,7 @@ if (!existsSync(resolve(root, ".next/BUILD_ID")) && !existsSync(resolve(root, ".
   process.exit(1);
 }
 
-const server = spawn("pnpm", ["start", "--port", String(PORT)], { cwd: root, stdio: "ignore" });
+const server = spawnPnpm(["start", "--port", String(PORT)], { cwd: root, stdio: "ignore" });
 
 async function waitForServer(url, tries = 60) {
   for (let i = 0; i < tries; i++) {

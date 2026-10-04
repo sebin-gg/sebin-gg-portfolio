@@ -5,10 +5,9 @@
  *
  * Usage: pnpm build && pnpm check:safari
  */
-import { spawnSync } from "node:child_process";
+import { spawnSyncPnpm } from "./lib/launch-pnpm.mjs";
 
-const result = spawnSync("pnpm", ["exec", "playwright", "test", "--project=webkit"], {
+const result = spawnSyncPnpm(["exec", "playwright", "test", "--project=webkit"], {
   stdio: "inherit",
-  shell: true,
 });
 process.exit(result.status ?? 1);

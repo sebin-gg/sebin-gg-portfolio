@@ -37,7 +37,7 @@
  * Requires a production build (`pnpm build`) and a Chrome/Thorium binary
  * (CHROME_PATH / THORIUM_PATH env or the usual system paths).
  */
-import { spawn } from "node:child_process";
+import { spawnPnpm } from "./lib/launch-pnpm.mjs";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import puppeteer from "puppeteer-core";
@@ -568,7 +568,7 @@ Filters (comma-separated values):
 
   let server = null;
   if (!args.server) {
-    server = spawn("pnpm", ["start", "--port", String(port)], { cwd: root, stdio: "ignore" });
+    server = spawnPnpm(["start", "--port", String(port)], { cwd: root, stdio: "ignore" });
     await waitForServer(baseUrl);
   }
 

@@ -9,7 +9,7 @@
  *
  * Usage: node scripts/perf-matrix-test.mjs
  */
-import { spawn } from "node:child_process";
+import { spawnPnpm } from "./lib/launch-pnpm.mjs";
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import puppeteer from "puppeteer-core";
@@ -154,7 +154,7 @@ async function waitForServer(url, tries = 60) {
   throw new Error("Server failed to start on port " + PORT);
 }
 
-const server = spawn("pnpm", ["start", "--port", String(PORT)], { cwd: root, stdio: "ignore" });
+const server = spawnPnpm(["start", "--port", String(PORT)], { cwd: root, stdio: "ignore" });
 
 try {
   const base = `http://127.0.0.1:${PORT}`;
