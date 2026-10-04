@@ -101,6 +101,12 @@ export interface Dictionary {
     hint: string;
     label: string;
     run: string;
+    /** Short input hint. The full command list lives in `terminal.commands`. */
+    placeholder: string;
+    /** Label for the clickable command chips under the input. */
+    commands: string;
+    /** Accessible name for a chip that runs one command. */
+    runCommand: string;
     /** Per-command reply templates. Placeholders are filled by `site.ts`. */
     responses: {
       help: string;

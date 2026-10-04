@@ -42,21 +42,25 @@ export function Terminal({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale
   const [value, setValue] = useState("");
   const lastId = useRef(0);
 
-  function submit(event: React.FormEvent) {
-    event.preventDefault();
+  function run(command: string) {
     const { output, anchor, clear } = runTerminalCommand(
-      value,
+      command,
       dict.terminal.responses,
       terminalFacts(dict),
     );
     if (clear) setEntries([]);
     else {
       lastId.current += 1;
-      const entry = { id: lastId.current, command: value.trim() || "help", output };
+      const entry = { id: lastId.current, command: command.trim() || "help", output };
       setEntries((prev) => [...prev.slice(-7), entry]);
       scrollToAnchor(anchor);
     }
     setValue("");
+  }
+
+  function submit(event: React.FormEvent) {
+    event.preventDefault();
+    run(value);
   }
 
   return (
@@ -96,7 +100,7 @@ export function Terminal({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale
             id="terminal-input"
             value={value}
             onChange={(event) => setValue(event.target.value)}
-            placeholder={terminalCommands.join("  ")}
+            placeholder={dict.terminal.placeholder}
             autoComplete="off"
             spellCheck={false}
             className="bg-canvas border-line/80 text-ink placeholder:text-ink-faint focus:border-accent min-w-0 flex-1 rounded-lg border px-3 py-2 outline-none"
@@ -108,6 +112,27 @@ export function Terminal({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale
             {dict.terminal.run}
           </button>
         </form>
+        {/*
+          The command list lives here as wrapping chips rather than inside the
+          input's placeholder: a nine-command placeholder string overflows the
+          single-line input and gets clipped after "resume", so the commands
+          past it were unreadable. Chips wrap, stay legible at any width, and
+          double as click-to-run.
+        */}
+        <div className="mt-3 flex flex-wrap items-center gap-1.5">
+          <span className="text-ink-faint mr-0.5 text-xs">{dict.terminal.commands}</span>
+          {terminalCommands.map((command) => (
+            <button
+              key={command}
+              type="button"
+              onClick={() => run(command)}
+              aria-label={`${dict.terminal.runCommand}: ${command}`}
+              className="border-line/80 bg-panel-2/70 text-ink-soft hover:border-accent hover:text-accent rounded-md border px-2 py-1 font-mono text-xs transition-colors"
+            >
+              {command}
+            </button>
+          ))}
+        </div>
       </div>
     </section>
   );

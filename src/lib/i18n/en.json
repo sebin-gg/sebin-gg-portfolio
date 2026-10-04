@@ -161,6 +161,9 @@
     "hint": "type help and press Enter",
     "label": "Terminal command",
     "run": "Run",
+    "placeholder": "e.g. whoami",
+    "commands": "Commands",
+    "runCommand": "Run command",
     "responses": {
       "help": "Try: {commands}. Type a command and press Enter.",
       "whoami": "{name} — {role}, {location}.",

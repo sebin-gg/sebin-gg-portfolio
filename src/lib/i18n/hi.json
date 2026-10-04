@@ -204,9 +204,11 @@
     }
   },
   "terminal": {
+    "commands": "कमांड",
     "hint": "help लिखें और Enter दबाएँ",
     "label": "टर्मिनल कमांड",
     "lede": "इस पेज की हर चीज़ पर एक कमांड लाइन। कुछ भी आपके ब्राउज़र से बाहर नहीं जाता।",
+    "placeholder": "जैसे whoami",
     "responses": {
       "about": "{bio}",
       "contact": "मेल {email} — GitHub {handle}।",
@@ -219,6 +221,7 @@
       "whoami": "{name} — {role}, {location}।"
     },
     "run": "चलाएँ",
+    "runCommand": "कमांड चलाएँ",
     "title": "प्लेग्राउंड टर्मिनल"
   }
 }

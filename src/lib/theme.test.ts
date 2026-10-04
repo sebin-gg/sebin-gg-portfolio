@@ -1,9 +1,11 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
+  DARK_SCHEME_QUERY,
   THEME_DARK_CLASS,
   THEME_STORAGE_KEY,
   getThemeSnapshot,
   htmlHasDarkClass,
+  prefersDarkScheme,
   resolveThemeIsDark,
   storedTheme,
   subscribeTheme,
@@ -41,16 +43,38 @@ describe("storedTheme", () => {
 });
 
 describe("resolveThemeIsDark", () => {
-  it("defaults to dark when nothing is stored", () => {
-    expect(resolveThemeIsDark(null)).toBe(true);
+  it("follows the device when nothing is stored", () => {
+    expect(resolveThemeIsDark(null, true)).toBe(true);
+    expect(resolveThemeIsDark(null, false)).toBe(false);
   });
 
-  it("stays dark when the user stored dark", () => {
-    expect(resolveThemeIsDark("dark")).toBe(true);
+  it("lets an explicit stored choice beat the device", () => {
+    expect(resolveThemeIsDark("dark", false)).toBe(true);
+    expect(resolveThemeIsDark("light", true)).toBe(false);
+  });
+});
+
+describe("prefersDarkScheme", () => {
+  it("reads the dark-scheme media query", () => {
+    const win = { matchMedia: vi.fn(() => ({ matches: true })) };
+    expect(prefersDarkScheme(win as unknown as Window)).toBe(true);
+    expect(win.matchMedia).toHaveBeenCalledWith(DARK_SCHEME_QUERY);
   });
 
-  it("only goes light when the user explicitly stored light", () => {
-    expect(resolveThemeIsDark("light")).toBe(false);
+  it("is false when the device reports light", () => {
+    const win = { matchMedia: () => ({ matches: false }) };
+    expect(prefersDarkScheme(win as unknown as Window)).toBe(false);
+  });
+
+  it("survives a missing or throwing matchMedia", () => {
+    expect(prefersDarkScheme({} as unknown as Window)).toBe(false);
+    expect(
+      prefersDarkScheme({
+        matchMedia: () => {
+          throw new Error("unsupported");
+        },
+      } as unknown as Window),
+    ).toBe(false);
   });
 });
 
@@ -62,6 +86,24 @@ describe("htmlHasDarkClass", () => {
   });
 });
 
+/** Runs the init script with a stubbed matchMedia reporting `dark`. */
+function runInitWithDevice(dark: boolean) {
+  const listeners = new Set<() => void>();
+  vi.stubGlobal("matchMedia", (query: string) => ({
+    matches: dark,
+    media: query,
+    addEventListener: (_: string, handler: () => void) => listeners.add(handler),
+  }));
+  new Function(themeInitScriptSource())();
+  return {
+    /** Simulates the OS flipping its color scheme mid-session. */
+    flipDevice(next: boolean) {
+      dark = next;
+      for (const handler of listeners) handler();
+    },
+  };
+}
+
 describe("themeInitScriptSource", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
@@ -69,26 +111,40 @@ describe("themeInitScriptSource", () => {
     localStorage.clear();
   });
 
-  it("references the storage key and dark class", () => {
+  it("references the storage key, dark class and device query", () => {
     const source = themeInitScriptSource();
     expect(source).toContain(THEME_STORAGE_KEY);
     expect(source).toContain(THEME_DARK_CLASS);
+    expect(source).toContain(DARK_SCHEME_QUERY);
   });
 
-  it("applies dark by default when nothing is stored", () => {
-    new Function(themeInitScriptSource())();
+  it("adopts the device's dark scheme when nothing is stored", () => {
+    runInitWithDevice(true);
     expect(document.documentElement.classList.contains(THEME_DARK_CLASS)).toBe(true);
   });
 
-  it("applies dark when storage says dark", () => {
+  it("stays light on a light-mode device", () => {
+    runInitWithDevice(false);
+    expect(document.documentElement.classList.contains(THEME_DARK_CLASS)).toBe(false);
+  });
+
+  it("lets a stored choice override the device", () => {
     localStorage.setItem(THEME_STORAGE_KEY, "dark");
-    new Function(themeInitScriptSource())();
+    runInitWithDevice(false);
     expect(document.documentElement.classList.contains(THEME_DARK_CLASS)).toBe(true);
   });
 
-  it("skips dark only when the user stored light", () => {
+  it("follows a live device change while nothing is stored", () => {
+    const device = runInitWithDevice(false);
+    expect(document.documentElement.classList.contains(THEME_DARK_CLASS)).toBe(false);
+    device.flipDevice(true);
+    expect(document.documentElement.classList.contains(THEME_DARK_CLASS)).toBe(true);
+  });
+
+  it("ignores a device change once the visitor picked a theme", () => {
     localStorage.setItem(THEME_STORAGE_KEY, "light");
-    new Function(themeInitScriptSource())();
+    const device = runInitWithDevice(false);
+    device.flipDevice(true);
     expect(document.documentElement.classList.contains(THEME_DARK_CLASS)).toBe(false);
   });
 
