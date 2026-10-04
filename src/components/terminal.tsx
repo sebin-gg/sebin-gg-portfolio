@@ -16,9 +16,8 @@ type Entry = { id: number; command: string; output: string };
 /** Per-line stagger for the run fade, in ms. */
 const FADE_STAGGER_MS = 45;
 
-function fadeStyle(index: number): React.CSSProperties {
-  return { "--fade-delay": `${index * FADE_STAGGER_MS}ms` } as React.CSSProperties;
-}
+const fadeStyle = (index: number): React.CSSProperties =>
+  ({ "--fade-delay": `${index * FADE_STAGGER_MS}ms` }) as React.CSSProperties;
 
 function prefersReducedMotion() {
   return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
