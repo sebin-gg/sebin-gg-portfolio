@@ -10,7 +10,7 @@
  * Every check script (thorium, chrome-family discovery, terminal) reuses
  * these so the assertions stay identical across engines.
  */
-import { spawn } from "node:child_process";
+import { spawnPnpm } from "./launch-pnpm.mjs";
 import { existsSync, mkdirSync } from "node:fs";
 import { resolve } from "node:path";
 
@@ -26,7 +26,7 @@ export function requireBuild() {
 }
 
 export async function serve(port) {
-  const server = spawn("pnpm", ["start", "--port", String(port)], {
+  const server = spawnPnpm(["start", "--port", String(port)], {
     cwd: root,
     stdio: "ignore",
   });
