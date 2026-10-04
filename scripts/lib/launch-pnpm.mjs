@@ -18,7 +18,8 @@ import { resolve, win32 } from "node:path";
  *   2. otherwise PATH is searched only for the two fixed probe commands
  *      (the system shell and `command -v`/`where`), the reported pnpm path
  *      is resolved to its real file and verified (absolute, regular file,
- *      present) before use.
+ *      present) before use. On Windows `where` lists several shim flavours,
+ *      so the candidate chosen is the one Node can actually execute.
  *
  * The spawn sites never consult PATH — they execute the absolute verified
  * path this function returns, so a writable PATH entry cannot substitute the
@@ -56,7 +57,7 @@ export function resolveWindowsShimTarget(shim, contents = readFileSync(shim, "ut
   return win32.resolve(win32.dirname(shim), match[1].replaceAll("/", "\\"));
 }
 
-function probePATHLookup() {
+function probePATHCandidates() {
   // Fixed probe commands only — never the value being resolved. On Windows
   // the lookup shell is cmd.exe via `where`; everywhere else /bin/sh.
   // S4036: reading `.stdout` tolerates a failed probe (status != 0) and the
@@ -67,7 +68,23 @@ function probePATHLookup() {
   const probe = spawnSync(shell, isWindows ? ["/c", script] : ["-c", script], {
     encoding: "utf8",
   });
-  return (probe.stdout ?? "").trim().split(/\r?\n/)[0] ?? "";
+  return (probe.stdout ?? "")
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+}
+
+/**
+ * Pick the Windows candidate Node can actually execute. cmd's `where` lists
+ * every shim flavour npm's cmd-shim writes — the extensionless POSIX `sh`
+ * script, `pnpm.CMD`, and `pnpm.ps1` — and the `sh` script sorts first, so the
+ * first line is never the one Node can run. Prefer a real `.exe`, else the
+ * `.CMD` wrapper whose fixed entrypoint we can parse and launch through Node.
+ */
+export function windowsCandidate(candidates) {
+  return (
+    candidates.find((c) => /\.exe$/i.test(c)) ?? candidates.find((c) => /\.cmd$/i.test(c)) ?? ""
+  );
 }
 
 /** Resolve pnpm to an absolute, verified executable path. Throws when none is found. */
@@ -86,27 +103,25 @@ export function resolvePnpmBin() {
     errors.push(`corepack entry missing: ${entry}`);
   }
   try {
-    const found = probePATHLookup();
-    if (found) {
-      if (isWindows) {
-        // cmd's `where` prints the wrapper, not necessarily its versioned
-        // target. Resolve the wrapper's fixed entrypoint and launch JS with
-        // Node directly so spawn never needs shell:true.
-        const target = /\.exe$/i.test(found) ? found : resolveWindowsShimTarget(found);
-        if (win32.isAbsolute(target) && commandExists(target)) {
-          if (/\.(?:c|m)?js$/i.test(target)) {
-            return { command: process.execPath, prefixArgs: [target] };
-          }
-          if (/\.exe$/i.test(target)) return target;
+    const candidates = probePATHCandidates();
+    if (isWindows) {
+      // cmd's `where` prints every shim flavour, not the executable one.
+      // Resolve the wrapper's fixed entrypoint and launch JS with Node
+      // directly so spawn never needs shell:true.
+      const found = windowsCandidate(candidates);
+      const target = /\.exe$/i.test(found) ? found : resolveWindowsShimTarget(found);
+      if (win32.isAbsolute(target) && commandExists(target)) {
+        if (/\.(?:c|m)?js$/i.test(target)) {
+          return { command: process.execPath, prefixArgs: [target] };
         }
-        errors.push(`PATH entry failed verification: ${found}`);
-      } else {
-        const absolute = found.startsWith("/") ? resolveSymlinkTarget(found) : "";
-        if (commandExists(absolute)) return absolute;
-        errors.push(`PATH entry failed verification: ${found}`);
+        if (/\.exe$/i.test(target)) return target;
       }
+      errors.push(`PATH entry failed verification: ${found || candidates.join(", ") || "none"}`);
     } else {
-      errors.push("PATH lookup found no pnpm");
+      const found = candidates[0] ?? "";
+      const absolute = found.startsWith("/") ? resolveSymlinkTarget(found) : "";
+      if (absolute && commandExists(absolute)) return absolute;
+      errors.push(`PATH entry failed verification: ${found || "none"}`);
     }
   } catch (error) {
     errors.push(`PATH probe failed: ${error?.message ?? error}`);

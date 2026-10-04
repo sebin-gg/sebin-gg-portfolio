@@ -45,6 +45,21 @@ describe("scripts/lib/launch-pnpm.mjs", () => {
     expect(actual).toBe("C:\\actions\\setup-pnpm\\node_modules\\pnpm\\bin\\pnpm.mjs");
   });
 
+  it("skips the extensionless sh shim that cmd's where lists first", async () => {
+    const { windowsCandidate } = await import(HELPER);
+    // Real `where pnpm` output on a Windows runner: the POSIX `sh` script is
+    // listed before the .CMD wrapper, and Node cannot exec either the bare
+    // script or a .CMD directly.
+    const whereOutput = [
+      "C:\\Users\\runneradmin\\setup-pnpm\\node_modules\\.bin\\bin\\pnpm",
+      "C:\\Users\\runneradmin\\setup-pnpm\\node_modules\\.bin\\bin\\pnpm.cmd",
+      "C:\\Users\\runneradmin\\setup-pnpm\\node_modules\\.bin\\bin\\pnpm.ps1",
+    ];
+    expect(windowsCandidate(whereOutput)).toBe(whereOutput[1]);
+    expect(windowsCandidate(["C:\\tools\\pnpm\\pnpm.exe"])).toBe("C:\\tools\\pnpm\\pnpm.exe");
+    expect(windowsCandidate(whereOutput.slice(0, 1))).toBe("");
+  });
+
   it("throws a clear error before spawning when no pnpm entrypoint resolves", async () => {
     // Empty PATH + no corepack/user-agent env leaves nothing verifiable.
     const oldPath = process.env.PATH;
