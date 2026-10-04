@@ -14,46 +14,6 @@ function expectLinkActive(id: string, active: boolean): void {
 
 const LINE = 300;
 
-/**
- * Emulates requestAnimationFrame faithfully: callbacks are queued and only run
- * on an explicit flush. Calling the callback synchronously instead would leave
- * the component's "frame pending" guard stuck, hiding the coalescing logic.
- */
-let frames: FrameRequestCallback[] = [];
-let nextFrameId = 1;
-
-function flushFrames() {
-  act(() => {
-    const pending = frames;
-    frames = [];
-    for (const callback of pending) callback(0);
-  });
-}
-
-/**
- * Positions the watched sections and scrolls the page. jsdom has no layout, so
- * both the document height and each rect are stubbed explicitly.
- */
-function setTops(tops: Record<string, number>) {
-  for (const [id, top] of Object.entries(tops)) {
-    const element = document.getElementById(id) as HTMLElement;
-    element.getBoundingClientRect = () => ({ top }) as DOMRect;
-  }
-}
-
-function scrollTo(tops: Record<string, number>, scrollY: number, scrollHeight = 4000) {
-  setTops(tops);
-  Object.defineProperty(document.documentElement, "scrollHeight", {
-    configurable: true,
-    value: scrollHeight,
-  });
-  window.scrollY = scrollY;
-  act(() => {
-    window.dispatchEvent(new Event("scroll"));
-  });
-  flushFrames();
-}
-
 describe("pickActiveSection", () => {
   it("highlights nothing before the first section is reached", () => {
     expect(
@@ -111,6 +71,45 @@ describe("pickActiveSection", () => {
 });
 
 describe("ActiveSection", () => {
+  /**
+   * Emulates requestAnimationFrame faithfully: callbacks are queued and only run
+   * on an explicit flush. Calling the callback synchronously instead would leave
+   * the component's "frame pending" guard stuck, hiding the coalescing logic.
+   */
+  let frames: FrameRequestCallback[] = [];
+  let nextFrameId = 1;
+
+  function flushFrames() {
+    act(() => {
+      const pending = frames;
+      frames = [];
+      for (const callback of pending) callback(0);
+    });
+  }
+
+  /**
+   * Positions the watched sections and scrolls the page. jsdom has no layout, so
+   * both the document height and each rect are stubbed explicitly.
+   */
+  function setTops(tops: Record<string, number>) {
+    for (const [id, top] of Object.entries(tops)) {
+      const element = document.getElementById(id) as HTMLElement;
+      element.getBoundingClientRect = () => ({ top }) as DOMRect;
+    }
+  }
+
+  function scrollTo(tops: Record<string, number>, scrollY: number, scrollHeight = 4000) {
+    setTops(tops);
+    Object.defineProperty(document.documentElement, "scrollHeight", {
+      configurable: true,
+      value: scrollHeight,
+    });
+    window.scrollY = scrollY;
+    act(() => {
+      window.dispatchEvent(new Event("scroll"));
+    });
+    flushFrames();
+  }
   beforeEach(() => {
     document.body.innerHTML = `
       <nav>
