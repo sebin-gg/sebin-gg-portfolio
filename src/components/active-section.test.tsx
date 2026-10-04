@@ -137,11 +137,8 @@ describe("ActiveSection", () => {
       frames.push(cb);
       return nextFrameId++;
     });
-    // Frames are never left pending after a flush, so cancellation is a no-op.
-    // A named function declaration rather than an arrow: an empty arrow trips
-    // JS-0321, `() => undefined` trips JS-0045, and `void handle` trips
-    // JS-0098, so this is the form that stays clean in DeepSource.
-    vi.stubGlobal("cancelAnimationFrame", function noopCancel() {});
+    // cancelAnimationFrame needs no stub: jsdom provides it natively, and the
+    // queued ids from the stubbed rAF are simply unknown to it.
     window.scrollY = 0;
     window.innerHeight = 1000;
     // Reading line is 30% of 1000px = 300. Start with every section below it,

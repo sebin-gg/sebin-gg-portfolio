@@ -83,6 +83,8 @@ function applyActive(id: string) {
 
 // skipcq: JS-0067
 export function ActiveSection({ ids }: ActiveSectionProps) {
+  // skipcq: JS-0045 — a useEffect callback legitimately returns its cleanup
+  // function; the rule expects a plain void return here.
   useEffect(() => {
     if (typeof window === "undefined") return;
     const elements = ids
