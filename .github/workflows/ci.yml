@@ -347,7 +347,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, windows-11-arm, ubuntu-24.04-arm]
+        include:
+          - os: windows-latest
+            store: 'D:\.pnpm-store'
+          - os: windows-11-arm
+            store: 'D:\.pnpm-store'
+          - os: ubuntu-24.04-arm
+            store: /home/runner/.pnpm-store
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -358,10 +364,26 @@ jobs:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version-file: .nvmrc
-          cache: pnpm
+
+      # pnpm/action-setup wipes its `dest` directory at the start of every run.
+      # On windows-11-arm pnpm's default store resolved *inside* that directory,
+      # so it was destroyed before install and all ~1,200 packages were
+      # re-downloaded on every run (2m49s vs 14s on windows-latest). Pinning the
+      # store outside `dest` lets it survive and actually be reused.
+      #
+      # The store is passed as a flag, not an env var or config file: pnpm
+      # ignores PNPM_STORE_DIR and npm_config_store_dir, and writing `storeDir`
+      # into pnpm-workspace.yaml made pnpm try to mkdir the mangled path "\\?".
+      # setup-node's `cache: pnpm` is dropped because it resolves the store via
+      # `pnpm store path`, which would cache the wrong directory.
+      - name: Cache the pnpm store
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ matrix.store }}
+          key: pnpm-store-${{ matrix.os }}-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --store-dir "${{ matrix.store }}"
 
       - name: Lint
         run: pnpm lint
@@ -398,7 +420,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, windows-11-arm, ubuntu-24.04-arm]
+        include:
+          - os: windows-latest
+            store: 'D:\.pnpm-store'
+          - os: windows-11-arm
+            store: 'D:\.pnpm-store'
+          - os: ubuntu-24.04-arm
+            store: /home/runner/.pnpm-store
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -409,10 +437,26 @@ jobs:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version-file: .nvmrc
-          cache: pnpm
+
+      # pnpm/action-setup wipes its `dest` directory at the start of every run.
+      # On windows-11-arm pnpm's default store resolved *inside* that directory,
+      # so it was destroyed before install and all ~1,200 packages were
+      # re-downloaded on every run (2m49s vs 14s on windows-latest). Pinning the
+      # store outside `dest` lets it survive and actually be reused.
+      #
+      # The store is passed as a flag, not an env var or config file: pnpm
+      # ignores PNPM_STORE_DIR and npm_config_store_dir, and writing `storeDir`
+      # into pnpm-workspace.yaml made pnpm try to mkdir the mangled path "\\?".
+      # setup-node's `cache: pnpm` is dropped because it resolves the store via
+      # `pnpm store path`, which would cache the wrong directory.
+      - name: Cache the pnpm store
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ matrix.store }}
+          key: pnpm-store-${{ matrix.os }}-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --store-dir "${{ matrix.store }}"
 
       - name: Build
         run: pnpm build
