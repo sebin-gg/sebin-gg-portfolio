@@ -188,6 +188,78 @@ describe("Terminal", () => {
     fireEvent.click(screen.getByRole("button", { name: "Run" }));
     expect(screen.getByText(/type help and press Enter/i)).toBeInTheDocument();
   });
+
+  it("centers the terminal panel in the section", () => {
+    const { container } = render(<Terminal />);
+    expect(container.querySelector(".font-mono")).toHaveClass("mx-auto");
+  });
+
+  it("fades each printed line in only when motion is allowed", () => {
+    const { container } = render(<Terminal />);
+    const input = screen.getByLabelText("Terminal command");
+    fireEvent.change(input, { target: { value: "whoami" } });
+    fireEvent.click(screen.getByRole("button", { name: "Run" }));
+
+    const line = container.querySelector(
+      ".motion-safe\\:animate-\\[terminal-fade_320ms_ease-out_both\\]",
+    );
+    expect(line).not.toBeNull();
+    // `both` fill mode is required: a staggered row has a positive delay, and
+    // without a backwards fill it paints at full opacity during the delay,
+    // then snaps to opacity 0 — a flash instead of a fade.
+    expect(line).toHaveClass("motion-safe:[animation-delay:var(--fade-delay)]");
+    expect(line?.getAttribute("style")).toContain("--fade-delay: 0ms");
+  });
+
+  it("staggers the fade per line and keeps keys stable across runs", () => {
+    const { container } = render(<Terminal />);
+    const input = screen.getByLabelText("Terminal command");
+    fireEvent.change(input, { target: { value: "whoami" } });
+    fireEvent.click(screen.getByRole("button", { name: "Run" }));
+    const firstKey = container.querySelector(".font-mono > div")?.firstElementChild?.textContent;
+    fireEvent.change(input, { target: { value: "skills" } });
+    fireEvent.click(screen.getByRole("button", { name: "Run" }));
+
+    const lines = container.querySelectorAll(".font-mono > div > div");
+    expect(lines).toHaveLength(2);
+    expect(lines[0]).toHaveAttribute("style", expect.stringContaining("--fade-delay: 0ms"));
+    expect(lines[1]).toHaveAttribute("style", expect.stringContaining("--fade-delay: 45ms"));
+    expect(lines[0]?.textContent).toBe(firstKey);
+  });
+
+  it("keeps a row mounted when the capped transcript shifts its indices", () => {
+    // The transcript caps at 8 rows, so every command past the eighth drops
+    // the oldest and shifts each survivor down one index. With index-based
+    // keys a row's key changes on that shift, React remounts it, and the fade
+    // replays on a line that was never re-run. Asserting DOM identity — not
+    // textContent — is what actually catches that.
+    const { container } = render(<Terminal />);
+    const input = screen.getByLabelText("Terminal command");
+    const run = (command: string) => {
+      fireEvent.change(input, { target: { value: command } });
+      fireEvent.click(screen.getByRole("button", { name: "Run" }));
+    };
+    const rows = () => container.querySelectorAll(".font-mono > div > div");
+
+    for (const command of [
+      "whoami",
+      "about",
+      "projects",
+      "skills",
+      "experience",
+      "resume",
+      "contact",
+      "help",
+    ]) {
+      run(command);
+    }
+    expect(rows()).toHaveLength(8);
+
+    const second = rows()[1];
+    run("whoami"); // ninth entry: the oldest drops, survivors shift index
+    expect(rows()).toHaveLength(8);
+    expect(rows()[0]).toBe(second);
+  });
 });
 
 describe("BlogEmptyState", () => {

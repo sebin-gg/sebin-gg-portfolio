@@ -84,6 +84,22 @@ body {
   color: var(--accent-ink);
 }
 
+/*
+  Terminal run fade. Each printed line fades in with a small stagger so a
+  command reads like the screen refreshing. Applied via `motion-safe:` in
+  terminal.tsx; the reduced-motion block at the end of this file collapses it.
+*/
+@keyframes terminal-fade {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Visible keyboard focus everywhere. */
 :focus-visible {
   outline: 2px solid var(--accent);

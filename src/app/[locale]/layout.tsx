@@ -47,14 +47,17 @@ export async function generateMetadata({ params }: LocaleLayoutProps): Promise<M
       url: `${siteUrl}${localePath(locale, "/")}`,
       title: dict.meta.title,
       description: dict.meta.description,
-      siteName: `${profile.name} — portfolio`,
+      siteName: dict.meta.title,
       locale: locale,
       images: [
         {
           url: "/og-image",
           width: 1200,
           height: 630,
-          alt: `${profile.name} — portfolio`,
+          // The PNG is one shared asset, so its pixels stay English. The alt
+          // is the string screen readers and link previews announce, so it
+          // uses the localized title instead of an English "portfolio".
+          alt: dict.meta.title,
         },
       ],
     },
