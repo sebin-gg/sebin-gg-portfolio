@@ -6,27 +6,38 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/locale";
 import { SectionHeading } from "@/components/section-heading";
 
+// DeepSource's JS-0067 flags every module-scope declaration as a global one,
+// but this is an ES module, so `export`/`import` keeps these module-scoped and
+// they cannot leak into a global scope. Each declaration below carries a
+// `skipcq` because the analyzer's exclude_patterns does not take effect on this
+// repository. Drop them if DeepSource ever fixes the rule.
+
 /**
  * Monotonic id per entry. Index-based keys collide once the transcript
  * scrolls (the list is capped, so indices shift down), which would remount
  * rows and re-fire their fade on every unrelated command.
  */
+// skipcq: JS-0067
 type Entry = { id: number; command: string; output: string };
 
 /** Per-line stagger for the run fade, in ms. */
 const FADE_STAGGER_MS = 45;
 
+// skipcq: JS-0067
 const fadeStyle = (index: number): React.CSSProperties =>
   ({ "--fade-delay": `${index * FADE_STAGGER_MS}ms` }) as React.CSSProperties;
 
+// skipcq: JS-0067
 function prefersReducedMotion() {
   return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
 }
 
+// skipcq: JS-0067
 function scrollTargetIntoView(target: Element) {
   target.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth" });
 }
 
+// skipcq: JS-0067
 function scrollToAnchor(anchor: string | null) {
   const target = anchor ? document.querySelector(anchor) : null;
   if (target) scrollTargetIntoView(target);
@@ -36,6 +47,7 @@ function scrollToAnchor(anchor: string | null) {
  * Playground terminal. Tiny client island: commands resolve from a static
  * table in site.ts, no network, no parsing.
  */
+// skipcq: JS-0067
 export function Terminal({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
   const dict = getDictionary(locale);
   const [entries, setEntries] = useState<Entry[]>([]);
