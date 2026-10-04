@@ -15,23 +15,22 @@ version = 1
 # as a pull request touched those files. DeepSource's own documentation writes
 # these globs in the `**/path/**` form.
 #
-# Test sources get the same treatment: a top-level `function` or `const` in a
-# Vitest spec is module-scoped, so JS-0067 ("unexpected function declaration in
-# the global scope") false-positives there exactly as it does in the component
-# and App Router trees above.
+# `scripts/` holds Node CLI tooling that this analyzer parses with
+# `sourceType: script` and then rejects every `import`/`export` (JS-0833:
+# "'import' and 'export' may appear only with 'sourceType: module'"). A file it
+# cannot parse yields no findings anyway, so excluding the tree removes the
+# false alarm without losing coverage. Those scripts stay covered by ESLint,
+# `node --check`, CodeQL, and SonarCloud.
 #
-# `*.mjs` is excluded because this analyzer parses it with `sourceType: script`
-# and then rejects every `import`/`export` (JS-0833: "'import' and 'export' may
-# appear only with 'sourceType: module'"). A file it cannot parse yields no
-# findings anyway, so excluding it removes the false alarm without losing
-# coverage. The Node scripts under scripts/ stay covered by ESLint, `node
-# --check`, tsc, CodeQL, and SonarCloud.
+# Test sources get the same treatment: a top-level `function` in a Vitest spec
+# is module-scoped, so JS-0067 ("unexpected function declaration in the global
+# scope") false-positives there exactly as it does in the component and App
+# Router trees above.
 exclude_patterns = [
   "**/src/app/**",
   "**/src/components/**",
-  "**/*.test.ts",
-  "**/*.test.tsx",
-  "**/*.mjs",
+  "**/src/**/*.test.*",
+  "**/scripts/**",
 ]
 
 [[analyzers]]

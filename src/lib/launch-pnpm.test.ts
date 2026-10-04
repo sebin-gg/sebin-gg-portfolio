@@ -8,17 +8,18 @@ import { describe, expect, it } from "vitest";
 const SCRIPTS_DIR = resolve(dirname(fileURLToPath(import.meta.url)), "../../scripts");
 const HELPER = join(SCRIPTS_DIR, "lib", "launch-pnpm.mjs");
 
-function getInvocation(target: string | { command: string; prefixArgs?: string[] }) {
-  if (typeof target === "string") return { command: target, args: [] };
-  return { command: target.command, args: target.prefixArgs ?? [] };
-}
-
 /**
  * S4036 contract: script-launched package-manager commands must never be
  * resolved through PATH. The helper returns an absolute, verified executable,
  * and every script spawn site consults the helper instead of naming `pnpm`.
  */
 describe("scripts/lib/launch-pnpm.mjs", () => {
+  // Both platforms share one call shape: a bare path, or { command, prefixArgs }
+  // on Windows where Node itself has to launch the verified pnpm entrypoint.
+  function getInvocation(target: string | { command: string; prefixArgs?: string[] }) {
+    if (typeof target === "string") return { command: target, args: [] };
+    return { command: target.command, args: target.prefixArgs ?? [] };
+  }
   it("resolves an absolute executable target (never a bare command name)", async () => {
     const mod = await import(HELPER);
     const { command } = getInvocation(mod.resolvePnpmBin());
