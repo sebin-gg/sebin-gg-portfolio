@@ -4,6 +4,8 @@
  * and GitHub (verified repo list, Sep 2026).
  */
 
+import type { Dictionary } from "@/lib/i18n/types";
+
 export const profile = {
   name: "Sebin Mathew",
   firstName: "Sebin",
@@ -315,7 +317,44 @@ export type TerminalCommand = (typeof terminalCommands)[number];
 
 type TerminalResult = { output: string; anchor: string | null; clear?: boolean };
 
-function terminalTable(responses: TerminalResponses): Record<TerminalCommand, TerminalResult> {
+/**
+ * Prose the terminal interpolates into its reply templates. The templates
+ * ({role}, {bio}, …) are translated per locale, so the values filling them
+ * have to be too — otherwise a Malayalam reply is half English. Project names,
+ * orgs and tool names stay in the source data: they are proper nouns.
+ */
+export type TerminalFacts = {
+  role: string;
+  location: string;
+  bio: string;
+  projectTagline: string;
+  skillItems: string;
+  currentTitle: string;
+};
+
+const englishFacts: TerminalFacts = {
+  role: profile.role,
+  location: profile.location,
+  bio: profile.bio[0],
+  projectTagline: projects[0].tagline,
+  skillItems: skills[0].items.slice(0, 4).join(", "),
+  currentTitle: timeline[0].title,
+};
+
+/** Builds the terminal's interpolated values from a locale dictionary. */
+export const terminalFacts = (dict: Dictionary): TerminalFacts => ({
+  role: dict.hero.role,
+  location: dict.footer.location,
+  bio: dict.about.bio[0],
+  projectTagline: dict.projects.taglines[0],
+  skillItems: englishFacts.skillItems,
+  currentTitle: dict.experience.roles[0],
+});
+
+function terminalTable(
+  responses: TerminalResponses,
+  facts: TerminalFacts,
+): Record<TerminalCommand, TerminalResult> {
   return {
     help: {
       output: fill(responses.help, { commands: terminalCommands.join("  ") }),
@@ -324,30 +363,30 @@ function terminalTable(responses: TerminalResponses): Record<TerminalCommand, Te
     whoami: {
       output: fill(responses.whoami, {
         name: profile.name,
-        role: profile.role,
-        location: profile.location,
+        role: facts.role,
+        location: facts.location,
       }),
       anchor: "#top",
     },
     about: {
-      output: fill(responses.about, { bio: profile.bio[0] }),
+      output: fill(responses.about, { bio: facts.bio }),
       anchor: "#top",
     },
     projects: {
       output: fill(responses.projects, {
         project: projects[0].name,
-        tagline: projects[0].tagline,
+        tagline: facts.projectTagline,
         count: projects.length,
       }),
       anchor: "#projects",
     },
     skills: {
-      output: fill(responses.skills, { items: skills[0].items.slice(0, 4).join(", ") }),
+      output: fill(responses.skills, { items: facts.skillItems }),
       anchor: "#skills",
     },
     experience: {
       output: fill(responses.experience, {
-        title: timeline[0].title,
+        title: facts.currentTitle,
         org: timeline[0].org,
         count: timeline.length,
       }),
@@ -377,9 +416,10 @@ function unknownResult(command: string, responses: TerminalResponses): TerminalR
 export function runTerminalCommand(
   raw: string,
   responses: TerminalResponses = terminalResponses,
+  facts: TerminalFacts = englishFacts,
 ): TerminalResult {
   const command = normalizeCommand(raw);
-  const table: Record<string, TerminalResult> = terminalTable(responses);
+  const table: Record<string, TerminalResult> = terminalTable(responses, facts);
   // `Object.hasOwn` keeps prototype keys (`constructor`, `toString`,
   // `__proto__`) from resolving to inherited members, which would otherwise be
   // truthy and surface as a result with `output === undefined`.

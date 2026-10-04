@@ -11,6 +11,7 @@ import {
   runTerminalCommand,
   siteUrl,
   terminalCommands,
+  terminalFacts,
   terminalResponses,
   timeline,
 } from "@/lib/site";
@@ -225,5 +226,40 @@ describe("terminal commands", () => {
         expected,
       );
     }
+  });
+
+  it("interpolates localized prose instead of the English source data", () => {
+    // The templates translated but the values filling them did not, so /hi
+    // and /ml printed English role, location, bio and project tagline inside a
+    // localized sentence. Every interpolated value must come from the
+    // dictionary, not from site.ts.
+    for (const locale of SUPPORTED_LOCALES) {
+      if (locale === DEFAULT_LOCALE) continue;
+      const dict = getDictionary(locale);
+      const facts = terminalFacts(dict);
+      const run = (command: string) =>
+        runTerminalCommand(command, dict.terminal.responses, facts).output;
+
+      expect(facts.role, locale).toBe(dict.hero.role);
+      expect(facts.location, locale).toBe(dict.footer.location);
+      expect(facts.bio, locale).toBe(dict.about.bio[0]);
+      expect(facts.currentTitle, locale).toBe(dict.experience.roles[0]);
+      expect(run("whoami"), locale).toContain(dict.hero.role);
+      expect(run("whoami"), locale).toContain(dict.footer.location);
+      expect(run("about"), locale).toBe(dict.about.bio[0]);
+      expect(run("projects"), locale).toContain(dict.projects.taglines[0]);
+      expect(run("experience"), locale).toContain(dict.experience.roles[0]);
+      // Guard the regression directly: no English source string survives.
+      expect(run("whoami"), locale).not.toContain(profile.role);
+      expect(run("whoami"), locale).not.toContain(profile.location);
+      expect(run("about"), locale).not.toContain(profile.bio[0]);
+    }
+  });
+
+  it("falls back to the English source data when no facts are supplied", () => {
+    // Signature default keeps `runTerminalCommand("whoami")` meaningful for
+    // callers that pass no dictionary.
+    expect(runTerminalCommand("whoami").output).toContain(profile.role);
+    expect(runTerminalCommand("about").output).toBe(profile.bio[0]);
   });
 });

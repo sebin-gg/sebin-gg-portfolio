@@ -2,10 +2,19 @@ version = 1
 
 # Route files under src/app are thin App Router adapters and src/components
 # exports are the React component contract; the analyzer's global-scope
-# function check (JS-0067) false-positives on both. Application logic in
-# src/lib remains fully analyzed. ESLint (complexity cap ≤ 4) covers real
+# function check (JS-0067) false-positives on both — every `export function`
+# in an ES module is module-scoped and cannot pollute a global scope.
+# Application logic in src/lib remains fully analyzed, so a genuine global
+# declaration there is still reported. ESLint (complexity cap ≤ 4) covers real
 # complexity everywhere else.
-exclude_patterns = ["src/app/**", "src/components/**"]
+#
+# The patterns need the leading `**/` to match. Written as bare `src/app/**`
+# they silently matched nothing, so both trees were analyzed anyway and JS-0067
+# was reported on pre-existing functions (generateMetadata, Terminal,
+# terminalTable, normalizeCommand, unknownResult, runTerminalCommand) as soon
+# as a pull request touched those files. DeepSource's own documentation writes
+# these globs in the `**/path/**` form.
+exclude_patterns = ["**/src/app/**", "**/src/components/**"]
 
 [[analyzers]]
 name = "javascript"
