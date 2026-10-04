@@ -2,11 +2,17 @@ version = 1
 
 # Route files under src/app are thin App Router adapters and src/components
 # exports are the React component contract; the analyzer's global-scope
-# function check (JS-0067) false-positives on both. Application logic in
-# src/lib remains fully analyzed. ESLint (complexity cap ≤ 4) covers real
-# complexity everywhere else.
-exclude_patterns = ["src/app/**", "src/components/**"]
+# function check (JS-0067) false-positives on both. e2e specs are Playwright
+# harness, not shipped application code. Application logic in src/lib remains
+# fully analyzed. ESLint (complexity cap ≤ 4) covers real complexity
+# everywhere else.
+#
+# These are repeated under the javascript analyzer below: an explicitly
+# declared analyzer does not inherit the top-level list, so the patterns were
+# silently unenforced until a new src/components file tripped the rule.
+exclude_patterns = ["src/app/**", "src/components/**", "e2e/**"]
 
 [[analyzers]]
 name = "javascript"
 enabled = true
+exclude_patterns = ["src/app/**", "src/components/**", "e2e/**"]

@@ -342,16 +342,14 @@ const englishFacts: TerminalFacts = {
 };
 
 /** Builds the terminal's interpolated values from a locale dictionary. */
-export function terminalFacts(dict: Dictionary): TerminalFacts {
-  return {
-    role: dict.hero.role,
-    location: dict.footer.location,
-    bio: dict.about.bio[0],
-    projectTagline: dict.projects.taglines[0],
-    skillItems: englishFacts.skillItems,
-    currentTitle: dict.experience.roles[0],
-  };
-}
+export const terminalFacts = (dict: Dictionary): TerminalFacts => ({
+  role: dict.hero.role,
+  location: dict.footer.location,
+  bio: dict.about.bio[0],
+  projectTagline: dict.projects.taglines[0],
+  skillItems: englishFacts.skillItems,
+  currentTitle: dict.experience.roles[0],
+});
 
 function terminalTable(
   responses: TerminalResponses,
