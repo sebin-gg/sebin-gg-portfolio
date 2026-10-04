@@ -6,12 +6,22 @@ import { expect, test } from "@playwright/test";
  * fade that respects the motion preference.
  */
 
-const PANEL = "#terminal .font-mono";
+/**
+ * Anchored on an explicit attribute rather than the `font-mono` utility class:
+ * the command chips are monospace too, so a class-based selector matched all
+ * ten elements and broke the strict-mode locator.
+ */
+const PANEL = "#terminal [data-terminal-panel]";
 const ROW = `${PANEL} div > div`;
 
+/**
+ * `exact` matters here: the command chips are named "Run command: <name>", and
+ * a substring match for "Run" would resolve to the chips as well as the submit
+ * button.
+ */
 const run = async (page: import("@playwright/test").Page, command: string) => {
   await page.getByLabel("Terminal command").fill(command);
-  await page.getByRole("button", { name: "Run" }).click();
+  await page.getByRole("button", { name: "Run", exact: true }).click();
 };
 
 test.describe("playground terminal", () => {

@@ -70,7 +70,10 @@ export function Terminal({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale
       className="mx-auto w-full max-w-7xl scroll-mt-20 px-4 py-6 sm:px-6 sm:py-8 lg:px-8 2xl:max-w-[90rem]"
     >
       <SectionHeading id="terminal-title" title={dict.terminal.title} lede={dict.terminal.lede} />
-      <div className="border-line/80 bg-panel/90 mx-auto max-w-2xl rounded-xl border p-4 font-mono text-sm shadow-sm backdrop-blur-xs sm:p-5">
+      <div
+        data-terminal-panel
+        className="border-line/80 bg-panel/90 mx-auto max-w-2xl rounded-xl border p-4 font-mono text-sm shadow-sm backdrop-blur-xs sm:p-5"
+      >
         <div aria-live="polite" className="space-y-2">
           {entries.length === 0 ? <p className="text-ink-faint">$ {dict.terminal.hint}</p> : null}
           {entries.map((entry, index) => (
