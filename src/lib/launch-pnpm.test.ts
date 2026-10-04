@@ -71,15 +71,15 @@ describe("scripts/lib/launch-pnpm.mjs", () => {
     }
   });
 
-  it("skips the extensionless sh shim that cmd's where lists first", async () => {
+  it("skips the POSIX sh script that cmd's where lists first", async () => {
     const { windowsCandidate } = await import(HELPER);
     // Real `where pnpm` output on a Windows runner: the POSIX `sh` script is
     // listed before the .CMD wrapper, and Node cannot exec either the bare
     // script or a .CMD directly.
     const whereOutput = [
-      "C:\\Users\\runneradmin\\setup-pnpm\\node_modules\\.bin\\bin\\pnpm",
-      "C:\\Users\\runneradmin\\setup-pnpm\\node_modules\\.bin\\bin\\pnpm.cmd",
-      "C:\\Users\\runneradmin\\setup-pnpm\\node_modules\\.bin\\bin\\pnpm.ps1",
+      "C:\\ci\\setup-pnpm\\node_modules\\.bin\\bin\\pnpm",
+      "C:\\ci\\setup-pnpm\\node_modules\\.bin\\bin\\pnpm.cmd",
+      "C:\\ci\\setup-pnpm\\node_modules\\.bin\\bin\\pnpm.ps1",
     ];
     expect(windowsCandidate(whereOutput)).toBe(whereOutput[1]);
     expect(windowsCandidate(["C:\\tools\\pnpm\\pnpm.exe"])).toBe("C:\\tools\\pnpm\\pnpm.exe");

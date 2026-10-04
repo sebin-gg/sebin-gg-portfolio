@@ -114,8 +114,8 @@ function probePATHCandidates() {
 
 /**
  * Pick the Windows candidate Node can actually execute. cmd's `where` lists
- * every shim flavour npm's cmd-shim writes — the extensionless POSIX `sh`
- * script, `pnpm.CMD`, and `pnpm.ps1` — and the `sh` script sorts first, so the
+ * every shim flavour npm's cmd-shim writes — the POSIX `sh` script with no
+ * file extension, `pnpm.CMD`, and `pnpm.ps1` — and the `sh` script sorts first, so the
  * first line is never the one Node can run. Prefer a real `.exe`, else the
  * `.CMD` wrapper whose fixed entrypoint we can parse and launch through Node.
  */
