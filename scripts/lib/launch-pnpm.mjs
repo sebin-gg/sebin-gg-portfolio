@@ -1,5 +1,5 @@
 import { spawnSync, spawn } from "node:child_process";
-import { accessSync, constants, existsSync, realpathSync, statSync } from "node:fs";
+import { existsSync, realpathSync, statSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -16,23 +16,23 @@ import { fileURLToPath } from "node:url";
  *   1. corepack layout: when corepack provides pnpm, the running version is
  *      named by npm_config_user_agent (e.g. "pnpm/11.20.0 …") and its entry
  *      point lives at an absolute path under COREPACK_ROOT;
- *   2. otherwise the executable found on PATH is resolved to its real file
- *      (`command -v pnpm` + readlink) and verified before use.
+ *   2. otherwise PATH is searched only for the two fixed probe commands
+ *      (the system shell and `command -v`/`where`), the reported pnpm path
+ *      is resolved to its real file and verified (absolute, regular file,
+ *      present) before use.
  *
- * Each candidate is verified (absolute path, exists, regular file,
- * executable) before it is handed back, so a broken or spoofed entry fails
- * closed with a clear error instead of falling through to a PATH search.
+ * The spawn sites never consult PATH — they execute the absolute verified
+ * path this function returns, so a writable PATH entry cannot substitute the
+ * package-manager binary. A broken or spoofed entry fails closed with a
+ * clear error instead of falling through to a PATH search.
  */
 
 const here = dirname(fileURLToPath(import.meta.url));
+const isWindows = process.platform === "win32";
 
-function isExecutableFile(p) {
-  if (typeof p !== "string" || !p.startsWith("/")) return false;
+function commandExists(p) {
   try {
-    if (!existsSync(p)) return false;
-    if (!statSync(p).isFile()) return false;
-    accessSync(p, constants.X_OK);
-    return true;
+    return typeof p === "string" && p.length > 0 && existsSync(p) && statSync(p).isFile();
   } catch {
     return false;
   }
@@ -46,6 +46,20 @@ function resolveSymlinkTarget(p) {
   }
 }
 
+function probePATHLookup() {
+  // Fixed probe commands only — never the value being resolved. On Windows
+  // the lookup shell is cmd.exe via `where`; everywhere else /bin/sh.
+  // S4036: reading `.stdout` tolerates a failed probe (status != 0) and the
+  // caller fails closed below, so a missing shell/probe cannot silently
+  // substitute an unverified binary.
+  const shell = isWindows ? (process.env.ComSpec ?? "C:\\Windows\\System32\\cmd.exe") : "/bin/sh";
+  const script = isWindows ? "where pnpm" : "command -v pnpm";
+  const probe = spawnSync(shell, isWindows ? ["/c", script] : ["-c", script], {
+    encoding: "utf8",
+  });
+  return (probe.stdout ?? "").trim().split(/\r?\n/)[0] ?? "";
+}
+
 /** Resolve pnpm to an absolute, verified executable path. Throws when none is found. */
 export function resolvePnpmBin() {
   const errors = [];
@@ -56,27 +70,17 @@ export function resolvePnpmBin() {
     // Corepack keeps one directory per package-manager version; the pnpm
     // entry point is the absolute file inside it.
     const entry = resolve(corepackRoot, `pnpm/${version}/lib/pnpm.js`);
-    if (isExecutableFile(entry) || existsSync(entry)) return entry;
+    if (commandExists(entry)) return entry;
     errors.push(`corepack entry missing: ${entry}`);
   }
   try {
-    // S4036: the PATH search here covers only the two fixed probe commands
-    // ("sh" and "command -v pnpm"). The spawn sites never consult PATH — they
-    // execute the absolute verified path this function returns, so a writable
-    // PATH entry cannot substitute the package-manager binary.
-    const probe = spawnSync("/bin/sh", ["-c", "command -v pnpm"], {
-      encoding: "utf8",
-    });
-    // S4036: reading `.stdout` tolerates a failed probe (status != 0) and the
-    // fallback below fails closed, so a missing shell/probe cannot silently
-    // substitute an unverified binary.
-    const found = (probe.stdout ?? "").trim().split("\n")[0];
+    const found = probePATHLookup();
     if (found) {
-      const real = found.startsWith("/") ? resolveSymlinkTarget(found) : "";
-      if (isExecutableFile(real)) return real;
+      const absolute = isWindows ? found : found.startsWith("/") ? resolveSymlinkTarget(found) : "";
+      if (commandExists(absolute)) return absolute;
       errors.push(`PATH entry failed verification: ${found}`);
     } else {
-      errors.push("`command -v pnpm` found nothing on PATH");
+      errors.push("PATH lookup found no pnpm");
     }
   } catch (error) {
     errors.push(`PATH probe failed: ${error?.message ?? error}`);

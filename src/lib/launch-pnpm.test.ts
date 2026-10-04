@@ -16,9 +16,9 @@ describe("scripts/lib/launch-pnpm.mjs", () => {
   it("resolves an absolute executable path (never a bare command name)", async () => {
     const { resolvePnpmBin } = await import(HELPER);
     const bin = resolvePnpmBin();
-    expect(bin.startsWith("/")).toBe(true);
     expect(bin).not.toBe("pnpm");
     expect(bin.endsWith("pnpm.mjs") || bin.endsWith("pnpm.js") || bin.endsWith("pnpm")).toBe(true);
+    if (process.platform !== "win32") expect(bin.startsWith("/")).toBe(true);
   });
 
   it("the resolved entrypoint actually executes (exit 0 on --version)", async () => {
