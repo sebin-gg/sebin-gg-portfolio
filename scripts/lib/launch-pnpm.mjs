@@ -27,8 +27,8 @@ import { fileURLToPath } from "node:url";
 const here = dirname(fileURLToPath(import.meta.url));
 
 function isExecutableFile(p) {
+  if (typeof p !== "string" || !p.startsWith("/")) return false;
   try {
-    if (!p || !p.startsWith("/")) return false;
     if (!existsSync(p)) return false;
     if (!statSync(p).isFile()) return false;
     accessSync(p, constants.X_OK);
@@ -60,15 +60,17 @@ export function resolvePnpmBin() {
     errors.push(`corepack entry missing: ${entry}`);
   }
   try {
-    // PATH lookup happens only for the two fixed probe commands below ("sh"
-    // and "command -v"); the pnpm command itself is then launched by the
-    // absolute path returned here, so attacker-controlled PATH entries can
-    // never substitute the package manager binary (Sonar S4036).
-    const found = spawnSync("sh", ["-c", "command -v pnpm"], {
+    // S4036: the PATH search here covers only the two fixed probe commands
+    // ("sh" and "command -v pnpm"). The spawn sites never consult PATH — they
+    // execute the absolute verified path this function returns, so a writable
+    // PATH entry cannot substitute the package-manager binary.
+    const probe = spawnSync("/bin/sh", ["-c", "command -v pnpm"], {
       encoding: "utf8",
-    })
-      .stdout.trim()
-      .split("\n")[0];
+    });
+    // S4036: reading `.stdout` tolerates a failed probe (status != 0) and the
+    // fallback below fails closed, so a missing shell/probe cannot silently
+    // substitute an unverified binary.
+    const found = (probe.stdout ?? "").trim().split("\n")[0];
     if (found) {
       const real = found.startsWith("/") ? resolveSymlinkTarget(found) : "";
       if (isExecutableFile(real)) return real;
