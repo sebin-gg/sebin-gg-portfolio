@@ -13,6 +13,31 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 Static-first personal portfolio on Next.js 16 (App Router) + TypeScript + Tailwind v4. Content
 comes from the résumé in `docs/` and the GitHub profile. Single page + a "blog coming soon" route.
 
+## Branch hygiene (required)
+
+Merged branches are deleted in the same task that merges them — never accumulated.
+
+- **Before creating a branch or PR**, sweep and delete stale ones first:
+  ```bash
+  git fetch --all --prune
+  gh pr list --state all --head <branch> --json number,state   # MERGED -> candidate
+  git ls-remote --heads origin <branch> | wc -l                # 0 -> remote already gone
+  ```
+- **After a PR merges**, delete both halves immediately:
+  ```bash
+  git push origin --delete <branch>
+  git branch -d <branch>
+  ```
+  Or pass `--delete-branch` to `gh pr merge`.
+- **Squash merges make ancestry checks lie.** After a squash merge,
+  `git merge-base --is-ancestor <branch> origin/main` returns false and
+  `git cherry` is unreliable, even though the work landed. Verify by content:
+  ```bash
+  git diff origin/main <branch> -- <files-the-branch-authored>   # empty = in main
+  ```
+- **Never delete**: `main`, a branch with an `OPEN` PR, or a branch whose content
+  genuinely differs from `main`. Ask the user when unsure.
+
 ## Commands (pnpm)
 
 - `pnpm dev` — dev server on :3000
