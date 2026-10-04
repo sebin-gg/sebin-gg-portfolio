@@ -240,8 +240,8 @@ export const skills: { group: string; items: string[] }[] = [
 ] as const;
 
 export const navItems = [
-  { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
+  { label: "Experience", href: "#experience" },
   { label: "Communities", href: "#communities" },
   { label: "Skills", href: "#skills" },
   { label: "Terminal", href: "#terminal" },

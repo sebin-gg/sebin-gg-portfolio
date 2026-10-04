@@ -10,7 +10,7 @@ import { Terminal } from "@/components/terminal";
 import { BlogEmptyState } from "@/components/blog-empty-state";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { communities, links, profile, projects, timeline } from "@/lib/site";
+import { communities, links, profile, projects, terminalCommands, timeline } from "@/lib/site";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { SUPPORTED_LOCALES } from "@/lib/locale";
 
@@ -177,6 +177,23 @@ describe("Terminal", () => {
   it("uses smooth scrolling when reduced motion is not enabled", () => {
     const scrollIntoView = runWhoamiWithMotionPreference(false);
     expect(scrollIntoView).toHaveBeenCalledWith({ behavior: "smooth" });
+  });
+
+  it("keeps the placeholder short and lists every command as its own chip", () => {
+    render(<Terminal />);
+    const input = screen.getByLabelText("Terminal command");
+    // A single placeholder string long enough to hold every command overflows
+    // the one-line input and clips, hiding the commands after the first few.
+    expect(input).toHaveAttribute("placeholder", "e.g. whoami");
+    for (const command of terminalCommands) {
+      expect(screen.getByRole("button", { name: `Run command: ${command}` })).toBeInTheDocument();
+    }
+  });
+
+  it("runs a command straight from its chip", () => {
+    render(<Terminal />);
+    fireEvent.click(screen.getByRole("button", { name: "Run command: whoami" }));
+    expect(screen.getByText(new RegExp(profile.name))).toBeInTheDocument();
   });
 
   it("clears the transcript on clear", async () => {

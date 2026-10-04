@@ -66,8 +66,13 @@ test.describe("home page", () => {
     await toggle.click();
 
     // Click every visible button on the page, including the mobile menu when open.
+    //
+    // The terminal's command chips are skipped: each one starts a smooth anchor
+    // scroll, so clicking nine of them back to back leaves later elements
+    // permanently "unstable" for the auto-wait and times out on the slower
+    // engines. Chip clicks are covered in terminal.spec.ts instead.
     for (let round = 0; round < 2; round++) {
-      const buttons = page.getByRole("button");
+      const buttons = page.locator("button:not([aria-label^='Run command:'])");
       const total = await buttons.count();
       for (let i = 0; i < total; i++) {
         const button = buttons.nth(i);

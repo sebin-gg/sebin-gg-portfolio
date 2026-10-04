@@ -6,12 +6,22 @@ import { expect, test } from "@playwright/test";
  * fade that respects the motion preference.
  */
 
-const PANEL = "#terminal .font-mono";
+/**
+ * Anchored on an explicit attribute rather than the `font-mono` utility class:
+ * the command chips are monospace too, so a class-based selector matched all
+ * ten elements and broke the strict-mode locator.
+ */
+const PANEL = "#terminal [data-terminal-panel]";
 const ROW = `${PANEL} div > div`;
 
+/**
+ * `exact` matters here: the command chips are named "Run command: <name>", and
+ * a substring match for "Run" would resolve to the chips as well as the submit
+ * button.
+ */
 const run = async (page: import("@playwright/test").Page, command: string) => {
   await page.getByLabel("Terminal command").fill(command);
-  await page.getByRole("button", { name: "Run" }).click();
+  await page.getByRole("button", { name: "Run", exact: true }).click();
 };
 
 test.describe("playground terminal", () => {
@@ -73,6 +83,21 @@ test.describe("playground terminal", () => {
         timeout: 3000,
       })
       .toBeGreaterThan(0.99);
+  });
+
+  test("runs a command from a chip without errors", async ({ page }) => {
+    // Covers the chips that the exhaustive tour in home.spec.ts skips: several
+    // in a row is exactly the interaction that made that tour unstable.
+    const errors: string[] = [];
+    page.on("pageerror", (err) => errors.push(err.message));
+    await page.goto("/");
+    await page.locator("#terminal").scrollIntoViewIfNeeded();
+
+    for (const command of ["whoami", "skills", "contact"]) {
+      await page.getByRole("button", { name: `Run command: ${command}`, exact: true }).click();
+    }
+    await expect(page.locator(ROW)).toHaveCount(3);
+    expect(errors).toEqual([]);
   });
 
   test("does not animate when reduced motion is preferred", async ({ browser }) => {

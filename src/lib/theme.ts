@@ -1,10 +1,25 @@
+// DeepSource's JS-0067 flags every module-scope declaration as a global one,
+// but this is an ES module, so `export`/`import` keeps these module-scoped and
+// they cannot leak into a global scope. Each declaration below carries a
+// `skipcq` because the analyzer's exclude_patterns does not take effect on this
+// repository. Drop them if DeepSource ever fixes the rule.
+
+// skipcq: JS-0067
 export const THEME_STORAGE_KEY = "theme";
+// skipcq: JS-0067
 export const THEME_DARK_CLASS = "dark";
+// skipcq: JS-0067
 export const THEME_EVENT = "themechange";
+
+// because the analyzer's exclude_patterns does not take effect on this
+/** Media query carrying the device's own light/dark preference. */
+// skipcq: JS-0067
+export const DARK_SCHEME_QUERY = "(prefers-color-scheme: dark)";
 
 export type Theme = "dark" | "light";
 
 /** Reads the stored preference; returns null when nothing is stored. */
+// skipcq: JS-0067
 export function storedTheme(storage: Pick<Storage, "getItem">): Theme | null {
   try {
     const value = storage.getItem(THEME_STORAGE_KEY);
@@ -14,21 +29,51 @@ export function storedTheme(storage: Pick<Storage, "getItem">): Theme | null {
   }
 }
 
+/** Runs a media query defensively, for environments without matchMedia. */
+// skipcq: JS-0067
+function queryMatches(win: Pick<Window, "matchMedia"> | null, query: string): boolean {
+  const matchMedia = win?.matchMedia;
+  if (typeof matchMedia !== "function") return false;
+  try {
+    return matchMedia.call(win, query).matches === true;
+  } catch {
+    return false;
+  }
+}
+
 /**
- * The site is dark by default with a modern, executive aesthetic.
- * Light is an opt-out the user stores explicitly; the OS preference
- * does not override either.
+ * Whether the device reports a dark color scheme. Tolerant of environments
+ * without matchMedia (jsdom stubs, very old browsers): those are treated as
+ * light rather than throwing during the pre-paint script.
  */
-export function resolveThemeIsDark(stored: Theme | null): boolean {
-  return stored !== "light";
+// skipcq: JS-0067
+export function prefersDarkScheme(win: Pick<Window, "matchMedia"> | null = globalThis.window) {
+  return queryMatches(win, DARK_SCHEME_QUERY);
+}
+
+/**
+ * An explicit stored choice always wins. With no stored choice the device
+ * preference decides, so first-time visitors on a light-mode phone get the
+ * light theme instead of being forced onto the dark default.
+ */
+// skipcq: JS-0067
+export function resolveThemeIsDark(
+  stored: Theme | null,
+  systemDark = prefersDarkScheme(),
+): boolean {
+  if (stored === "dark") return true;
+  if (stored === "light") return false;
+  return systemDark;
 }
 
 /** Whether the <html> element currently carries the dark class. */
+// skipcq: JS-0067
 export function htmlHasDarkClass(doc: { documentElement: { classList: DOMTokenList } }): boolean {
   return doc.documentElement.classList.contains(THEME_DARK_CLASS);
 }
 
 /** Subscribes to theme change events on the window. */
+// skipcq: JS-0067
 export function subscribeTheme(onStoreChange: () => void): () => void {
   if (typeof window === "undefined") {
     return () => {};
@@ -38,6 +83,7 @@ export function subscribeTheme(onStoreChange: () => void): () => void {
 }
 
 /** Reads the current theme snapshot from document. */
+// skipcq: JS-0067
 export function getThemeSnapshot(): boolean {
   if (typeof document === "undefined") {
     return false;
@@ -45,6 +91,7 @@ export function getThemeSnapshot(): boolean {
   return htmlHasDarkClass(document);
 }
 
+// skipcq: JS-0067
 function persistThemePreference(dark: boolean): void {
   try {
     localStorage.setItem(THEME_STORAGE_KEY, dark ? "dark" : "light");
@@ -53,6 +100,7 @@ function persistThemePreference(dark: boolean): void {
   }
 }
 
+// skipcq: JS-0067
 function dispatchThemeEvent(): void {
   if (typeof window !== "undefined") {
     window.dispatchEvent(new Event(THEME_EVENT));
@@ -60,6 +108,7 @@ function dispatchThemeEvent(): void {
 }
 
 /** Toggles between light and dark, updating DOM, localStorage and dispatching event. */
+// skipcq: JS-0067
 export function toggleTheme(): boolean {
   if (typeof document === "undefined") {
     return false;
@@ -71,16 +120,50 @@ export function toggleTheme(): boolean {
   return nextDark;
 }
 
-/** Returns the raw inline script that applies the theme class before paint. */
+/**
+ * Returns the raw inline script that applies the theme class before paint.
+ *
+ * It runs in <head> before first paint, so the correct palette is on <html>
+ * with no flash. It also keeps following the device while the visitor has made
+ * no explicit choice: flipping the OS to dark mid-session switches the site
+ * over, whereas an explicit toggle is persisted and then always wins.
+ *
+ * The logic is duplicated from resolveThemeIsDark/storedTheme on purpose: it
+ * cannot import them before the bundle loads.
+ */
+// skipcq: JS-0067
 export function themeInitScriptSource(): string {
+  const key = JSON.stringify(THEME_STORAGE_KEY);
+  const darkClass = JSON.stringify(THEME_DARK_CLASS);
+  const query = JSON.stringify(DARK_SCHEME_QUERY);
   const script = `
 (function () {
-  try {
-    if (localStorage.getItem(${JSON.stringify(THEME_STORAGE_KEY)}) !== "light") {
-      document.documentElement.classList.add(${JSON.stringify(THEME_DARK_CLASS)});
-    }
-  } catch (e) {
-    // Storage can be blocked (private mode); dark is the default anyway.
+  var KEY = ${key}, CLASS = ${darkClass};
+  function stored() {
+    try { return window.localStorage.getItem(KEY); } catch (e) { return null; }
+  }
+  function media() {
+    try { return window.matchMedia(${query}); } catch (e) { return null; }
+  }
+  function isDark() {
+    var saved = stored();
+    if (saved === "dark") return true;
+    if (saved === "light") return false;
+    var mq = media();
+    return !!(mq && mq.matches);
+  }
+  function apply() {
+    document.documentElement.classList.toggle(CLASS, isDark());
+    window.dispatchEvent(new Event(${JSON.stringify(THEME_EVENT)}));
+  }
+  apply();
+  // Follow the device, but only while nothing has been explicitly stored, so
+  // an explicit toggle is never undone by an OS change.
+  var mq = media();
+  if (mq && mq.addEventListener) {
+    mq.addEventListener("change", function () {
+      if (stored() === null) apply();
+    });
   }
 })();
 `;

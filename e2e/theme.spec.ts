@@ -1,19 +1,32 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
-async function htmlClass(page: import("@playwright/test").Page) {
+async function htmlClass(page: Page) {
   return page.evaluate(() => document.documentElement.className);
 }
 
-test.describe("theme toggle", () => {
-  test("is dark by default (fresh visitor, nothing stored)", async ({ page }) => {
+/**
+ * The site follows the device's color scheme until the visitor makes an
+ * explicit choice, after which that choice is persisted and always wins.
+ * Playwright's default `colorScheme` is "light", so every test below sets the
+ * device preference explicitly instead of relying on it.
+ */
+test.describe("theme", () => {
+  test("a fresh visitor on a light device gets the light theme", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "light" });
     await page.goto("/");
-    // Dark is the default: no stored preference yet.
-    expect(await htmlClass(page)).toContain("dark");
-    const toggle = page.getByRole("button", { name: "Switch to light mode" });
-    await expect(toggle).toBeVisible();
+    expect(await htmlClass(page)).not.toContain("dark");
+    await expect(page.getByRole("button", { name: "Switch to dark mode" })).toBeVisible();
   });
 
-  test("switches to light and persists after reload", async ({ page }) => {
+  test("a fresh visitor on a dark device gets the dark theme", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "dark" });
+    await page.goto("/");
+    expect(await htmlClass(page)).toContain("dark");
+    await expect(page.getByRole("button", { name: "Switch to light mode" })).toBeVisible();
+  });
+
+  test("an explicit choice overrides the device and survives a reload", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "dark" });
     await page.goto("/");
     await page.getByRole("button", { name: "Switch to light mode" }).click();
 
@@ -21,27 +34,68 @@ test.describe("theme toggle", () => {
     expect(await htmlClass(page)).not.toContain("dark");
 
     await page.reload();
-    // Init script reads the stored "light" and skips the dark class.
-    await expect(page.getByRole("button", { name: "Switch to dark mode" })).toBeVisible();
     expect(await htmlClass(page)).not.toContain("dark");
+    await expect(page.getByRole("button", { name: "Switch to dark mode" })).toBeVisible();
   });
 
-  test("switches back to dark and persists that too", async ({ page }) => {
+  test("toggling to dark from a light device persists", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "light" });
     await page.goto("/");
-    await page.getByRole("button", { name: "Switch to light mode" }).click();
     await page.getByRole("button", { name: "Switch to dark mode" }).click();
+
     await expect(page.getByRole("button", { name: "Switch to light mode" })).toBeVisible();
     expect(await htmlClass(page)).toContain("dark");
+
+    // The stored "dark" must win over the light device preference on reload.
     await page.reload();
     expect(await htmlClass(page)).toContain("dark");
+  });
+
+  test("follows a live device change while nothing is stored", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "light" });
+    await page.goto("/");
+    expect(await htmlClass(page)).not.toContain("dark");
+
+    // No explicit choice, so flipping the OS switches the site over.
+    await page.emulateMedia({ colorScheme: "dark" });
+    await expect.poll(() => htmlClass(page)).toContain("dark");
+  });
+
+  test("an explicit choice is not undone by a later device change", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "dark" });
+    await page.goto("/");
+    await page.getByRole("button", { name: "Switch to light mode" }).click();
+    expect(await htmlClass(page)).not.toContain("dark");
+
+    await page.emulateMedia({ colorScheme: "light" });
+    await page.waitForTimeout(250);
+    expect(await htmlClass(page)).not.toContain("dark");
+  });
+
+  test("native widgets match the palette via color-scheme", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "light" });
+    await page.goto("/");
+    const light = await page.evaluate(() =>
+      getComputedStyle(document.documentElement).getPropertyValue("color-scheme").trim(),
+    );
+    expect(light).toBe("light");
+
+    await page.emulateMedia({ colorScheme: "dark" });
+    await expect
+      .poll(() =>
+        page.evaluate(() =>
+          getComputedStyle(document.documentElement).getPropertyValue("color-scheme").trim(),
+        ),
+      )
+      .toBe("dark");
   });
 
   test("no wrong-theme flash: init script runs in the head", async ({ page }) => {
     // The inline script must be present in the initial HTML (server rendered),
-    // before any client bundle runs.
+    // before any client bundle runs, and must read the device preference.
     const response = await page.goto("/");
     const html = await response!.text();
-    expect(html).toContain('localStorage.getItem("theme")');
-    expect(html).toContain('document.documentElement.classList.add("dark")');
+    expect(html).toContain("prefers-color-scheme: dark");
+    expect(html).toContain("classList.toggle");
   });
 });

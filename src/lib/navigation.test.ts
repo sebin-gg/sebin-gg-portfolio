@@ -9,6 +9,7 @@ import {
   resolveNavigation,
 } from "@/lib/navigation";
 import { getDictionary } from "@/lib/i18n/dictionaries";
+import { navItems } from "@/lib/site";
 
 describe("navigation module", () => {
   it("determines home route correctly", () => {
@@ -99,5 +100,13 @@ describe("navigation module", () => {
       { label: "Skills", href: "#skills" },
     ];
     expect(getSectionIds(items)).toEqual(["about", "skills"]);
+  });
+
+  it("leads with Projects", () => {
+    // Projects is the section visitors came for, so it heads the bar. Labels
+    // are looked up by href, so reordering cannot shift a label onto a link.
+    const items = localizedNavItems(getDictionary("en"), "en");
+    expect(items[0]).toEqual({ label: "Projects", href: "#projects" });
+    expect(navItems[0].href).toBe("#projects");
   });
 });

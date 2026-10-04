@@ -7,37 +7,56 @@
   Semantic tokens. Light values live on :root, dark values live on
   .dark. Utilities are mapped in @theme inline below so components can
   use classes like bg-canvas, text-ink, border-line, text-accent.
+
+  The two modes are a matched pair: same hue families (slate surfaces, indigo
+  accent), inverted lightness, and the same structural contract. In each mode
+  --accent-strong is the higher-contrast hover step — darker than --accent on
+  light, lighter on dark — because "more prominent" means opposite things on
+  opposite surfaces.
+
+  Surfaces sit deliberately close together (panel vs canvas ~1.10 in both
+  modes): the layout reads as one field, and depth comes from --line rather
+  than from big surface jumps. Borders carry the separation, which is why they
+  are tuned to >= 1.45 against --panel in both modes instead of the washed-out
+  hairlines a "pure white on near-white" palette ends up with.
+
+  color-scheme tells the browser which palette to use for native widgets,
+  scrollbars and form controls. Without it, a light page renders dark scrollbars
+  and dark-rendered <select>/autocomplete popups, which is the single most
+  common reason a hand-built light mode "looks broken".
 */
 :root {
-  --canvas: #f8fafc;
+  color-scheme: light;
+  --canvas: #f1f5f9;
   --panel: #ffffff;
-  --panel-2: #f1f5f9;
-  --line: #e2e8f0;
-  --line-strong: #cbd5e1;
+  --panel-2: #e8edf5;
+  --line: #cbd5e1;
+  --line-strong: #94a3b8;
   --ink: #0f172a;
   --ink-soft: #475569;
-  --ink-faint: #5d6b82;
+  --ink-faint: #5a6880;
   --accent: #4f46e5;
   --accent-strong: #4338ca;
   --accent-soft: #eef2ff;
   --accent-ink: #ffffff;
-  --glow: rgba(79, 70, 229, 0.12);
+  --glow: rgba(79, 70, 229, 0.14);
 }
 
 .dark {
-  --canvas: #090d16;
-  --panel: #0f1523;
-  --panel-2: #161f33;
-  --line: #1e293b;
-  --line-strong: #334155;
+  color-scheme: dark;
+  --canvas: #0b1020;
+  --panel: #131b2d;
+  --panel-2: #1c2740;
+  --line: #2a3850;
+  --line-strong: #44557a;
   --ink: #f8fafc;
-  --ink-soft: #94a3b8;
-  --ink-faint: #7d8aa6;
+  --ink-soft: #a3b1c7;
+  --ink-faint: #8593ad;
   --accent: #818cf8;
   --accent-strong: #a5b4fc;
   --accent-soft: #1e1b4b;
   --accent-ink: #1e1b4b;
-  --glow: rgba(129, 140, 248, 0.18);
+  --glow: rgba(129, 140, 248, 0.2);
 }
 
 @theme inline {

@@ -1,0 +1,7 @@
+# Mirrors the CI quality gate locally so failures surface in seconds instead
+# of a push/CI round trip. Uses test:unit:fast (no coverage) because the
+# coverage run exists for the CRAP gate and the report upload, not for
+# catching breakage; add --no-verify only if you are deliberately bypassing it.
+pnpm lint
+pnpm typecheck
+pnpm test:unit:fast
