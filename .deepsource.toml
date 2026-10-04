@@ -7,11 +7,6 @@ version = 1
 # complexity everywhere else.
 exclude_patterns = ["src/app/**", "src/components/**"]
 
-# Test code is marked, not excluded, so the analyzer still reports real
-# problems in it while dropping rules that test frameworks require breaking —
-# notably the async-function rule, which every Playwright callback trips.
-test_patterns = ["e2e/**", "**/*.test.ts", "**/*.test.tsx"]
-
 [[analyzers]]
 name = "javascript"
 enabled = true

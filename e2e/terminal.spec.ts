@@ -9,10 +9,10 @@ import { expect, test } from "@playwright/test";
 const PANEL = "#terminal .font-mono";
 const ROW = `${PANEL} div > div`;
 
-async function run(page: import("@playwright/test").Page, command: string) {
+const run = async (page: import("@playwright/test").Page, command: string) => {
   await page.getByLabel("Terminal command").fill(command);
   await page.getByRole("button", { name: "Run" }).click();
-}
+};
 
 test.describe("playground terminal", () => {
   test("centers the panel within its section", async ({ page }) => {
@@ -53,8 +53,12 @@ test.describe("playground terminal", () => {
     await run(page, "whoami");
     const row = page.locator(ROW).last();
     const styles = await row.evaluate((el) => {
-      const s = getComputedStyle(el);
-      return { name: s.animationName, delay: s.animationDelay, fill: s.animationFillMode };
+      const computed = getComputedStyle(el);
+      return {
+        name: computed.animationName,
+        delay: computed.animationDelay,
+        fill: computed.animationFillMode,
+      };
     });
     expect(styles.name).toBe("terminal-fade");
     expect(styles.fill).toBe("both");
@@ -65,7 +69,7 @@ test.describe("playground terminal", () => {
 
     // And it must actually end up fully visible.
     await expect
-      .poll(async () => row.evaluate((el) => Number(getComputedStyle(el).opacity)), {
+      .poll(() => row.evaluate((el) => Number(getComputedStyle(el).opacity)), {
         timeout: 3000,
       })
       .toBeGreaterThan(0.99);
@@ -81,8 +85,8 @@ test.describe("playground terminal", () => {
       .locator(ROW)
       .last()
       .evaluate((el) => {
-        const s = getComputedStyle(el);
-        return { name: s.animationName, delay: s.animationDelay };
+        const computed = getComputedStyle(el);
+        return { name: computed.animationName, delay: computed.animationDelay };
       });
     expect(styles.name).toBe("none");
     expect(styles.delay).toBe("0s");
