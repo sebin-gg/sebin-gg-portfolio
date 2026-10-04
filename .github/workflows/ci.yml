@@ -177,8 +177,8 @@ jobs:
           path: .next
 
       - name: Run e2e tests
-        if: steps.e2e_changes.outputs.run == 'true'
         run: pnpm test:e2e --project=${{ matrix.browser }}
+        if: steps.e2e_changes.outputs.run == 'true'
         env:
           E2E_SKIP_BUILD: 1
 
@@ -272,8 +272,8 @@ jobs:
           path: .next
 
       - name: Run mobile e2e tests
-        if: steps.e2e_changes.outputs.run == 'true'
         run: pnpm exec playwright test --project=mobile
+        if: steps.e2e_changes.outputs.run == 'true'
         env:
           E2E_SKIP_BUILD: 1
 
@@ -347,34 +347,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - os: windows-latest
-            store: 'D:\.pnpm-store'
-          - os: windows-11-arm
-            store: 'D:\.pnpm-store'
-          - os: ubuntu-24.04-arm
-            store: /home/runner/.pnpm-store
+        os: [windows-latest, windows-11-arm, ubuntu-24.04-arm]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
 
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-
-      # pnpm/action-setup wipes its `dest` directory at the start of every run.
-      # On windows-11-arm pnpm's default store resolved *inside* that
-      # directory, so the store was destroyed before install and all ~1,200
-      # packages were re-downloaded (2m49s vs 14s on windows-latest). Pin the
-      # store outside `dest` first so setup-node's pnpm cache resolves to a
-      # directory that survives, and the cache actually hits.
-      #
-      # This must be config, not an env var: pnpm ignores PNPM_STORE_DIR and
-      # npm_config_store_dir, and honours only the --store-dir flag or the
-      # config file. `--location=project` writes to the pnpm-workspace.yaml
-      # this repo already has.
-      - name: Pin the pnpm store
-        shell: bash
-        run: pnpm config set storeDir "${{ matrix.store }}" --location=project
 
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
@@ -419,34 +398,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - os: windows-latest
-            store: 'D:\.pnpm-store'
-          - os: windows-11-arm
-            store: 'D:\.pnpm-store'
-          - os: ubuntu-24.04-arm
-            store: /home/runner/.pnpm-store
+        os: [windows-latest, windows-11-arm, ubuntu-24.04-arm]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
 
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-
-      # pnpm/action-setup wipes its `dest` directory at the start of every run.
-      # On windows-11-arm pnpm's default store resolved *inside* that
-      # directory, so the store was destroyed before install and all ~1,200
-      # packages were re-downloaded (2m49s vs 14s on windows-latest). Pin the
-      # store outside `dest` first so setup-node's pnpm cache resolves to a
-      # directory that survives, and the cache actually hits.
-      #
-      # This must be config, not an env var: pnpm ignores PNPM_STORE_DIR and
-      # npm_config_store_dir, and honours only the --store-dir flag or the
-      # config file. `--location=project` writes to the pnpm-workspace.yaml
-      # this repo already has.
-      - name: Pin the pnpm store
-        shell: bash
-        run: pnpm config set storeDir "${{ matrix.store }}" --location=project
 
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
