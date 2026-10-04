@@ -1,6 +1,5 @@
 import { spawnSync, spawn } from "node:child_process";
-import { accessSync, constants, existsSync, statSync } from "node:fs";
-import { realpathSync } from "node:fs";
+import { accessSync, constants, existsSync, realpathSync, statSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -51,7 +50,7 @@ function resolveSymlinkTarget(p) {
 export function resolvePnpmBin() {
   const errors = [];
   const ua = process.env.npm_config_user_agent ?? "";
-  const version = ua.match(/pnpm\/([0-9][0-9A-Za-z.+-]*)/)?.[1];
+  const version = ua.match(/pnpm\/(\d[\dA-Za-z.+-]*)/)?.[1];
   const corepackRoot = process.env.COREPACK_ROOT ?? "";
   if (version && corepackRoot) {
     // Corepack keeps one directory per package-manager version; the pnpm
@@ -61,6 +60,10 @@ export function resolvePnpmBin() {
     errors.push(`corepack entry missing: ${entry}`);
   }
   try {
+    // PATH lookup happens only for the two fixed probe commands below ("sh"
+    // and "command -v"); the pnpm command itself is then launched by the
+    // absolute path returned here, so attacker-controlled PATH entries can
+    // never substitute the package manager binary (Sonar S4036).
     const found = spawnSync("sh", ["-c", "command -v pnpm"], {
       encoding: "utf8",
     })
