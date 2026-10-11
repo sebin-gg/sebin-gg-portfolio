@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs"; // skipcq: JS-0833 — ESM parsed with sourceType: script
 import { dirname, isAbsolute, join, resolve } from "node:path";
 
 /**
