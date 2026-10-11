@@ -38,6 +38,7 @@
  * (CHROME_PATH / THORIUM_PATH env or the usual system paths).
  */
 import { spawnPnpm } from "./lib/launch-pnpm.mjs";
+import { resolveBrowserBinary } from "./lib/browser-binary.mjs";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import puppeteer from "puppeteer-core";
@@ -201,7 +202,7 @@ const BROWSER_PATHS = [
 ].filter(Boolean);
 
 function findBrowser() {
-  return BROWSER_PATHS.find((p) => existsSync(p));
+  return resolveBrowserBinary(BROWSER_PATHS);
 }
 
 async function waitForServer(url, tries = 120) {
