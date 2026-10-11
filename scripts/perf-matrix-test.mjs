@@ -20,6 +20,12 @@ const PORT = 3400;
 const BROWSER_PATHS = [
   process.env.THORIUM_PATH,
   process.env.CHROME_PATH,
+  // Windows install locations: puppeteer cannot launch a .bat wrapper (spawn
+  // EINVAL without a shell), so point at the real binaries only.
+  "C:\\Program Files\\Thorium\\Application\\thorium.exe",
+  "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+  "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
   "/usr/bin/thorium-browser",
   "/usr/bin/thorium",
   "/usr/bin/google-chrome-stable",
