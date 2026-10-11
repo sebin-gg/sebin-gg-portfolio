@@ -41,8 +41,10 @@ Merged branches are deleted in the same task that merges them — never accumula
 ## Commands (pnpm)
 
 - `pnpm dev` — dev server on :3000
-- `pnpm verify:fast` — **default inner loop while iterating:** lint + typecheck +
-  format:check + unit (no coverage), in parallel. Browser/perf checks excluded.
+- `pnpm verify:fast` — **default inner loop while iterating:** lint + typecheck →
+  build + format:check + unit (no coverage), in parallel lanes; typecheck and
+  build are serialized on one lane because both touch `.next`. Browser/perf
+  checks excluded.
 - `pnpm test:e2e:chrome` — browser loop (chromium only, still builds + serves).
   Full matrix (`test:e2e:local`, `test:e2e`) and `check:all` run once pre-PR.
 - `pnpm check:all` — full local quality gate (static gates ∥ unit+build+browsers ∥ CRAP → e2e → terminal/thorium)

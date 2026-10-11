@@ -60,8 +60,29 @@ function resolveSymlinkTarget(p) {
  */
 export function resolveWindowsShimTarget(shim, contents) {
   const parsed = shimTargetFromContents(shim, contents);
-  if (parsed && isAbsolute(parsed) && commandExists(parsed)) return parsed;
+  if (parsed && isAbsolute(parsed) && commandExists(parsed) && hasPnpmProvenance(parsed)) {
+    return parsed;
+  }
   return findPnpmEntryFromShim(shim);
+}
+
+/**
+ * Binary provenance: the target only runs when a `pnpm` package directory
+ * sits at the target, its parent (pnpm home layouts hoist pnpm.exe next to
+ * it), or an ancestor. An attacker who can write a fake shim and a fake exe
+ * controls the story either way, but a stray exfiltrator exe dropped in an
+ * unrelated PATH dir without a pnpm install beside it now fails closed into
+ * the walk-up below, which itself requires `node_modules/pnpm` on disk.
+ */
+function hasPnpmProvenance(target) {
+  let dir = win32.dirname(win32.resolve(target.replace(/\\/g, "/")));
+  for (let depth = 0; depth < 6; depth += 1) {
+    if (commandExists(join(dir, "pnpm", "package.json"))) return true;
+    const parent = win32.dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  return false;
 }
 
 /**
