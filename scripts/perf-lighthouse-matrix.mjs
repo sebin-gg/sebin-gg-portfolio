@@ -38,6 +38,7 @@
  * (CHROME_PATH / THORIUM_PATH env or the usual system paths).
  */
 import { spawnPnpm } from "./lib/launch-pnpm.mjs";
+import { resolveBrowserBinary } from "./lib/browser-binary.mjs";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import puppeteer from "puppeteer-core";
@@ -191,6 +192,11 @@ function parseArgs(argv) {
 const BROWSER_PATHS = [
   process.env.THORIUM_PATH,
   process.env.CHROME_PATH,
+  // Standard Windows install locations so discovery works with no env set.
+  "C:\\Program Files\\Thorium\\Application\\thorium.exe",
+  "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+  "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
   "/usr/bin/thorium-browser",
   "/usr/bin/thorium",
   "/usr/bin/google-chrome-stable",
@@ -201,7 +207,7 @@ const BROWSER_PATHS = [
 ].filter(Boolean);
 
 function findBrowser() {
-  return BROWSER_PATHS.find((p) => existsSync(p));
+  return resolveBrowserBinary(BROWSER_PATHS);
 }
 
 async function waitForServer(url, tries = 120) {
