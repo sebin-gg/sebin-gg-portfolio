@@ -49,6 +49,19 @@ describe("scripts/lib/launch-pnpm.mjs", () => {
     expect(shimTargetFromContents(shim, "@ECHO off\r\n")).toBe("");
   });
 
+  it("parses pnpm's self-managed %~dp0 shim dialect (versioned home layout)", async () => {
+    const { shimTargetFromContents } = await import(HELPER);
+    // Real-world shape from `pnpm home`-managed installs (v10+): the shim
+    // uses the %~dp0 modifier and hops up into a versioned store before
+    // reaching pnpm.exe. Must resolve like the classic %dp0% dialect.
+    const shim = "D:\\pnpm\\bin\\pnpm.CMD";
+    const parsed = shimTargetFromContents(
+      shim,
+      '@SETLOCAL\r\n@"%~dp0\\..\\global\\v11\\2de8-1a077eda3c9\\node_modules\\pnpm\\pnpm.exe"   %*\r\n',
+    );
+    expect(parsed).toBe("D:\\pnpm\\global\\v11\\2de8-1a077eda3c9\\node_modules\\pnpm\\pnpm.exe");
+  });
+
   it("falls back to the installed pnpm package when the shim target is stale", async () => {
     const { resolveWindowsShimTarget: resolveTarget } = await import(HELPER);
     // Reproduce the runner layout: PNPM_HOME/bin/pnpm.CMD whose %dp0% argument
