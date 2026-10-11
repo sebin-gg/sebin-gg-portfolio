@@ -2,7 +2,7 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, sep } from "node:path";
 // skipcq: JS-0067
 import { resolveBrowserBinary } from "../../scripts/lib/browser-binary.mjs";
 
@@ -53,7 +53,7 @@ describe("resolveBrowserBinary", () => {
     mkdirSync(appDir, { recursive: true });
     writeFileSync(join(appDir, "browser.exe"), "-- fake --");
     try {
-      writeFileSync(wrapper, `@echo off\r\n"%MY_BROWSER_DIR%\\browser.exe" %*\r\n`);
+      writeFileSync(wrapper, `@echo off\r\n"%MY_BROWSER_DIR%${sep}browser.exe" %*\r\n`);
       process.env.MY_BROWSER_DIR = appDir;
       expect(resolveBrowserBinary([wrapper])).toBe(join(appDir, "browser.exe"));
     } finally {
@@ -68,7 +68,8 @@ describe("resolveBrowserBinary", () => {
       // A wrapper somewhere else that names the exe by its relative location.
       const otherDir = join(dir, "agent");
       mkdirSync(otherDir, { recursive: true });
-      const rel = "..\\Thorium\\Application\\thorium.exe";
+      // Both platforms' path.join resolve "/" — cmd also accepts it.
+      const rel = "../Thorium/Application/thorium.exe";
       writeFileSync(join(otherDir, "wrap.bat"), `@echo off\r\n"%~dp0${rel}" %*\r\n`);
       // %~dp0 expansion is not a plain env var; the relative fallback must
       // still find the exe when the variable name itself is unknown.
