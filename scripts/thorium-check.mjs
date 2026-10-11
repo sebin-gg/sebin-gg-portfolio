@@ -11,6 +11,7 @@
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { checkSite, launch, report, requireBuild, root, serve } from "./lib/browser-check.mjs";
+import { resolveBrowserBinary } from "./lib/browser-binary.mjs";
 
 const THORIUM_PATHS = [
   process.env.THORIUM_PATH,
@@ -19,7 +20,7 @@ const THORIUM_PATHS = [
   `${process.env.HOME}/.local/bin/thorium`,
 ].filter(Boolean);
 
-const executablePath = THORIUM_PATHS.find((p) => existsSync(p));
+const executablePath = resolveBrowserBinary(THORIUM_PATHS);
 
 if (!executablePath) {
   console.error("✗ Thorium browser not found. Set THORIUM_PATH or install thorium-browser.");

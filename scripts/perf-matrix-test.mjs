@@ -10,6 +10,7 @@
  * Usage: node scripts/perf-matrix-test.mjs
  */
 import { spawnPnpm } from "./lib/launch-pnpm.mjs";
+import { resolveBrowserBinary } from "./lib/browser-binary.mjs";
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import puppeteer from "puppeteer-core";
@@ -35,7 +36,7 @@ const BROWSER_PATHS = [
   "/home/sebinmathew/.local/bin/thorium",
 ].filter(Boolean);
 
-const executablePath = BROWSER_PATHS.find((p) => existsSync(p));
+const executablePath = resolveBrowserBinary(BROWSER_PATHS);
 
 if (!executablePath) {
   console.error("✗ No Chrome/Thorium browser binary found.");
