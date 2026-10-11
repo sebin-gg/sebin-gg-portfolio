@@ -156,7 +156,14 @@ describe("themeInitScriptSource", () => {
   });
 
   it("survives blocked storage", () => {
+    // The inline script reads window.localStorage; stub both objects so the
+    // blocked condition actually reaches the script (jsdom keeps separate
+    // global/window slots for the accessor here).
     vi.stubGlobal("localStorage", undefined);
+    Object.defineProperty(window, "localStorage", {
+      value: undefined,
+      configurable: true,
+    });
     expect(() => {
       new Function(themeInitScriptSource())();
     }).not.toThrow();

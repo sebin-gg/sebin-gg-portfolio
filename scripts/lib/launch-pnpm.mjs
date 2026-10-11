@@ -60,18 +60,55 @@ function resolveSymlinkTarget(p) {
  */
 export function resolveWindowsShimTarget(shim, contents) {
   const parsed = shimTargetFromContents(shim, contents);
-  if (parsed && isAbsolute(parsed) && commandExists(parsed)) return parsed;
+  if (parsed && isAbsolute(parsed) && commandExists(parsed) && hasPnpmProvenance(parsed)) {
+    return parsed;
+  }
   return findPnpmEntryFromShim(shim);
 }
 
-/** The quoted `%dp0%`-relative argument npm's cmd-shim invokes just before `%*`. */
+/**
+ * Binary provenance: the target only runs when a `pnpm` package directory
+ * sits at the target, its parent (pnpm home layouts hoist pnpm.exe next to
+ * it), or an ancestor. An attacker who can write a fake shim and a fake exe
+ * controls the story either way, but a stray exfiltrator exe dropped in an
+ * unrelated PATH dir without a pnpm install beside it now fails closed into
+ * the walk-up below, which itself requires `node_modules/pnpm` on disk.
+ */
+function hasPnpmProvenance(target) {
+  let dir = win32.dirname(win32.resolve(target.replace(/\\/g, "/")));
+  for (let depth = 0; depth < 6; depth += 1) {
+    if (commandExists(join(dir, "pnpm", "package.json"))) return true;
+    const parent = win32.dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  return false;
+}
+
+/**
+ * The executable argument quoted immediately before `%*` in a cmd shim.
+ *
+ * Two shim dialects exist in the wild:
+ *  - npm's cmd-shim writes quoted `%dp0%\entry.js`.
+ *  - pnpm's self-managed installs (v10+ `pnpm home` layout) write
+ *    `@"%~dp0\..\global\v11\…\pnpm.exe" %*` — the `%~` modifier is not
+ *    a quoting quirk of one tool; capture both so either resolves.
+ */
 export function shimTargetFromContents(shim, contents = readFileSync(shim, "utf8")) {
-  const invocation = contents
-    .split(/\r?\n/)
-    .find((line) => line.includes("%*") && /"%dp0%[\\/][^"]+"\s+%*/i.test(line));
+  const lines = contents.split(/\r?\n/);
+  // Dialect 1 (npm cmd-shim): quoted "%dp0%\path" followed by %*.
+  const invocation = lines.find(
+    (line) => line.includes("%*") && /"%dp0%[\\/][^"]+"\s+%*/i.test(line),
+  );
   const match = invocation?.match(/"%dp0%[\\/]([^"]+)"\s+%*/i);
-  if (!match) return "";
-  return win32.resolve(win32.dirname(shim), match[1].replaceAll("/", "\\"));
+  if (match) return win32.resolve(win32.dirname(shim), match[1].replaceAll("/", "\\"));
+  // Dialect 2 (pnpm self-managed): %~dp0-relative executable, quoted or not.
+  const raw = lines.find((line) => /%~dp0/.test(line) && line.includes("%*"));
+  const rawMatch = raw?.match(/%~dp0\\?([^"%]+\.(?:exe|c|m?js))"?\s+%*/i);
+  if (rawMatch) {
+    return win32.resolve(win32.dirname(shim), rawMatch[1].replaceAll("/", "\\"));
+  }
+  return "";
 }
 
 // pnpm ships a .cjs or .mjs entrypoint depending on version.
