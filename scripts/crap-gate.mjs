@@ -13,6 +13,7 @@
  * this script so coverage/coverage-summary.json exists.
  */
 import { execFileSync } from "node:child_process";
+import { createRequire } from "node:module";
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
@@ -21,13 +22,31 @@ const coverageFile = resolve(root, "coverage/coverage-summary.json");
 const COMPLEXITY_CAP = 4;
 
 function runLintComplexity() {
-  const eslintBin = resolve(root, "node_modules/.bin/eslint");
+  const [command, ...entryArgs] = eslintCommand();
   try {
-    return JSON.parse(execFileSync(eslintBin, ["src", "--format", "json"], { encoding: "utf8" }));
+    return JSON.parse(
+      execFileSync(command, [...entryArgs, "src", "--format", "json"], { encoding: "utf8" }),
+    );
   } catch (error) {
     // ESLint exits 1 when it finds problems but still prints JSON to stdout.
     return JSON.parse(error.stdout);
   }
+}
+
+/*
+ * The .bin shims are not spawnable from Node without `shell:true` (the
+ * extensionless POSIX sh shim is ENOENT for CreateProcess on Windows, and the
+ * .CMD wrapper silently no-ops when spawned directly from a Node child on
+ * Node 26). Resolve the real eslint JS entry and run it with the current Node
+ * executable — portable across pnpm's .pnpm layout on every platform.
+ */
+function eslintCommand() {
+  // eslint's package exports hide bin/eslint.js, so resolve from its package
+  // root (the bin path is fixed by the package layout, not the exports map).
+  const requireKid = createRequire(resolve(root, "package.json"));
+  const pkgDir = requireKid.resolve("eslint/package.json");
+  const entry = resolve(pkgDir, "..", "bin", "eslint.js");
+  return [process.execPath, entry];
 }
 
 function maxComplexity(report) {
