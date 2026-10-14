@@ -71,6 +71,10 @@ does not say.
    never as literals — cspell runs strict and flags them.
 3. The unslop scanner is English-only; translated dictionaries are out of its
    scope, English copy is in scope.
+4. Git Bash mangles a lone `/` CLI argument into a Windows path
+   (`C:/Program Files/Git/`), so slash-leading args to the `.mjs` scripts die
+   (seen: perf-matrix `--routes /`). Same command-gotcha class as item 1 — run
+   such commands with `MSYS_NO_PATHCONV=1`.
 
 ## Agent skills (use these when working here)
 
