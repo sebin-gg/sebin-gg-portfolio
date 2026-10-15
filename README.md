@@ -179,3 +179,6 @@ Change copy/links there; components follow.
 - The homepage is image-free by design, so there are no `next/image` optimizations to babysit.
 - Agent-friendly: the site ships an `llms.txt` (linked from `<head>`) so LLM agents can summarize it, plus sitemap/robots/JSON-LD Person schema.
 - Dark is the default theme; visitors can toggle to light (stored in localStorage, honored pre-hydration).
+
+
+# harmless_ci_harness: force CI scheduling for PR #63 re-evaluation
