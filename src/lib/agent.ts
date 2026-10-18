@@ -23,6 +23,7 @@ export type AgentSnapshot = {
   updatedAt: string;
 };
 
+// skipcq: JS-0067 — module-scoped export, not a global declaration
 export function buildAgentSnapshot(): AgentSnapshot {
   return {
     name: profile.name,
@@ -57,6 +58,7 @@ export function buildAgentSnapshot(): AgentSnapshot {
   };
 }
 
+// skipcq: JS-0067 — module-scoped export, not a global declaration
 export function buildLlmsText(): string {
   const snap = buildAgentSnapshot();
   const lines = [

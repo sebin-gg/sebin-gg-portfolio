@@ -4,6 +4,7 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { DEFAULT_LOCALE, localePath, type Locale } from "@/lib/locale";
 import { GithubIcon, LinkedinIcon, XIcon } from "@/components/icons";
 
+// skipcq: JS-0067 — module-scoped component export, not a global declaration
 export function SiteFooter({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
   const dict = getDictionary(locale);
   const year = new Date().getFullYear();
