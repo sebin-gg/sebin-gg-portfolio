@@ -88,10 +88,9 @@ Measured with Lighthouse (see `budgets.json`, `lighthouserc.js`, and
   (~87–96), where 100 is impossible by definition.
 
 Why it stays fast on 2G/3G: no images, one self-hosted variable sans font preloaded (the LCP
-family) while the mono family loads non-blocking, zero client libraries, CSS inlined via
-`experimental.inlineCss` (one less round-trip on cold 2G loads), and the header's interactive
-widgets hydrate only after the main thread goes idle so their work lands outside the
-FCP → TTI window.
+family) while the mono family loads non-blocking, zero client libraries, small CSS assets
+that browsers can cache between visits, and header widgets that hydrate after the main
+thread goes idle so their work lands outside the FCP → TTI window.
 
 > Running Lighthouse locally while other apps peg the CPU inflates the simulated TBT. On an idle
 > machine scores sit in the high 80s–90s; CI (clean runner, median of 3) is the source of truth.

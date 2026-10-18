@@ -4,7 +4,6 @@ export type AgentSnapshot = {
   name: string;
   role: string;
   location: string;
-  email: string;
   site: string;
   tagline: string;
   focus: readonly string[];
@@ -24,12 +23,12 @@ export type AgentSnapshot = {
   updatedAt: string;
 };
 
+// skipcq: JS-0067 — module-scoped export, not a global declaration
 export function buildAgentSnapshot(): AgentSnapshot {
   return {
     name: profile.name,
     role: profile.role,
     location: profile.location,
-    email: profile.email,
     site: siteUrl,
     tagline: profile.tagline,
     focus: profile.focus,
@@ -38,7 +37,6 @@ export function buildAgentSnapshot(): AgentSnapshot {
       github: links.github.href,
       linkedin: links.linkedin.href,
       x: links.x.href,
-      email: links.email.href,
     },
     resume: `${siteUrl}${resumeUrl}`,
     projects: projects.map((p) => ({
@@ -60,6 +58,7 @@ export function buildAgentSnapshot(): AgentSnapshot {
   };
 }
 
+// skipcq: JS-0067 — module-scoped export, not a global declaration
 export function buildLlmsText(): string {
   const snap = buildAgentSnapshot();
   const lines = [
@@ -68,7 +67,6 @@ export function buildLlmsText(): string {
     `> ${snap.tagline}`,
     ``,
     `- Location: ${snap.location}`,
-    `- Email: ${snap.email}`,
     `- GitHub: ${snap.links.github}`,
     `- LinkedIn: ${snap.links.linkedin}`,
     `- Resume: ${snap.resume}`,

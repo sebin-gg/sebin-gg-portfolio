@@ -2,8 +2,9 @@ import Link from "next/link";
 import { links, profile } from "@/lib/site";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { DEFAULT_LOCALE, localePath, type Locale } from "@/lib/locale";
-import { GithubIcon, LinkedinIcon, MailIcon, XIcon } from "@/components/icons";
+import { GithubIcon, LinkedinIcon, XIcon } from "@/components/icons";
 
+// skipcq: JS-0067 — module-scoped component export, not a global declaration
 export function SiteFooter({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
   const dict = getDictionary(locale);
   const year = new Date().getFullYear();
@@ -51,13 +52,6 @@ export function SiteFooter({ locale = DEFAULT_LOCALE }: { readonly locale?: Loca
               className="text-ink-soft hover:text-accent rounded-md p-2 transition-colors"
             >
               <XIcon className="h-4 w-4" />
-            </a>
-            <a
-              href={links.email.href}
-              aria-label={dict.footer.sendEmail}
-              className="text-ink-soft hover:text-accent rounded-md p-2 transition-colors"
-            >
-              <MailIcon className="h-5 w-5" />
             </a>
           </div>
         </div>

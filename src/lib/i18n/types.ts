@@ -50,7 +50,7 @@ export interface Dictionary {
     linkedinProfile: string;
     xProfile: string;
     highlights: string;
-    emailLabel: string;
+    githubLabel: string;
     collegeLabel: string;
     collegeLine: string;
     statsProjects: string;
@@ -151,7 +151,6 @@ export interface Dictionary {
   };
   footer: {
     accessibility: string;
-    sendEmail: string;
     githubProfile: string;
     linkedinProfile: string;
     xProfile: string;

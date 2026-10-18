@@ -11,7 +11,6 @@ export const profile = {
   firstName: "Sebin",
   role: "Full-stack developer and software engineer",
   location: "Kottayam, Kerala, India",
-  email: "Sebinmathew543@gmail.com",
   /** Phone number is deliberately not published on the web page; it stays in the résumé PDF. */
   degree: "B.Tech in Computer Science & Engineering",
   college: "College of Engineering Chengannur",
@@ -44,11 +43,6 @@ export const links = {
     handle: "/in/sebin-gg",
   },
   x: { label: "X", href: "https://x.com/M13568Sebin", handle: "@M13568Sebin" },
-  email: {
-    label: "Email",
-    href: "mailto:Sebinmathew543@gmail.com",
-    handle: "Sebinmathew543@gmail.com",
-  },
 } as const;
 
 export const resumeUrl = "/resume.pdf";
@@ -283,7 +277,7 @@ export const terminalResponses = {
   skills: "{items} — full toolbox below.",
   experience: "Now: {title} at {org}. {count} stops below.",
   resume: "Resume PDF is at {url} — header button downloads it too.",
-  contact: "Mail {email} — GitHub {handle}.",
+  contact: "Contact me on GitHub: {handle}.",
   unknown: "Unknown command: {command}. Type help.",
 } as const;
 
@@ -397,7 +391,7 @@ function terminalTable(
       anchor: null,
     },
     contact: {
-      output: fill(responses.contact, { email: profile.email, handle: links.github.handle }),
+      output: fill(responses.contact, { handle: links.github.handle }),
       anchor: null,
     },
     clear: { output: "", anchor: null, clear: true },

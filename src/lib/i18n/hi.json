@@ -99,7 +99,6 @@
     "githubProfile": "GitHub प्रोफ़ाइल",
     "linkedinProfile": "LinkedIn प्रोफ़ाइल",
     "location": "कोट्टायम, केरल, भारत",
-    "sendEmail": "ईमेल भेजें",
     "xProfile": "X प्रोफ़ाइल"
   },
   "header": {
@@ -112,7 +111,7 @@
     "collegeLabel": "कॉलेज",
     "collegeLine": "{short} · {year} बैच",
     "downloadResume": "रिज़्यूमे डाउनलोड करें",
-    "emailLabel": "ईमेल",
+    "githubLabel": "GitHub",
     "focus": [
       "साइबर सुरक्षा",
       "बैकएंड सिस्टम",
@@ -211,7 +210,7 @@
     "placeholder": "जैसे whoami",
     "responses": {
       "about": "{bio}",
-      "contact": "मेल {email} — GitHub {handle}।",
+      "contact": "GitHub पर संपर्क करें: {handle}।",
       "experience": "अभी: {org} में {title}। नीचे {count} पड़ाव।",
       "help": "यह आज़माएँ: {commands}. कोई कमांड लिखकर Enter दबाएँ।",
       "projects": "नवीनतम: {project} — {tagline}। नीचे {count} प्रोजेक्ट।",
