@@ -40,7 +40,8 @@
 import { spawnPnpm } from "./lib/launch-pnpm.mjs";
 import { resolveBrowserBinary } from "./lib/browser-binary.mjs";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { homedir } from "node:os";
+import { join, resolve } from "node:path";
 import puppeteer from "puppeteer-core";
 import { createRequire } from "node:module";
 
@@ -203,7 +204,7 @@ const BROWSER_PATHS = [
   "/usr/bin/google-chrome",
   "/usr/bin/chromium",
   "/usr/bin/chromium-browser",
-  "/home/sebinmathew/.local/bin/thorium",
+  join(homedir(), ".local", "bin", "thorium"),
 ].filter(Boolean);
 
 function findBrowser() {
