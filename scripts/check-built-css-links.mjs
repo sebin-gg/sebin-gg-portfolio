@@ -1,4 +1,4 @@
-import fs from "node:fs";
+import fs from "node:fs"; // skipcq: JS-0833 — ESM parsed with sourceType: script
 import path from "node:path";
 
 const appDir = path.resolve(".next/server/app");
