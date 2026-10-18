@@ -49,7 +49,8 @@ describe("siteUrl", () => {
 describe("profile", () => {
   it("has the identity fields populated", () => {
     expect(profile.name).toBe("Sebin Mathew");
-    expect(profile.email).toMatch(/@/);
+    expect(links.github.href).toBe("https://github.com/sebin-gg");
+    expect(profile).not.toHaveProperty("email");
     expect(profile.cgpa).toBeGreaterThan(0);
     expect(profile.bio.length).toBeGreaterThan(0);
   });

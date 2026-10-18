@@ -101,7 +101,6 @@
     "githubProfile": "GitHub പ്രൊഫൈൽ",
     "linkedinProfile": "LinkedIn പ്രൊഫൈൽ",
     "location": "കോട്ടയം, കേരളം, ഇന്ത്യ",
-    "sendEmail": "ഇമെയിൽ അയയ്ക്കുക",
     "xProfile": "X പ്രൊഫൈൽ"
   },
   "header": {
@@ -114,7 +113,7 @@
     "collegeLabel": "കോളേജ്",
     "collegeLine": "{short} · {year}-ലെ ബാച്ച്",
     "downloadResume": "റെസ്യൂമെ ഡൗൺലോഡ് ചെയ്യുക",
-    "emailLabel": "ഇമെയിൽ",
+    "githubLabel": "GitHub",
     "focus": [
       "സൈബർ സുരക്ഷ",
       "ബാക്കെൻഡ് സംവിധാനങ്ങൾ",
@@ -213,7 +212,7 @@
     "placeholder": "ഉദാ: whoami",
     "responses": {
       "about": "{bio}",
-      "contact": "മെയിൽ {email} — GitHub {handle}.",
+      "contact": "GitHub-ൽ ബന്ധപ്പെടുക: {handle}.",
       "experience": "ഇപ്പോൾ: {org}-ലെ {title}. താഴെ {count} സ്റ്റോപ്പുകൾ.",
       "help": "ഇത് പരീക്ഷിക്കുക: {commands}. ഒരു കമാൻഡ് ടൈപ്പ് ചെയ്ത് Enter അമർത്തുക.",
       "projects": "പുതിയത്: {project} — {tagline}. താഴെ {count} പ്രോജക്റ്റുകൾ.",

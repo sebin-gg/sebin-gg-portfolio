@@ -46,7 +46,10 @@ describe("Hero", () => {
     const card = screen.getByRole("complementary", { name: "Profile highlights" });
     expect(within(card).getByText("SM")).toBeInTheDocument();
     expect(within(card).queryByText(/Education/i)).not.toBeInTheDocument();
-    expect(within(card).getByText(profile.email)).toBeInTheDocument();
+    expect(within(card).getByRole("link", { name: links.github.handle })).toHaveAttribute(
+      "href",
+      links.github.href,
+    );
     expect(within(card).getByText(profile.college)).toBeInTheDocument();
     expect(within(card).getByText(profile.degree)).toBeInTheDocument();
     expect(within(card).getByText(String(profile.cgpa))).toBeInTheDocument();

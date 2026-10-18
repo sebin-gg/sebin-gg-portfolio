@@ -20,8 +20,8 @@ export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) 
     { value: `${projects.length}`, label: dict.hero.statsProjects },
     { value: "'28", label: dict.hero.statsClass },
   ];
-  const facts: { label: string; value: string; mailto?: boolean }[] = [
-    { label: dict.hero.emailLabel, value: profile.email, mailto: true },
+  const facts: { label: string; value: string; href?: string }[] = [
+    { label: dict.hero.githubLabel, value: links.github.handle, href: links.github.href },
     { label: dict.hero.collegeLabel, value: dict.about.collegeValue },
     { label: dict.about.degreeLabel, value: dict.about.degreeValue },
     { label: dict.about.cgpaLabel, value: String(profile.cgpa) },
@@ -149,8 +149,13 @@ export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) 
                   <div key={fact.label} className="flex items-baseline justify-between gap-4">
                     <dt className="text-ink-faint">{fact.label}</dt>
                     <dd className="text-ink text-right font-medium">
-                      {fact.mailto ? (
-                        <a href={links.email.href} className="hover:text-accent transition-colors">
+                      {fact.href ? (
+                        <a
+                          href={fact.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:text-accent transition-colors"
+                        >
                           {fact.value}
                         </a>
                       ) : (
