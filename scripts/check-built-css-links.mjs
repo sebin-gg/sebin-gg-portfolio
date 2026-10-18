@@ -19,6 +19,9 @@ function collect(directory) {
 collect(appDir);
 
 const errors = [];
+if (htmlFiles.length === 0) {
+  errors.push("No prerendered HTML files were found.");
+}
 let stylesheetCount = 0;
 for (const file of htmlFiles) {
   const html = fs.readFileSync(file, "utf8");
@@ -52,6 +55,9 @@ for (const file of htmlFiles) {
     }
     stylesheetCount++;
   }
+}
+if (stylesheetCount === 0) {
+  errors.push("No stylesheet links were found in the prerendered HTML files.");
 }
 if (errors.length) {
   console.error(errors.join("\n"));
