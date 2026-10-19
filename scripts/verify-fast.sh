@@ -56,5 +56,7 @@ if ((${#failed_names[@]} > 0)); then
   fail "parallel gates"
 fi
 
+pnpm test:resume-copy || fail "résumé copy regression test"
+
 echo
-echo "✔ Fast gates passed (lint, typecheck+build, format, unit:fast)."
+echo "✔ Fast gates passed (lint, typecheck+build, format, unit:fast, résumé copy)."

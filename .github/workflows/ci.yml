@@ -43,6 +43,9 @@ jobs:
       - name: Unit tests with coverage
         run: pnpm test:unit
 
+      - name: Résumé copy failure-path test
+        run: pnpm test:resume-copy
+
       - name: CRAP complexity gate
         run: pnpm crap:gate
 

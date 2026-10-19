@@ -14,7 +14,7 @@ echo "==> Installing Playwright browsers (for e2e + visual checks)"
 pnpm exec playwright install chromium firefox webkit
 
 echo "==> Refreshing résumé PDF copy (public/resume.pdf)"
-bash scripts/prepare-resume.sh || echo "! No résumé PDF found to copy — skipping (the committed one stays)."
+bash scripts/prepare-resume.sh
 
 echo
 echo "✔ Setup complete."
