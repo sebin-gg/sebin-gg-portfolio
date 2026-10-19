@@ -116,6 +116,19 @@ describe("timeline", () => {
     expect(timeline.some((item) => item.kind === "work")).toBe(true);
     expect(timeline.some((item) => item.kind === "program")).toBe(true);
   });
+
+  it("links the FOCES entry to its executive committee and portrait", () => {
+    expect(timeline[0]).toMatchObject({
+      org: "FOCES CEC",
+      href: "https://foces.ceconline.edu/#execom",
+      portrait: {
+        src: "/images/sebin-mathew.webp",
+        alt: "Sebin Mathew",
+        width: 400,
+        height: 514,
+      },
+    });
+  });
 });
 
 describe("resume", () => {
