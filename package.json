@@ -14,6 +14,7 @@
     "test:unit": "vitest run --coverage",
     "test:unit:fast": "vitest run",
     "test:unit:watch": "vitest",
+    "test:resume-copy": "bash scripts/test-prepare-resume.sh",
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:local": "playwright test --project=chromium --project=firefox --project=mobile",
