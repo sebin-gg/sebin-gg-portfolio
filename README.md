@@ -101,11 +101,11 @@ The repo is set up for agent-friendly work. Skills live in `.agents/skills/` (lo
 `skills-lock.json`); agents load them with the `skill` tool. `AGENTS.md` tells agents which ones
 to use when working here.
 
-| Tool / skill | What it does                                                                    | How to use                                                               |
-| ------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Tool / skill | What it does                                                                    | How to use                                                                       |
+| ------------ | ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
 | `Serena MCP` | Finds symbols and references across the codebase                                | Use when configured for symbol lookup, cross-file analysis, or larger refactors. |
-| `caveman`    | Token-reducing terse mode — cuts output tokens while keeping technical accuracy | Load `skill:caveman`; levels `lite / full / ultra`; `/caveman off` exits |
-| `unslop`     | Strips AI tells / redundancy from user-visible copy, with bundled scanners      | `skill:unslop`; `scripts/banned_phrase_scan.py` etc. for audits          |
+| `caveman`    | Token-reducing terse mode — cuts output tokens while keeping technical accuracy | Load `skill:caveman`; levels `lite / full / ultra`; `/caveman off` exits         |
+| `unslop`     | Strips AI tells / redundancy from user-visible copy, with bundled scanners      | `skill:unslop`; `scripts/banned_phrase_scan.py` etc. for audits                  |
 
 Install any community skill into the repo:
 
