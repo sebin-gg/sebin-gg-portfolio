@@ -14,8 +14,8 @@ overrides:
   qs@6.15.1: 6.16.0
   smol-toml@1.8.0: 1.9.1
   source-map-js@1.2.1: 1.2.2
-  tmp@0.0.33: 0.2.6
-  tmp@0.1.0: 0.2.6
+  tmp@0.0.33: 0.2.7
+  tmp@0.1.0: 0.2.7
   uuid@8.3.2: 11.1.1
 
 importers:
@@ -5191,8 +5191,8 @@ packages:
     resolution: {integrity: sha512-somxA8xKAUzlAxl0TX/jMSYIbRNFIVGnI96pVGJPeMc5BsHmfVXn6mOJT6U++ELnl04eGfzpfcEuZe8WiASkXg==}
     hasBin: true
 
-  tmp@0.2.6:
-    resolution: {integrity: sha512-5sJPdPjfI5Kx+qbrDesxkglRBxW//g7hCsqspEjwkewGvBMGIKMOTKzLt1hFVJzyadba3lDUN20O9qhvbQUSTA==}
+  tmp@0.2.7:
+    resolution: {integrity: sha512-e0votIpp4Uo2AJYSzVHV6xCcawuiez3DzqDAbrTc3YxBkplN6e+dM13ZeIcZnDg/QpSuU2zfZ3rzwY8ukEnaXw==}
     engines: {node: '>=14.14'}
 
   to-regex-range@5.0.1:
@@ -6851,7 +6851,7 @@ snapshots:
       lighthouse-logger: 1.2.0(supports-color@7.2.0)
       open: 7.4.2
       proxy-agent: 6.5.0(supports-color@7.2.0)
-      tmp: 0.2.6
+      tmp: 0.2.7
       uuid: 11.1.1
       yargs: 15.4.1
       yargs-parser: 13.1.2
@@ -8817,7 +8817,7 @@ snapshots:
     dependencies:
       chardet: 0.7.0
       iconv-lite: 0.4.24
-      tmp: 0.2.6
+      tmp: 0.2.7
 
   extract-zip@2.0.1(supports-color@7.2.0):
     dependencies:
@@ -11365,7 +11365,7 @@ snapshots:
     dependencies:
       tldts-core: 7.4.18
 
-  tmp@0.2.6: {}
+  tmp@0.2.7: {}
 
   to-regex-range@5.0.1:
     dependencies:
