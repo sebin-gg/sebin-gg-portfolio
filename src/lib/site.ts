@@ -50,6 +50,13 @@ export const resumeUrl = "/resume.pdf";
 export type TimelineItem = {
   title: string;
   org: string;
+  href?: string;
+  portrait?: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+  };
   /** Human-readable date range, e.g. "Apr 2026 – present". */
   period: string;
   summary: string[];
@@ -60,6 +67,13 @@ export const timeline: TimelineItem[] = [
   {
     title: "Project Coordinator",
     org: "FOCES CEC",
+    href: "https://foces.ceconline.edu/#execom",
+    portrait: {
+      src: "/images/sebin-mathew.webp",
+      alt: "Sebin Mathew",
+      width: 400,
+      height: 514,
+    },
     period: "Apr 2026 – present",
     kind: "work",
     summary: [

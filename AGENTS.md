@@ -97,13 +97,18 @@ it human-voiced, typographic apostrophes only.
 
 ## Rules
 
-1. **Performance is a feature.** This site is image-free and static-first on purpose — the budget
-   is ~2G/3G. Do not add client-side libraries, images, analytics, or heavy JS. New interactive
-   UI = tiny isolated client component only. Self-host fonts via `next/font`, never a CDN link.
+1. **Performance is a feature.** Keep this site static-first and lean for ~2G/3G. The only image
+   exception is Sebin's local FOCES timeline portrait, rendered small in grayscale with `next/image`
+   at its native dimensions and default lazy loading. Do not add other images, client-side libraries,
+   analytics, or heavy JS. New interactive UI = tiny isolated client component only. Self-host fonts
+   via `next/font`, never a CDN link.
 2. **Content lives in `src/lib/site.ts`.** Copy, links, projects, experience — update data there,
    not inside components. Keep copy human-voiced (no AI tells), with typographic apostrophes —
    the unslop skill's `references/core-contract.md` (`.agents/skills/unslop/`) is the standard
-   these words refer to; run its audit pass before and after touching user-visible copy.
+   these words refer to; run its audit pass before and after touching user-visible copy. For semantic
+   code navigation, use Serena for symbol/reference lookup, cross-file analysis, and larger refactors
+   when Serena MCP is configured for this checkout; use repository search for small text, workflow,
+   and documentation changes. If Serena is unavailable, continue with available tools.
 3. **Dark mode is class-based** (`.dark` on `<html>`) and **dark is the default** — light only
    when the user explicitly stored `theme=light`. `src/lib/theme.ts` is the single source of
    truth for this logic: the inline no-FOUC script and the toggle both read their behavior from
