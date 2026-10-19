@@ -46,6 +46,8 @@ export function Experience({ locale = DEFAULT_LOCALE }: { readonly locale?: Loca
                     {item.href ? (
                       <a
                         href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="decoration-ink-soft/40 hover:text-accent focus-visible:outline-accent rounded-sm underline underline-offset-4 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
                       >
                         {item.org}

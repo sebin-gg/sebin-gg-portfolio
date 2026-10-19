@@ -10,6 +10,11 @@ describe("Experience", () => {
       "href",
       "https://foces.ceconline.edu/#execom",
     );
+    expect(screen.getByRole("link", { name: "FOCES CEC" })).toHaveAttribute("target", "_blank");
+    expect(screen.getByRole("link", { name: "FOCES CEC" })).toHaveAttribute(
+      "rel",
+      "noopener noreferrer",
+    );
     expect(screen.getByRole("img", { name: "Sebin Mathew" })).toHaveClass("grayscale");
   });
 });

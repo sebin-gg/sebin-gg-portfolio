@@ -18,7 +18,13 @@ export type AgentSnapshot = {
     href: string;
     demo?: string;
   }[];
-  experience: { title: string; org: string; period: string; summary: string[] }[];
+  experience: {
+    title: string;
+    org: string;
+    period: string;
+    summary: string[];
+    href?: string;
+  }[];
   skills: { group: string; items: string[] }[];
   updatedAt: string;
 };
@@ -52,6 +58,7 @@ export function buildAgentSnapshot(): AgentSnapshot {
       org: t.org,
       period: t.period,
       summary: [...t.summary],
+      ...(t.href ? { href: t.href } : {}),
     })),
     skills: skills.map((s) => ({ group: s.group, items: [...s.items] })),
     updatedAt: new Date().toISOString(),
@@ -75,7 +82,9 @@ export function buildLlmsText(): string {
     ...snap.projects.map((p) => `- ${p.name}: ${p.description} (${p.href})`),
     ``,
     `## Experience`,
-    ...snap.experience.map((e) => `- ${e.title}, ${e.org} (${e.period})`),
+    ...snap.experience.map(
+      (e) => `- ${e.title}, ${e.org} (${e.period})${e.href ? ` (${e.href})` : ""}`,
+    ),
     ``,
     `## Skills`,
     ...snap.skills.map((s) => `- ${s.group}: ${s.items.join(", ")}`),

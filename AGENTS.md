@@ -98,7 +98,7 @@ it human-voiced, typographic apostrophes only.
 ## Rules
 
 1. **Performance is a feature.** Keep this site static-first and lean for ~2G/3G. The only image
-   exception is Sebin's local FOCES timeline portrait, rendered small in grayscale with `next/image`
+   exception is Sebin's local FOCES timeline portrait, rendered small in monochrome with `next/image`
    at its native dimensions and default lazy loading. Do not add other images, client-side libraries,
    analytics, or heavy JS. New interactive UI = tiny isolated client component only. Self-host fonts
    via `next/font`, never a CDN link.
