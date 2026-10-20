@@ -49,3 +49,5 @@ docs/screenshots/*
 # firecrawl local cache (untrusted web content, never commit)
 .firecrawl/
 .aider*
+
+.vercel
