@@ -3,6 +3,8 @@ import path from "node:path";
 
 const appDir = path.resolve(".next/server/app");
 const staticDir = path.resolve(".next/static");
+const routeCacheDir = path.resolve(".next/server/route-cache");
+const prerenderManifestPath = path.resolve(".next/prerender-manifest.json");
 if (!fs.existsSync(appDir) || !fs.existsSync(staticDir)) {
   console.error("Build output is missing. Run `pnpm build` first.");
   process.exit(1);
@@ -18,6 +20,21 @@ function collect(directory) {
 }
 collect(appDir);
 
+// Vercel's Next.js adapter writes build-time responses to route-cache instead
+// of leaving the plain HTML files that this check inspects in server/app.
+const hasVercelAdapterPrerenders =
+  process.env.VERCEL === "1" &&
+  fs.existsSync(routeCacheDir) &&
+  fs.readdirSync(routeCacheDir).length > 0 &&
+  fs.existsSync(prerenderManifestPath) &&
+  Object.keys(JSON.parse(fs.readFileSync(prerenderManifestPath, "utf8")).routes ?? {}).length > 0;
+
+let htmlRoot = appDir;
+if (htmlFiles.length === 0 && hasVercelAdapterPrerenders) {
+  htmlRoot = routeCacheDir;
+  collect(routeCacheDir);
+}
+
 const errors = [];
 if (htmlFiles.length === 0) {
   errors.push("No prerendered HTML files were found.");
@@ -32,25 +49,25 @@ for (const file of htmlFiles) {
       continue;
     const href = tag.match(/\bhref=(?:"([^"]*)"|'([^']*)')/i);
     if (!href) {
-      errors.push(`${path.relative(appDir, file)}: stylesheet link has no href`);
+      errors.push(`${path.relative(htmlRoot, file)}: stylesheet link has no href`);
       continue;
     }
     const url = href[1] ?? href[2];
     if (/\s/.test(url)) {
       errors.push(
-        `${path.relative(appDir, file)}: stylesheet href contains multiple paths or whitespace: ${url}`,
+        `${path.relative(htmlRoot, file)}: stylesheet href contains multiple paths or whitespace: ${url}`,
       );
       continue;
     }
     const decoded = decodeURIComponent(url.split(/[?#]/, 1)[0]);
     const prefix = "/_next/static/";
     if (!decoded.startsWith(prefix)) {
-      errors.push(`${path.relative(appDir, file)}: unexpected stylesheet URL: ${url}`);
+      errors.push(`${path.relative(htmlRoot, file)}: unexpected stylesheet URL: ${url}`);
       continue;
     }
     const asset = path.resolve(staticDir, decoded.slice(prefix.length));
     if (!asset.startsWith(`${staticDir}${path.sep}`) || !fs.existsSync(asset)) {
-      errors.push(`${path.relative(appDir, file)}: stylesheet file is missing: ${url}`);
+      errors.push(`${path.relative(htmlRoot, file)}: stylesheet file is missing: ${url}`);
       continue;
     }
     stylesheetCount++;
