@@ -79,7 +79,7 @@ importers:
         version: 16.4.0(@typescript-eslint/parser@8.71.1(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3))(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)
       gt:
         specifier: ^2.21.1
-        version: 2.26.1(@babel/core@7.29.7(supports-color@7.2.0))(supports-color@7.2.0)
+        version: 2.26.3(@babel/core@7.29.7(supports-color@7.2.0))(supports-color@7.2.0)
       husky:
         specifier: ^9.1.7
         version: 9.1.7
@@ -269,11 +269,6 @@ packages:
   '@babel/helpers@8.0.0':
     resolution: {integrity: sha512-wfbi91pM3py96oIiJEz7qIpyXDytgr9zQC1HEWwlGNVRAEmItuU/0a41ZUKu1sJGyhhOIpc4t5vk4PYzt8wpsg==}
     engines: {node: ^22.18.0 || >=24.11.0}
-
-  '@babel/parser@7.29.8':
-    resolution: {integrity: sha512-E8lTAYNB1KW+FH+VGJuZM1ioAx2E6oVlvQFRrf5P8ZZmsiJXYAD9vTFV7yyEURNzgh1dFqMZuO6tUwcARbqFCA==}
-    engines: {node: '>=6.0.0'}
-    hasBin: true
 
   '@babel/parser@7.29.9':
     resolution: {integrity: sha512-CjXrNHTnvqBVqHgdBysY3vk2T8tpJHb5/RMeHJBTyVa9xgugCB0CJTx/3oO8RV2QRQP391RWpB7D6hLjm8V9uA==}
@@ -2782,10 +2777,6 @@ packages:
   end-of-stream@1.4.5:
     resolution: {integrity: sha512-ooEGc6HP26xXq/N+GCGOT0JKCLDGrq2bQUZrQ7gyrJiZANJ/8YDTxTpQBXGMn+WbIQXNVpyWymm7KYVICQnyOg==}
 
-  enhanced-resolve@5.24.5:
-    resolution: {integrity: sha512-L1l8TNvomm6UVW5B253AGxQagSQr+vGwhMlrrfRS2qmhx46AMpMVJKQYLvWYbysTMY8VoicOvzHzoHMbyzB+4A==}
-    engines: {node: '>=10.13.0'}
-
   enhanced-resolve@5.26.0:
     resolution: {integrity: sha512-9vhedylFonb2YGogzUKX6+Ja72gOJbN1QHAqdrvqLwhdl/QWbKopzoUC9EbQNVsAns/bx/4uyqalrQAoy1IByw==}
     engines: {node: '>=10.13.0'}
@@ -3269,8 +3260,8 @@ packages:
   gt-remark@1.0.12:
     resolution: {integrity: sha512-mqW6BkvfLGHwtIIdsy3C0QW26HbZDJ7EdQz7c7pL8KZrLIBzbcu2rHVqWEoleeB5+TsqMQIFWRhsUt5UpbrDWw==}
 
-  gt@2.26.1:
-    resolution: {integrity: sha512-A9SVBaq7TZ/CaX6slEVpnkg8rPG2jMtSq+M48Rl4qkiqr6SaUJ7jEf5KD/IE5EIuTfMXYFJHrwQ/y80l16wVSQ==}
+  gt@2.26.3:
+    resolution: {integrity: sha512-flek1/ecfZOmYeh7g2KeAFMzezAJdWn2HGqibDFYNxPnQWkAY/5vsaPWznb2BmhfimRMxqlKc7b5Egb/aYLhFQ==}
     hasBin: true
 
   has-bigints@1.1.0:
@@ -5793,10 +5784,6 @@ snapshots:
       '@babel/template': 8.0.0
       '@babel/types': 8.0.4
 
-  '@babel/parser@7.29.8':
-    dependencies:
-      '@babel/types': 7.29.8
-
   '@babel/parser@7.29.9':
     dependencies:
       '@babel/types': 7.29.8
@@ -7095,7 +7082,7 @@ snapshots:
   '@tailwindcss/node@4.3.3':
     dependencies:
       '@jridgewell/remapping': 2.3.5
-      enhanced-resolve: 5.24.5
+      enhanced-resolve: 5.26.0
       jiti: 2.7.0
       lightningcss: 1.32.0
       magic-string: 0.30.21
@@ -8213,11 +8200,6 @@ snapshots:
     dependencies:
       once: 1.4.0
 
-  enhanced-resolve@5.24.5:
-    dependencies:
-      graceful-fs: 4.2.11
-      tapable: 2.3.3
-
   enhanced-resolve@5.26.0:
     dependencies:
       graceful-fs: 4.2.11
@@ -8944,7 +8926,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  gt@2.26.1(@babel/core@7.29.7(supports-color@7.2.0))(supports-color@7.2.0):
+  gt@2.26.3(@babel/core@7.29.7(supports-color@7.2.0))(supports-color@7.2.0):
     dependencies:
       '@babel/generator': 7.29.8
       '@babel/parser': 7.29.9
@@ -9686,7 +9668,7 @@ snapshots:
 
   magicast@0.5.4:
     dependencies:
-      '@babel/parser': 7.29.8
+      '@babel/parser': 7.29.9
       '@babel/types': 7.29.8
       source-map-js: 1.2.2
 
