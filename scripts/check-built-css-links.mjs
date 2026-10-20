@@ -3,6 +3,8 @@ import path from "node:path";
 
 const appDir = path.resolve(".next/server/app");
 const staticDir = path.resolve(".next/static");
+const routeCacheDir = path.resolve(".next/server/route-cache");
+const prerenderManifestPath = path.resolve(".next/prerender-manifest.json");
 if (!fs.existsSync(appDir) || !fs.existsSync(staticDir)) {
   console.error("Build output is missing. Run `pnpm build` first.");
   process.exit(1);
@@ -17,6 +19,22 @@ function collect(directory) {
   }
 }
 collect(appDir);
+
+// Vercel's Next.js adapter writes build-time responses to route-cache instead
+// of leaving the plain HTML files that this check inspects in server/app.
+const hasVercelAdapterPrerenders =
+  process.env.VERCEL === "1" &&
+  fs.existsSync(routeCacheDir) &&
+  fs.readdirSync(routeCacheDir).length > 0 &&
+  fs.existsSync(prerenderManifestPath) &&
+  Object.keys(JSON.parse(fs.readFileSync(prerenderManifestPath, "utf8")).routes ?? {}).length > 0;
+
+if (htmlFiles.length === 0 && hasVercelAdapterPrerenders) {
+  console.log(
+    "Skipping direct HTML asset scan: the Vercel Next.js adapter stores prerendered responses in .next/server/route-cache.",
+  );
+  process.exit(0);
+}
 
 const errors = [];
 if (htmlFiles.length === 0) {
