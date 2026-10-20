@@ -29,11 +29,10 @@ const hasVercelAdapterPrerenders =
   fs.existsSync(prerenderManifestPath) &&
   Object.keys(JSON.parse(fs.readFileSync(prerenderManifestPath, "utf8")).routes ?? {}).length > 0;
 
+let htmlRoot = appDir;
 if (htmlFiles.length === 0 && hasVercelAdapterPrerenders) {
-  console.log(
-    "Skipping direct HTML asset scan: the Vercel Next.js adapter stores prerendered responses in .next/server/route-cache.",
-  );
-  process.exit(0);
+  htmlRoot = routeCacheDir;
+  collect(routeCacheDir);
 }
 
 const errors = [];
@@ -50,25 +49,25 @@ for (const file of htmlFiles) {
       continue;
     const href = tag.match(/\bhref=(?:"([^"]*)"|'([^']*)')/i);
     if (!href) {
-      errors.push(`${path.relative(appDir, file)}: stylesheet link has no href`);
+      errors.push(`${path.relative(htmlRoot, file)}: stylesheet link has no href`);
       continue;
     }
     const url = href[1] ?? href[2];
     if (/\s/.test(url)) {
       errors.push(
-        `${path.relative(appDir, file)}: stylesheet href contains multiple paths or whitespace: ${url}`,
+        `${path.relative(htmlRoot, file)}: stylesheet href contains multiple paths or whitespace: ${url}`,
       );
       continue;
     }
     const decoded = decodeURIComponent(url.split(/[?#]/, 1)[0]);
     const prefix = "/_next/static/";
     if (!decoded.startsWith(prefix)) {
-      errors.push(`${path.relative(appDir, file)}: unexpected stylesheet URL: ${url}`);
+      errors.push(`${path.relative(htmlRoot, file)}: unexpected stylesheet URL: ${url}`);
       continue;
     }
     const asset = path.resolve(staticDir, decoded.slice(prefix.length));
     if (!asset.startsWith(`${staticDir}${path.sep}`) || !fs.existsSync(asset)) {
-      errors.push(`${path.relative(appDir, file)}: stylesheet file is missing: ${url}`);
+      errors.push(`${path.relative(htmlRoot, file)}: stylesheet file is missing: ${url}`);
       continue;
     }
     stylesheetCount++;
