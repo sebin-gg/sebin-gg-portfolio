@@ -79,7 +79,7 @@ importers:
         version: 16.4.0(@typescript-eslint/parser@8.71.1(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3))(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)
       gt:
         specifier: ^2.21.1
-        version: 2.26.3(@babel/core@7.29.7(supports-color@7.2.0))(supports-color@7.2.0)
+        version: 2.26.5(@babel/core@7.29.7(supports-color@7.2.0))(supports-color@7.2.0)
       husky:
         specifier: ^9.1.7
         version: 9.1.7
@@ -937,15 +937,15 @@ packages:
   '@generaltranslation/icu@0.1.2':
     resolution: {integrity: sha512-2A0txUrZdAWAc42N58/PtoWv7vNB0U1Iyl+nDzf7RSswLHPMsonp7OmPnSraQgkoRSVSlueARVQK4T+zanWsyA==}
 
-  '@generaltranslation/python-extractor@0.2.61':
-    resolution: {integrity: sha512-uxKZUDWHcYved4MR0/Jb3Gtw0462oY+sYnRkEglN6GTIkPIOVAKvL1aewPXTPNEkNnXEh8AFt/HussFZby1dVA==}
+  '@generaltranslation/python-extractor@0.2.62':
+    resolution: {integrity: sha512-O1t1wz4FhCHzaQXMHaDO4gjiz/H6k342BRFGBjGayyhNnaVYy62aGCufojcGEygYB5zkUjA5xZBReOaPxNQJtA==}
     engines: {node: '>=16.0.0'}
 
-  '@generaltranslation/supported-locales@2.1.42':
-    resolution: {integrity: sha512-p1+/RCG6TsuqW3Mb/PjxTAjG48edlXWFCN9dn2njLdaijpCuOZQOn7qjxgxsLwaSVnMSIEGDmDXDLp9S/I1Gow==}
+  '@generaltranslation/supported-locales@2.1.43':
+    resolution: {integrity: sha512-Zifn2mqOLuj5FxrjcPFw+K8f6Z/oWbriKwOldt/OeDh/8r5IE19PHIYY1LCvu38WwDfwivmWBeMv5XVLcdeJMA==}
 
-  '@generaltranslation/vue-extractor@0.1.20':
-    resolution: {integrity: sha512-NYppQ+mWrHVAMF/kM8/3MUz3EyuN8nPwQeLjDxb2XaMM45oTyjFbvPPbrH9hO64+XldAWEti8aS2AVFiesSmow==}
+  '@generaltranslation/vue-extractor@0.1.21':
+    resolution: {integrity: sha512-f7NATKXwp+2+WzLTgadND+WPYpa4thtSzJExCsCTFHEBdtoRFZygE+h1d3zC7cy1FA/kQfprfP80BjqF3gYHqg==}
 
   '@humanfs/core@0.19.2':
     resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==}
@@ -1412,6 +1412,7 @@ packages:
   '@opentelemetry/sdk-trace-base@2.12.0':
     resolution: {integrity: sha512-JOERgZCxRM06FEJ5kEWxlSRChah6MmXDx3KwCruqEv/iEyLkTokCSemf2y1w8oIHtfrr8EVTpzebq/31vn2Cpg==}
     engines: {node: ^18.19.0 || >=20.6.0}
+    deprecated: Use @opentelemetry/sdk-trace package
     peerDependencies:
       '@opentelemetry/api': '>=1.3.0 <1.10.0'
 
@@ -2070,8 +2071,8 @@ packages:
   '@vitest/utils@4.1.11':
     resolution: {integrity: sha512-zTCVGpyFsGWBhllOyKlTw/vnr6D9qxsfSDyfbyZmTyjHw5N/VuvzHpHoQjm2ZJzn4RJgx5w4r7V0er69CmLgPQ==}
 
-  '@vue/shared@3.5.43':
-    resolution: {integrity: sha512-uksS7YGMR5NZyr4JNq0Rp+QyLns0ueaz20KwzIPW9R0LH1Vnt4E+XUM29PNseEbf1www2gOuhuDi5AKOIXag9Q==}
+  '@vue/shared@3.5.44':
+    resolution: {integrity: sha512-H82XLH0DjmSOdbEwO15x3QTo1f5PWEtv237eLpYKc0mqLu+B8hnq16lFWmuBmNurkeiG3wr+oM1FhOll/YVFRg==}
 
   accepts@1.3.8:
     resolution: {integrity: sha512-PYAthTa2m2VKxuvSD3DPC/Gy+U+sOA1LAuT8mkmRuvw+NACSaeXEQ+NHcVF7rONl6qcaxV3Uuemwawk+7+SJLw==}
@@ -3168,8 +3169,8 @@ packages:
   functions-have-names@1.2.3:
     resolution: {integrity: sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==}
 
-  generaltranslation@9.5.6:
-    resolution: {integrity: sha512-z9Rrs6HEwLDP2QrsQvBfUMg7G0ztqgE0c6TZm6cU6iPTzFwFEuXT9KoVEFrD0/HjgIBqvegb+lGMhPCRqT+fBQ==}
+  generaltranslation@9.5.7:
+    resolution: {integrity: sha512-RIzj3yJT5Y8A3gYPURv7cL5IAtTlsguHW/cdAmg4m6Yx/uBZLbbmRCs+MyyNte3og61zFbTdTegkM66gf07NAg==}
 
   generator-function@2.0.1:
     resolution: {integrity: sha512-SFdFmIJi+ybC0vjlHN0ZGVGHc3lgE0DxPAT0djjVg+kjOnSqclqmj0KQ7ykTOLP6YxoqOvuAODGdcHJn+43q3g==}
@@ -3260,8 +3261,8 @@ packages:
   gt-remark@1.0.12:
     resolution: {integrity: sha512-mqW6BkvfLGHwtIIdsy3C0QW26HbZDJ7EdQz7c7pL8KZrLIBzbcu2rHVqWEoleeB5+TsqMQIFWRhsUt5UpbrDWw==}
 
-  gt@2.26.3:
-    resolution: {integrity: sha512-flek1/ecfZOmYeh7g2KeAFMzezAJdWn2HGqibDFYNxPnQWkAY/5vsaPWznb2BmhfimRMxqlKc7b5Egb/aYLhFQ==}
+  gt@2.26.5:
+    resolution: {integrity: sha512-XL0HfahNFbdjWDPjxeH3H2PC5/VCqrvBkKBJgK7oA/67kMyeZgLALPOHdY1fWqAQ43ucR603iK7qb/xI8z9wxA==}
     hasBin: true
 
   has-bigints@1.1.0:
@@ -6398,27 +6399,27 @@ snapshots:
 
   '@generaltranslation/icu@0.1.2': {}
 
-  '@generaltranslation/python-extractor@0.2.61':
+  '@generaltranslation/python-extractor@0.2.62':
     dependencies:
-      generaltranslation: 9.5.6
+      generaltranslation: 9.5.7
       web-tree-sitter: 0.26.13
 
-  '@generaltranslation/supported-locales@2.1.42':
+  '@generaltranslation/supported-locales@2.1.43':
     dependencies:
-      generaltranslation: 9.5.6
+      generaltranslation: 9.5.7
 
-  '@generaltranslation/vue-extractor@0.1.20(supports-color@7.2.0)':
+  '@generaltranslation/vue-extractor@0.1.21(supports-color@7.2.0)':
     dependencies:
       '@babel/parser': 7.29.9
       '@babel/traverse': 7.29.10(supports-color@7.2.0)
       '@babel/types': 7.29.8
       '@generaltranslation/format': 0.1.9
-      '@vue/shared': 3.5.43
+      '@vue/shared': 3.5.44
       enhanced-resolve: 5.26.0
       entities: 7.0.1
       es-module-lexer: 2.3.2
       fast-glob: 3.3.3
-      generaltranslation: 9.5.6
+      generaltranslation: 9.5.7
       semver: 7.8.5
       tsconfig-paths: 4.2.0
       yaml: 2.9.1
@@ -7462,7 +7463,7 @@ snapshots:
       convert-source-map: 2.0.0
       tinyrainbow: 3.1.1
 
-  '@vue/shared@3.5.43': {}
+  '@vue/shared@3.5.44': {}
 
   accepts@1.3.8:
     dependencies:
@@ -8814,7 +8815,7 @@ snapshots:
 
   functions-have-names@1.2.3: {}
 
-  generaltranslation@9.5.6:
+  generaltranslation@9.5.7:
     dependencies:
       '@generaltranslation/api': 0.5.4
       '@generaltranslation/format': 0.1.9
@@ -8926,7 +8927,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  gt@2.26.3(@babel/core@7.29.7(supports-color@7.2.0))(supports-color@7.2.0):
+  gt@2.26.5(@babel/core@7.29.7(supports-color@7.2.0))(supports-color@7.2.0):
     dependencies:
       '@babel/generator': 7.29.8
       '@babel/parser': 7.29.9
@@ -8936,9 +8937,9 @@ snapshots:
       '@clack/prompts': 1.0.0-alpha.6
       '@generaltranslation/format': 0.1.9
       '@generaltranslation/icu': 0.1.2
-      '@generaltranslation/python-extractor': 0.2.61
-      '@generaltranslation/supported-locales': 2.1.42
-      '@generaltranslation/vue-extractor': 0.1.20(supports-color@7.2.0)
+      '@generaltranslation/python-extractor': 0.2.62
+      '@generaltranslation/supported-locales': 2.1.43
+      '@generaltranslation/vue-extractor': 0.1.21(supports-color@7.2.0)
       chalk: 5.6.2
       commander: 12.1.0
       dotenv: 16.6.1
@@ -8947,7 +8948,7 @@ snapshots:
       fast-glob: 3.3.3
       fast-json-stable-stringify: 2.1.0
       fflate: 0.8.3
-      generaltranslation: 9.5.6
+      generaltranslation: 9.5.7
       gt-remark: 1.0.12(supports-color@7.2.0)
       html-entities: 2.6.0
       json-pointer: 0.6.2
