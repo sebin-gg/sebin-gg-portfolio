@@ -15,8 +15,14 @@ describe("section fade-up animation", () => {
   });
 
   it("is collapsed by the global reduced-motion rule", () => {
-    expect(css).toMatch(
-      /prefers-reduced-motion: reduce[\s\S]*animation-duration: 0\.01ms !important/,
-    );
+    expect(css).toMatch(/prefers-reduced-motion: reduce[\s\S]*animation: none !important/);
+  });
+
+  it("the ?motion=off override kills animation the same way", () => {
+    expect(css).toMatch(/html\[data-motion="off"\][\s\S]*?animation: none !important/);
+  });
+
+  it("the OS reduce block escapes an explicit ?motion=on override", () => {
+    expect(css).toMatch(/prefers-reduced-motion: reduce[\s\S]*html:not\(\[data-motion="on"\]\)/);
   });
 });
