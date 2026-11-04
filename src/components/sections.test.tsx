@@ -7,6 +7,7 @@ import { Communities } from "@/components/communities";
 import { Recommendations } from "@/components/recommendations";
 import { Skills } from "@/components/skills";
 import { Terminal } from "@/components/terminal";
+import { Contact } from "@/components/contact";
 import { BlogEmptyState } from "@/components/blog-empty-state";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -25,6 +26,10 @@ describe("Hero", () => {
     expect(screen.getByRole("link", { name: /download résumé/i })).toHaveAttribute(
       "href",
       "/resume.pdf",
+    );
+    expect(screen.getByRole("link", { name: "Email me" })).toHaveAttribute(
+      "href",
+      links.email.href,
     );
   });
 
@@ -49,6 +54,13 @@ describe("Hero", () => {
     expect(within(card).getByRole("link", { name: links.github.handle })).toHaveAttribute(
       "href",
       links.github.href,
+    );
+    expect(within(card).getByRole("link", { name: links.email.handle })).toHaveAttribute(
+      "href",
+      links.email.href,
+    );
+    expect(within(card).getByRole("link", { name: links.email.handle })).not.toHaveAttribute(
+      "target",
     );
     expect(within(card).getByText(profile.college)).toBeInTheDocument();
     expect(within(card).getByText(profile.degree)).toBeInTheDocument();
@@ -282,6 +294,19 @@ describe("Terminal", () => {
   });
 });
 
+describe("Contact", () => {
+  it("offers the email call to action and the internship line", () => {
+    render(<Contact />);
+    expect(screen.getByRole("heading", { name: "Get in touch" })).toBeInTheDocument();
+    expect(screen.getByText(/open to internships/i)).toBeInTheDocument();
+    for (const link of screen.getAllByRole("link")) {
+      expect(link).toHaveAttribute("href", links.email.href);
+    }
+    expect(screen.getByRole("link", { name: links.email.handle })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Email me" })).toBeInTheDocument();
+  });
+});
+
 describe("BlogEmptyState", () => {
   it("says the blog is coming soon and lists planned posts", () => {
     render(<BlogEmptyState />);
@@ -331,6 +356,10 @@ describe("SiteFooter", () => {
     render(<SiteFooter />);
     expect(screen.getByText(new RegExp(`© \\d{4} ${profile.name}`))).toBeInTheDocument();
     expect(screen.getAllByRole("link", { name: "GitHub profile" }).length).toBeGreaterThan(0);
+    expect(screen.getByRole("link", { name: "Send an email" })).toHaveAttribute(
+      "href",
+      links.email.href,
+    );
     expect(screen.getByText(/Kottayam, Kerala, India/)).toBeInTheDocument();
   });
 });

@@ -11,6 +11,7 @@ import { Communities } from "@/components/communities";
 import { Recommendations } from "@/components/recommendations";
 import { Skills } from "@/components/skills";
 import { Terminal } from "@/components/terminal";
+import { Contact } from "@/components/contact";
 import { BlogCta } from "@/components/blog-cta";
 
 interface LocalePageProps {
@@ -62,6 +63,7 @@ export default async function LocalizedHomePage({ params }: LocalePageProps) {
       <Recommendations locale={locale} />
       <Skills locale={locale} />
       <Terminal locale={locale} />
+      <Contact locale={locale} />
       <BlogCta locale={locale} />
     </PageChrome>
   );

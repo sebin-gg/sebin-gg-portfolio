@@ -10,6 +10,7 @@ import { Communities } from "@/components/communities";
 import { Recommendations } from "@/components/recommendations";
 import { Skills } from "@/components/skills";
 import { Terminal } from "@/components/terminal";
+import { Contact } from "@/components/contact";
 import { BlogCta } from "@/components/blog-cta";
 
 export const metadata: Metadata = {
@@ -30,6 +31,7 @@ export default function HomePage() {
       <Recommendations locale="en" />
       <Skills locale="en" />
       <Terminal locale="en" />
+      <Contact locale="en" />
       <BlogCta locale="en" />
     </PageChrome>
   );

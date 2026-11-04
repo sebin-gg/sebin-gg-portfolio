@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildAgentSnapshot, buildLlmsText } from "@/lib/agent";
+import { links, profile } from "@/lib/site";
 
 describe("agent snapshot", () => {
   it("exposes name, links, projects without phone number", () => {
@@ -7,8 +8,8 @@ describe("agent snapshot", () => {
     expect(snap.name).toBe("Sebin Mathew");
     expect(snap.links.github).toBe("https://github.com/sebin-gg");
     expect(snap.experience[0]?.href).toBe("https://foces.ceconline.edu/#execom");
-    expect(snap).not.toHaveProperty("email");
-    expect(snap.links).not.toHaveProperty("email");
+    expect(snap.email).toBe(profile.email);
+    expect(snap.links.email).toBe(links.email.href);
     expect(snap.projects.length).toBeGreaterThanOrEqual(6);
     expect(JSON.stringify(snap)).not.toMatch(/\+?91?\s?\d{10}/);
   });
@@ -18,6 +19,6 @@ describe("agent snapshot", () => {
     expect(text).toContain("/agent.json");
     expect(text).toContain("https://github.com/sebin-gg");
     expect(text).toContain("https://foces.ceconline.edu/#execom");
-    expect(text).not.toMatch(/email|mailto:/i);
+    expect(text).toContain(`- Email: ${profile.email}`);
   });
 });
