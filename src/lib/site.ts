@@ -306,6 +306,7 @@ export type TerminalResponseKey = keyof typeof terminalResponses;
 
 export type TerminalResponses = Record<TerminalResponseKey, string>;
 
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 function fill(template: string, values: Record<string, string | number>): string {
   return template.replace(/\{(\w+)\}/g, (match, key: string) =>
     key in values ? String(values[key]) : match,
@@ -366,6 +367,7 @@ export const terminalFacts = (dict: Dictionary): TerminalFacts => ({
   currentTitle: dict.experience.roles[0],
 });
 
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 function terminalTable(
   responses: TerminalResponses,
   facts: TerminalFacts,
@@ -422,15 +424,18 @@ function terminalTable(
   };
 }
 
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 function normalizeCommand(raw: string): string {
   const command = raw.trim().toLowerCase();
   return command === "" ? "help" : command;
 }
 
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 function unknownResult(command: string, responses: TerminalResponses): TerminalResult {
   return { output: fill(responses.unknown, { command }), anchor: null };
 }
 
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function runTerminalCommand(
   raw: string,
   responses: TerminalResponses = terminalResponses,
@@ -446,6 +451,7 @@ export function runTerminalCommand(
 
 const SITE_URL_FALLBACK = "https://sebin-gg.vercel.app";
 
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 function parseHttpUrl(raw: string): URL {
   try {
     const url = new URL(raw);
@@ -461,6 +467,7 @@ function parseHttpUrl(raw: string): URL {
  * NEXT_PUBLIC_SITE_URL (empty or relative) can never leak into metadata,
  * hreflang alternates, or the sitemap as a relative URL.
  */
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function resolveSiteUrl(env: string | undefined): string {
   const url = parseHttpUrl(env?.trim() || SITE_URL_FALLBACK);
   return url.pathname === "/" ? url.origin : `${url.origin}${url.pathname.replace(/\/+$/, "")}`;

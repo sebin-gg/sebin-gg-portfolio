@@ -19,12 +19,14 @@ export interface ResolvedNavItem {
  * Determines whether the given pathname represents a home route in any locale
  * (`/` and `/hi` are both home; `/blog` and `/hi/blog` are not).
  */
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function isHomeRoute(pathname: string | null | undefined): boolean {
   if (!pathname) return true;
   return stripLocalePrefix(pathname) === "/";
 }
 
 /** Locale home base joined before hash anchors ("" for English, "/hi" otherwise). */
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 function localeHomeBase(locale: Locale): string {
   return locale === DEFAULT_LOCALE ? "" : `/${locale}`;
 }
@@ -34,6 +36,7 @@ function localeHomeBase(locale: Locale): string {
  * page. Off-home hash links jump to the same locale's home (`/hi/blog` ->
  * `/hi/#experience`), never crossing languages.
  */
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function getNavHref(
   itemHref: string,
   isHome: boolean,
@@ -46,6 +49,7 @@ export function getNavHref(
 }
 
 /** Resolves the logo anchor: in-page jump on home, same-locale home elsewhere. */
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function getLogoHref(pathname: string | null | undefined): string {
   if (isHomeRoute(pathname)) return "#top";
   return localeHomeBase(localeFromPathname(pathname)) || "/";
@@ -55,11 +59,13 @@ export function getLogoHref(pathname: string | null | undefined): string {
  * Active-state compares canonical (locale-stripped) paths: /hi/blog is the
  * same page as /blog even though its rendered href carries the prefix.
  */
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 function isCurrentRoute(item: NavItemDef, canonicalPath: string): boolean {
   return !item.href.startsWith("#") && canonicalPath === stripLocalePrefix(item.href);
 }
 
 /** Resolves a single navigation item definition against the active route. */
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function resolveNavItem(
   item: NavItemDef,
   pathname: string | null | undefined,
@@ -78,6 +84,7 @@ export function resolveNavItem(
 }
 
 /** Resolves all navigation items against the active route. */
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function resolveNavigation(
   pathname: string | null | undefined,
   items: readonly NavItemDef[] = navItems,
@@ -95,6 +102,7 @@ export function resolveNavigation(
  * gets a locale prefix, labels come from the locale dictionary (looked up by
  * href so inserting a nav item cannot shift labels onto the wrong link).
  */
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function localizedNavItems(dict: Dictionary, locale: Locale): NavItemDef[] {
   const labels: Record<string, string> = {
     "#experience": dict.nav.experience,
@@ -112,6 +120,7 @@ export function localizedNavItems(dict: Dictionary, locale: Locale): NavItemDef[
 }
 
 /** Extracts hash target section IDs for scroll-spy observation. */
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function getSectionIds(items: readonly NavItemDef[] = navItems): string[] {
   return items.filter((item) => item.href.startsWith("#")).map((item) => item.href.slice(1));
 }

@@ -15,22 +15,28 @@ export function useIdle(timeoutMs = 2000): boolean {
       if (!cancelled) setIdle(true);
     };
 
-    if (typeof window === "undefined") return undefined;
+    let cleanup = (): void => {
+      cancelled = true;
+    };
 
-    const hasIdle = "requestIdleCallback" in window;
-    if (hasIdle) {
-      const id = window.requestIdleCallback(finish, { timeout: timeoutMs });
-      return () => {
-        cancelled = true;
-        window.cancelIdleCallback(id);
-      };
+    if (typeof window !== "undefined") {
+      const hasIdle = "requestIdleCallback" in window;
+      if (hasIdle) {
+        const id = window.requestIdleCallback(finish, { timeout: timeoutMs });
+        cleanup = () => {
+          cancelled = true;
+          window.cancelIdleCallback(id);
+        };
+      } else {
+        const id = window.setTimeout(finish, 400);
+        cleanup = () => {
+          cancelled = true;
+          window.clearTimeout(id);
+        };
+      }
     }
 
-    const id = window.setTimeout(finish, 400);
-    return () => {
-      cancelled = true;
-      window.clearTimeout(id);
-    };
+    return cleanup;
   }, [timeoutMs]);
 
   return idle;
