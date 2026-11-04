@@ -46,8 +46,8 @@ export const links = {
   x: { label: "X", href: "https://x.com/M13568Sebin", handle: "@M13568Sebin" },
   email: {
     label: "Email",
-    href: "mailto:Sebinmathew543@gmail.com",
-    handle: "Sebinmathew543@gmail.com",
+    href: `mailto:${profile.email}`,
+    handle: profile.email,
   },
 } as const;
 
