@@ -32,8 +32,8 @@ export default function HomePage() {
       <Recommendations locale="en" />
       <Skills locale="en" />
       <Terminal locale="en" />
-      <Contact locale="en" />
       <BlogCta locale="en" />
+      <Contact locale="en" />
     </PageChrome>
   );
 }

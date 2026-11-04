@@ -63,8 +63,8 @@ export default async function LocalizedHomePage({ params }: LocalePageProps) {
       <Recommendations locale={locale} />
       <Skills locale={locale} />
       <Terminal locale={locale} />
-      <Contact locale={locale} />
       <BlogCta locale={locale} />
+      <Contact locale={locale} />
     </PageChrome>
   );
 }
