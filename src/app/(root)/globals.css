@@ -4,6 +4,14 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
+  motion-allowed: animation utilities apply unless the manual ?motion=off
+  override is active (html[data-motion="off"]). The prefers-reduced-motion
+  block below still zeroes them under OS reduce — this variant exists so
+  ?motion=on can restore them on a reduced-motion device.
+*/
+@custom-variant motion-allowed (&:where(html:not([data-motion="off"]) *));
+
+/*
   Semantic tokens. Light values live on :root, dark values live on
   .dark. Utilities are mapped in @theme inline below so components can
   use classes like bg-canvas, text-ink, border-line, text-accent.
@@ -105,7 +113,7 @@ body {
 
 /*
   Terminal run fade. Each printed line fades in with a small stagger so a
-  command reads like the screen refreshing. Applied via `motion-safe:` in
+  command reads like the screen refreshing. Applied via `motion-allowed:` in
   terminal.tsx; the reduced-motion block at the end of this file collapses it.
 */
 @keyframes terminal-fade {
@@ -141,6 +149,31 @@ body {
   }
 }
 
+/*
+  Manual motion override (?motion= URL param, applied pre-paint by
+  MotionInit as html[data-motion]). "on" escapes the OS reduce block below
+  and re-enables the section fade even on a reduced-motion device; "off"
+  kills motion regardless of the OS setting.
+*/
+@supports (animation-timeline: view()) {
+  html[data-motion="on"] section {
+    animation: section-fade 600ms ease-out both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 35%;
+  }
+}
+
+html[data-motion="off"] {
+  scroll-behavior: auto;
+}
+html[data-motion="off"] *,
+html[data-motion="off"] *::before,
+html[data-motion="off"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
 /* Visible keyboard focus everywhere. */
 :focus-visible {
   outline: 2px solid var(--accent);
@@ -149,12 +182,12 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
+  html:not([data-motion="on"]) {
     scroll-behavior: auto;
   }
-  *,
-  *::before,
-  *::after {
+  html:not([data-motion="on"]) *,
+  html:not([data-motion="on"]) *::before,
+  html:not([data-motion="on"]) *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

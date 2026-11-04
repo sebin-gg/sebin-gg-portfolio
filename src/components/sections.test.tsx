@@ -233,13 +233,13 @@ describe("Terminal", () => {
     fireEvent.click(screen.getByRole("button", { name: "Run" }));
 
     const line = container.querySelector(
-      ".motion-safe\\:animate-\\[terminal-fade_320ms_ease-out_both\\]",
+      ".motion-allowed\\:animate-\\[terminal-fade_320ms_ease-out_both\\]",
     );
     expect(line).not.toBeNull();
     // `both` fill mode is required: a staggered row has a positive delay, and
     // without a backwards fill it paints at full opacity during the delay,
     // then snaps to opacity 0 — a flash instead of a fade.
-    expect(line).toHaveClass("motion-safe:[animation-delay:var(--fade-delay)]");
+    expect(line).toHaveClass("motion-allowed:[animation-delay:var(--fade-delay)]");
     expect(line?.getAttribute("style")).toContain("--fade-delay: 0ms");
   });
 
