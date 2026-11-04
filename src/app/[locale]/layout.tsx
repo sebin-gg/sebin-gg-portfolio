@@ -144,6 +144,7 @@ function buildJsonLd(locale: string, title: string, description: string): JsonLd
   };
 }
 
+// skipcq: JS-0067 — module-scoped component export, not a global declaration
 export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
   const locale = await requireLocaleParam(params);
   const dict = getDictionary(locale);

@@ -147,6 +147,7 @@ const jsonLdData = {
   ],
 };
 
+// skipcq: JS-0067 — module-scoped component export, not a global declaration
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
