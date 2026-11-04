@@ -102,6 +102,7 @@ export function localizedNavItems(dict: Dictionary, locale: Locale): NavItemDef[
     "#communities": dict.nav.communities,
     "#skills": dict.nav.skills,
     "#terminal": dict.nav.terminal,
+    "#contact": dict.nav.contact,
     "/blog": dict.nav.blog,
   };
   return navItems.map((item) => ({

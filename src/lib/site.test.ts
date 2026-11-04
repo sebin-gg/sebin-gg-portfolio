@@ -50,7 +50,7 @@ describe("profile", () => {
   it("has the identity fields populated", () => {
     expect(profile.name).toBe("Sebin Mathew");
     expect(links.github.href).toBe("https://github.com/sebin-gg");
-    expect(profile).not.toHaveProperty("email");
+    expect(profile.email).toMatch(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
     expect(profile.cgpa).toBeGreaterThan(0);
     expect(profile.bio.length).toBeGreaterThan(0);
   });
@@ -68,12 +68,21 @@ describe("links", () => {
     expect(links.github.href).toMatch(/^https:\/\/github\.com\/sebin-gg$/);
     expect(links.linkedin.href).toMatch(/^https:\/\/www\.linkedin\.com\/in\/sebin-gg$/);
     expect(links.x.href).toMatch(/^https:\/\/x\.com\//);
+    expect(links.email.href).toBe(`mailto:${profile.email}`);
   });
 });
 
 describe("navigation", () => {
   it("anchors to sections that exist on the home page", () => {
-    const sectionIds = ["top", "experience", "projects", "communities", "skills", "terminal"];
+    const sectionIds = [
+      "top",
+      "experience",
+      "projects",
+      "communities",
+      "skills",
+      "terminal",
+      "contact",
+    ];
     const anchors = navItems.filter((item) => item.href.startsWith("#"));
     for (const item of anchors) {
       expect(sectionIds).toContain(item.href.slice(1));
@@ -178,7 +187,7 @@ describe("terminal commands", () => {
   });
 
   it("only points anchors at sections that exist on the home page", () => {
-    const sectionIds = ["top", "experience", "projects", "skills"];
+    const sectionIds = ["top", "experience", "projects", "skills", "contact"];
     for (const command of terminalCommands) {
       const { anchor } = runTerminalCommand(command);
       if (anchor) expect(sectionIds).toContain(anchor.slice(1));

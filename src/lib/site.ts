@@ -11,6 +11,7 @@ export const profile = {
   firstName: "Sebin",
   role: "Full-stack developer and software engineer",
   location: "Kottayam, Kerala, India",
+  email: "Sebinmathew543@gmail.com",
   /** Phone number is deliberately not published on the web page; it stays in the résumé PDF. */
   degree: "B.Tech in Computer Science & Engineering",
   college: "College of Engineering Chengannur",
@@ -43,6 +44,11 @@ export const links = {
     handle: "/in/sebin-gg",
   },
   x: { label: "X", href: "https://x.com/M13568Sebin", handle: "@M13568Sebin" },
+  email: {
+    label: "Email",
+    href: "mailto:Sebinmathew543@gmail.com",
+    handle: "Sebinmathew543@gmail.com",
+  },
 } as const;
 
 export const resumeUrl = "/resume.pdf";
@@ -137,7 +143,7 @@ export const projects: Project[] = [
     name: "TortoiseLang (slowlang)",
     tagline: "A language that punishes fast typing",
     description:
-      "Satirical programming language and IDE that throttles execution when you type too fast — then triggers ASCII turtle rage and poetic haiku feedback.",
+      "Satirical Python-like language and Tkinter IDE that enforces a 30 WPM typing cap. Type faster and the ASCII turtle rage-locks you out for 2 seconds, then mocks you in haiku. The zero-install web demo plays by the same rules.",
     stack: ["Python", "Tkinter", "pytest"],
     href: "https://github.com/sebin-gg/slowlang",
     demo: "https://sebin-gg.github.io/slowlang/",
@@ -147,8 +153,8 @@ export const projects: Project[] = [
     name: "Event Tracker",
     tagline: "FOCES event platform",
     description:
-      "Full-stack event management for the FOCES Volunteer Project. Pydantic-validated API, search indexing, SQLite persistence, responsive dark/light UI. Live on GitHub Pages.",
-    stack: ["FastAPI", "React", "Tailwind CSS", "SQLite"],
+      "Full-stack event manager built for the FOCES Volunteer Project. FastAPI + Pydantic backend with two endpoints, live search filter and localStorage persistence on the front end. Live on GitHub Pages.",
+    stack: ["FastAPI", "React", "Tailwind CSS", "Vite"],
     href: "https://github.com/sebin-gg/Event-Tracker",
     demo: "https://sebin-gg.github.io/Event-Tracker/",
   },
@@ -156,7 +162,7 @@ export const projects: Project[] = [
     name: "Kindred",
     tagline: "Community impact tracker",
     description:
-      "Platform where volunteers log impact across six tracks, earn titles and appear in a private dashboard. Rate-limited REST API with bcrypt auth.",
+      "Volunteers log impact across six tracks at 10 points per journal entry, earning titles from their top three. Express 5 REST API behind bcrypt hashing, 7-day JWTs and three rate-limit tiers: 300, 120 and 20 requests per 15 minutes.",
     stack: ["Express 5", "React 19", "MongoDB", "JWT"],
     href: "https://github.com/sebin-gg/kindred",
     demo: "https://kindred-seven-pi.vercel.app/",
@@ -165,8 +171,8 @@ export const projects: Project[] = [
     name: "Aegis",
     tagline: "Cyber threat dashboard with local AI",
     description:
-      "Streaming terminal logs, automated attack simulation, iptables mitigation commands and optional local-AI analysis via Ollama.",
-    stack: ["Next.js 15", "React 19", "TypeScript", "Ollama"],
+      "Simulated SOC dashboard: streaming attack-log feed, a one-button incident workflow, copyable iptables mitigations and an auto-generated CISO post-mortem. Optional analysis via local Ollama (qwen2.5:3b), with static fallbacks for five threat types.",
+    stack: ["Next.js 16", "React 19", "TypeScript", "Ollama"],
     href: "https://github.com/sebin-gg/Aegis",
     highlight: "security",
   },
@@ -174,8 +180,8 @@ export const projects: Project[] = [
     name: "brevity-prompt",
     tagline: "Chrome extension that trims prompts",
     description:
-      "Compresses prompts in-browser before they hit ChatGPT, Claude or Gemini — 40–65% fewer tokens. Pure client-side regex, zero external dependencies.",
-    stack: ["JavaScript", "Chrome MV3", "regex"],
+      "Compresses prompts in-browser for ChatGPT, Claude and Gemini: regex pre-clean plus a five-stage optimizer, fully local and network-free. Ollama or the containerized companion joins only past 280 characters, racing a 3-second deadline.",
+    stack: ["JavaScript", "Chrome MV3", "FastAPI"],
     href: "https://github.com/sebin-gg/brevity-prompt",
     highlight: "privacy",
   },
@@ -183,7 +189,7 @@ export const projects: Project[] = [
     name: "ShyUI",
     tagline: "Tray app that hides title bars of maximized windows",
     description:
-      "Lightweight Windows tray app that auto-hides the title bar of maximized windows for a cleaner fullscreen-style view. Single C# file on the Win32 API with per-app control and global hotkeys.",
+      "One 695-line C# file on the Win32 API: polls the foreground window every 50 ms and parks maximized title bars 40 px above the screen edge. Mouse to the top 2 px slides the bar back down; Ctrl+Alt+S pauses, Ctrl+Alt+T toggles per app.",
     stack: ["C#", "Windows Forms", "Win32 API"],
     href: "https://github.com/sebin-gg/shyui",
   },
@@ -253,6 +259,7 @@ export const navItems = [
   { label: "Communities", href: "#communities" },
   { label: "Skills", href: "#skills" },
   { label: "Terminal", href: "#terminal" },
+  { label: "Contact", href: "#contact" },
   { label: "Blog", href: "/blog" },
 ] as const;
 
@@ -291,7 +298,7 @@ export const terminalResponses = {
   skills: "{items} — full toolbox below.",
   experience: "Now: {title} at {org}. {count} stops below.",
   resume: "Resume PDF is at {url} — header button downloads it too.",
-  contact: "Contact me on GitHub: {handle}.",
+  contact: "Email {email} — GitHub {handle}.",
   unknown: "Unknown command: {command}. Type help.",
 } as const;
 
@@ -405,8 +412,11 @@ function terminalTable(
       anchor: null,
     },
     contact: {
-      output: fill(responses.contact, { handle: links.github.handle }),
-      anchor: null,
+      output: fill(responses.contact, {
+        email: links.email.handle,
+        handle: links.github.handle,
+      }),
+      anchor: "#contact",
     },
     clear: { output: "", anchor: null, clear: true },
   };

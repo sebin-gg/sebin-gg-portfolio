@@ -6,6 +6,7 @@ import {
   DownloadIcon,
   GithubIcon,
   LinkedinIcon,
+  MailIcon,
   XIcon,
 } from "@/components/icons";
 
@@ -21,8 +22,14 @@ export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) 
     { value: `${projects.length}`, label: dict.hero.statsProjects },
     { value: "'28", label: dict.hero.statsClass },
   ];
-  const facts: { label: string; value: string; href?: string }[] = [
+  const facts: { label: string; value: string; href?: string; mailto?: boolean }[] = [
     { label: dict.hero.githubLabel, value: links.github.handle, href: links.github.href },
+    {
+      label: dict.hero.emailLabel,
+      value: links.email.handle,
+      href: links.email.href,
+      mailto: true,
+    },
     { label: dict.hero.collegeLabel, value: dict.about.collegeValue },
     { label: dict.about.degreeLabel, value: dict.about.degreeValue },
     { label: dict.about.cgpaLabel, value: String(profile.cgpa) },
@@ -66,7 +73,7 @@ export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) 
 
             <div className="mt-6 flex flex-col gap-3 sm:mt-7">
               {/* Primary action row: cleanly on one line */}
-              <div className="flex items-center gap-2.5 sm:gap-3">
+              <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
                 <a
                   href="#projects"
                   className="bg-accent text-accent-ink hover:bg-accent-strong shadow-accent/20 inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-semibold whitespace-nowrap shadow-md transition-all hover:shadow-lg sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
@@ -82,6 +89,14 @@ export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) 
                 >
                   <DownloadIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   {dict.hero.downloadResume}
+                </a>
+                <a
+                  href={links.email.href}
+                  title={links.email.handle}
+                  className="border-line/80 bg-panel/90 text-ink hover:border-accent hover:text-accent inline-flex items-center justify-center gap-1.5 rounded-lg border px-3.5 py-2 text-xs font-semibold whitespace-nowrap shadow-xs backdrop-blur-xs transition-all sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
+                >
+                  <MailIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  {dict.hero.emailMe}
                 </a>
               </div>
 
@@ -153,8 +168,7 @@ export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) 
                       {fact.href ? (
                         <a
                           href={fact.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                          {...(fact.mailto ? {} : { target: "_blank", rel: "noopener noreferrer" })}
                           className="hover:text-accent transition-colors"
                         >
                           {fact.value}
