@@ -20,6 +20,7 @@ export const metadata: Metadata = {
   },
 };
 
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export default function HomePage() {
   const dict = getDictionary("en");
   return (

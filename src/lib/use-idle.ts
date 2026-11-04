@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
  * defer hydration of progressive-enhancement widgets off the critical path so
  * their parse/execute work lands after the load window.
  */
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function useIdle(timeoutMs = 2000): boolean {
   const [idle, setIdle] = useState(false);
 
