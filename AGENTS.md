@@ -79,7 +79,7 @@ does not say.
 ## Agent skills (use these when working here)
 
 Skills live in `.agents/skills/` and are locked by hash in `skills-lock.json` (version 1;
-current hashes: `caveman` c4d7354b…, `unslop` c2db46a9…). Load the skill via the `skill`
+current hashes: `caveman` c4d7354b…, `unslop` 5ce98681…). Load the skill via the `skill`
 tool before relying on it. The ones this repo expects:
 
 1. **`caveman`** — terse replies. Default mode for agents working in this repo:

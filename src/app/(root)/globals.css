@@ -119,6 +119,28 @@ body {
   }
 }
 
+/*
+  Section fade-up. Pure CSS scroll-driven animation, so no JS and no
+  observer cost — engines without view() support (Firefox) just show
+  each section instantly. The reduced-motion block below collapses it.
+*/
+@keyframes section-fade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    section {
+      animation: section-fade 600ms ease-out both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}
+
 /* Visible keyboard focus everywhere. */
 :focus-visible {
   outline: 2px solid var(--accent);
