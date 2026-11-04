@@ -15,7 +15,7 @@ export function useIdle(timeoutMs = 2000): boolean {
       if (!cancelled) setIdle(true);
     };
 
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined") return undefined;
 
     const hasIdle = "requestIdleCallback" in window;
     if (hasIdle) {

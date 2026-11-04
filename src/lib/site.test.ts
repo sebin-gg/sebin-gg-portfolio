@@ -194,6 +194,12 @@ describe("terminal commands", () => {
     }
   });
 
+  it("answers contact with the email and points at the contact section", () => {
+    const result = runTerminalCommand("contact");
+    expect(result.output).toContain(profile.email);
+    expect(result.anchor).toBe("#contact");
+  });
+
   it("flags clear so the client can reset the transcript", () => {
     expect(runTerminalCommand("clear").clear).toBe(true);
   });
