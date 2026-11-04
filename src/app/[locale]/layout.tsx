@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { links, profile, siteUrl } from "@/lib/site";
@@ -5,6 +6,8 @@ import { hreflangAlternates, localePath, SUPPORTED_LOCALES } from "@/lib/locale"
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { requireLocaleParam } from "@/app/[locale]/locale-params";
 import { ThemeInit } from "@/components/theme-init";
+import { MotionInit } from "@/components/motion-init";
+import { MotionParamSync } from "@/components/motion-param-sync";
 import "../(root)/globals.css";
 
 const geistSans = Geist({
@@ -162,12 +165,18 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
           href="/rss.xml"
         />
         <ThemeInit />
+        <MotionInit />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="bg-canvas text-ink flex min-h-screen flex-col antialiased">{children}</body>
+      <body className="bg-canvas text-ink flex min-h-screen flex-col antialiased">
+        <Suspense fallback={null}>
+          <MotionParamSync />
+        </Suspense>
+        {children}
+      </body>
     </html>
   );
 }

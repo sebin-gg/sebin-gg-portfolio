@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { MOTION_ATTRIBUTE, resolveMotionParam } from "@/lib/motion";
 import { runTerminalCommand, terminalCommands, terminalFacts } from "@/lib/site";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/locale";
@@ -28,13 +29,15 @@ const fadeStyle = (index: number): React.CSSProperties =>
   ({ "--fade-delay": `${index * FADE_STAGGER_MS}ms` }) as React.CSSProperties;
 
 // skipcq: JS-0067
-function prefersReducedMotion() {
-  return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+function motionAllowed() {
+  const override = resolveMotionParam(document.documentElement.getAttribute(MOTION_ATTRIBUTE));
+  if (override) return override === "on";
+  return !(window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false);
 }
 
 // skipcq: JS-0067
 function scrollTargetIntoView(target: Element) {
-  target.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth" });
+  target.scrollIntoView({ behavior: motionAllowed() ? "smooth" : "auto" });
 }
 
 // skipcq: JS-0067

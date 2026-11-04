@@ -12,6 +12,7 @@ import { BlogEmptyState } from "@/components/blog-empty-state";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { communities, links, profile, projects, terminalCommands, timeline } from "@/lib/site";
+import { MOTION_ATTRIBUTE } from "@/lib/motion";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { SUPPORTED_LOCALES } from "@/lib/locale";
 
@@ -162,6 +163,7 @@ describe("Terminal", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
     document.querySelector("#top")?.remove();
+    document.documentElement.removeAttribute(MOTION_ATTRIBUTE);
   });
 
   function runWhoamiWithMotionPreference(reducedMotion: boolean) {
@@ -191,6 +193,18 @@ describe("Terminal", () => {
 
   it("uses smooth scrolling when reduced motion is not enabled", () => {
     const scrollIntoView = runWhoamiWithMotionPreference(false);
+    expect(scrollIntoView).toHaveBeenCalledWith({ behavior: "smooth" });
+  });
+
+  it("lets ?motion=off force immediate scrolling on a no-preference device", () => {
+    document.documentElement.setAttribute(MOTION_ATTRIBUTE, "off");
+    const scrollIntoView = runWhoamiWithMotionPreference(false);
+    expect(scrollIntoView).toHaveBeenCalledWith({ behavior: "auto" });
+  });
+
+  it("lets ?motion=on force smooth scrolling on a reduced-motion device", () => {
+    document.documentElement.setAttribute(MOTION_ATTRIBUTE, "on");
+    const scrollIntoView = runWhoamiWithMotionPreference(true);
     expect(scrollIntoView).toHaveBeenCalledWith({ behavior: "smooth" });
   });
 
