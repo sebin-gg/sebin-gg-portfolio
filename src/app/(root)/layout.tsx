@@ -1,8 +1,11 @@
+import { Suspense } from "react";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { links, profile, siteMeta, siteUrl } from "@/lib/site";
 import { hreflangAlternates } from "@/lib/locale";
 import { ThemeInit } from "@/components/theme-init";
+import { MotionInit } from "@/components/motion-init";
+import { MotionParamSync } from "@/components/motion-param-sync";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -144,6 +147,7 @@ const jsonLdData = {
   ],
 };
 
+// skipcq: JS-0067 — module-scoped component export, not a global declaration
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
@@ -160,12 +164,18 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           href="/rss.xml"
         />
         <ThemeInit />
+        <MotionInit />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdData) }}
         />
       </head>
-      <body className="bg-canvas text-ink flex min-h-screen flex-col antialiased">{children}</body>
+      <body className="bg-canvas text-ink flex min-h-screen flex-col antialiased">
+        <Suspense fallback={null}>
+          <MotionParamSync />
+        </Suspense>
+        {children}
+      </body>
     </html>
   );
 }
