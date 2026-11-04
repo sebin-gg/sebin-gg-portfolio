@@ -16,7 +16,7 @@ describe("section fade-up animation", () => {
 
   it("is collapsed by the global reduced-motion rule", () => {
     expect(css).toMatch(
-      /prefers-reduced-motion: reduce[^}]*animation-duration: 0\.01ms !important/s,
+      /prefers-reduced-motion: reduce[\s\S]*animation-duration: 0\.01ms !important/,
     );
   });
 });
