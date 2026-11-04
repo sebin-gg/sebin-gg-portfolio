@@ -4,6 +4,7 @@ import { DEFAULT_LOCALE, type Locale } from "@/lib/locale";
 import { SectionHeading } from "@/components/section-heading";
 import { ArrowUpRightIcon, MailIcon } from "@/components/icons";
 
+// skipcq: JS-0067 — module-scoped component export, not a global declaration
 export function Contact({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
   const dict = getDictionary(locale);
 
