@@ -320,9 +320,9 @@ function fill(template: string, values: Record<string, string | number>): string
 export const terminalCommands = [
   "help",
   "whoami",
+  "skills",
   "about",
   "projects",
-  "skills",
   "experience",
   "resume",
   "contact",
