@@ -7,10 +7,12 @@ import { Communities } from "@/components/communities";
 import { Recommendations } from "@/components/recommendations";
 import { Skills } from "@/components/skills";
 import { Terminal } from "@/components/terminal";
+import { Contact } from "@/components/contact";
 import { BlogEmptyState } from "@/components/blog-empty-state";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { communities, links, profile, projects, terminalCommands, timeline } from "@/lib/site";
+import { MOTION_ATTRIBUTE } from "@/lib/motion";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { SUPPORTED_LOCALES } from "@/lib/locale";
 
@@ -25,6 +27,10 @@ describe("Hero", () => {
     expect(screen.getByRole("link", { name: /download résumé/i })).toHaveAttribute(
       "href",
       "/resume.pdf",
+    );
+    expect(screen.getByRole("link", { name: "Email me" })).toHaveAttribute(
+      "href",
+      links.email.href,
     );
   });
 
@@ -49,6 +55,13 @@ describe("Hero", () => {
     expect(within(card).getByRole("link", { name: links.github.handle })).toHaveAttribute(
       "href",
       links.github.href,
+    );
+    expect(within(card).getByRole("link", { name: links.email.handle })).toHaveAttribute(
+      "href",
+      links.email.href,
+    );
+    expect(within(card).getByRole("link", { name: links.email.handle })).not.toHaveAttribute(
+      "target",
     );
     expect(within(card).getByText(profile.college)).toBeInTheDocument();
     expect(within(card).getByText(profile.degree)).toBeInTheDocument();
@@ -150,6 +163,7 @@ describe("Terminal", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
     document.querySelector("#top")?.remove();
+    document.documentElement.removeAttribute(MOTION_ATTRIBUTE);
   });
 
   function runWhoamiWithMotionPreference(reducedMotion: boolean) {
@@ -179,6 +193,18 @@ describe("Terminal", () => {
 
   it("uses smooth scrolling when reduced motion is not enabled", () => {
     const scrollIntoView = runWhoamiWithMotionPreference(false);
+    expect(scrollIntoView).toHaveBeenCalledWith({ behavior: "smooth" });
+  });
+
+  it("lets ?motion=off force immediate scrolling on a no-preference device", () => {
+    document.documentElement.setAttribute(MOTION_ATTRIBUTE, "off");
+    const scrollIntoView = runWhoamiWithMotionPreference(false);
+    expect(scrollIntoView).toHaveBeenCalledWith({ behavior: "auto" });
+  });
+
+  it("lets ?motion=on force smooth scrolling on a reduced-motion device", () => {
+    document.documentElement.setAttribute(MOTION_ATTRIBUTE, "on");
+    const scrollIntoView = runWhoamiWithMotionPreference(true);
     expect(scrollIntoView).toHaveBeenCalledWith({ behavior: "smooth" });
   });
 
@@ -221,13 +247,13 @@ describe("Terminal", () => {
     fireEvent.click(screen.getByRole("button", { name: "Run" }));
 
     const line = container.querySelector(
-      ".motion-safe\\:animate-\\[terminal-fade_320ms_ease-out_both\\]",
+      ".motion-allowed\\:animate-\\[terminal-fade_320ms_ease-out_both\\]",
     );
     expect(line).not.toBeNull();
     // `both` fill mode is required: a staggered row has a positive delay, and
     // without a backwards fill it paints at full opacity during the delay,
     // then snaps to opacity 0 — a flash instead of a fade.
-    expect(line).toHaveClass("motion-safe:[animation-delay:var(--fade-delay)]");
+    expect(line).toHaveClass("motion-allowed:[animation-delay:var(--fade-delay)]");
     expect(line?.getAttribute("style")).toContain("--fade-delay: 0ms");
   });
 
@@ -282,6 +308,25 @@ describe("Terminal", () => {
   });
 });
 
+describe("Contact", () => {
+  it("offers the email call to action and the internship line", () => {
+    render(<Contact />);
+    expect(screen.getByRole("heading", { name: "Get in touch" })).toBeInTheDocument();
+    expect(screen.getByText(/open to internships/i)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: links.email.handle })).toHaveAttribute(
+      "href",
+      links.email.href,
+    );
+    expect(screen.getByRole("link", { name: "Email me" })).toHaveAttribute(
+      "href",
+      links.email.href,
+    );
+    for (const link of [links.github, links.linkedin, links.x]) {
+      expect(screen.getByRole("link", { name: link.label })).toHaveAttribute("href", link.href);
+    }
+  });
+});
+
 describe("BlogEmptyState", () => {
   it("says the blog is coming soon and lists planned posts", () => {
     render(<BlogEmptyState />);
@@ -331,6 +376,10 @@ describe("SiteFooter", () => {
     render(<SiteFooter />);
     expect(screen.getByText(new RegExp(`© \\d{4} ${profile.name}`))).toBeInTheDocument();
     expect(screen.getAllByRole("link", { name: "GitHub profile" }).length).toBeGreaterThan(0);
+    expect(screen.getByRole("link", { name: "Send an email" })).toHaveAttribute(
+      "href",
+      links.email.href,
+    );
     expect(screen.getByText(/Kottayam, Kerala, India/)).toBeInTheDocument();
   });
 });

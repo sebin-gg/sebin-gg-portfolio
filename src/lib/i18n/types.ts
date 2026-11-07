@@ -30,6 +30,7 @@ export interface Dictionary {
     communities: string;
     skills: string;
     terminal: string;
+    contact: string;
     blog: string;
   };
   header: {
@@ -46,11 +47,13 @@ export interface Dictionary {
     focus: string[];
     viewProjects: string;
     downloadResume: string;
+    emailMe: string;
     githubProfile: string;
     linkedinProfile: string;
     xProfile: string;
     highlights: string;
     githubLabel: string;
+    emailLabel: string;
     collegeLabel: string;
     collegeLine: string;
     statsProjects: string;
@@ -120,6 +123,12 @@ export interface Dictionary {
       unknown: string;
     };
   };
+  contact: {
+    title: string;
+    availability: string;
+    body: string;
+    cta: string;
+  };
   blogCta: {
     title: string;
     comingSoon: string;
@@ -151,6 +160,7 @@ export interface Dictionary {
   };
   footer: {
     accessibility: string;
+    sendEmail: string;
     githubProfile: string;
     linkedinProfile: string;
     xProfile: string;

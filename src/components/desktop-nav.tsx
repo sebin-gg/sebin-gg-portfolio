@@ -15,7 +15,7 @@ export function DesktopNav({
   readonly ariaLabel: string;
 }) {
   return (
-    <nav aria-label={ariaLabel} className="hidden md:block">
+    <nav aria-label={ariaLabel} className="hidden lg:block">
       <ul className="flex items-center gap-1">
         {items.map((item) => (
           <li key={item.rawHref}>

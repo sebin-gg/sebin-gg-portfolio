@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
  * defer hydration of progressive-enhancement widgets off the critical path so
  * their parse/execute work lands after the load window.
  */
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function useIdle(timeoutMs = 2000): boolean {
   const [idle, setIdle] = useState(false);
 
@@ -15,22 +16,28 @@ export function useIdle(timeoutMs = 2000): boolean {
       if (!cancelled) setIdle(true);
     };
 
-    if (typeof window === "undefined") return;
+    let cleanup = (): void => {
+      cancelled = true;
+    };
 
-    const hasIdle = "requestIdleCallback" in window;
-    if (hasIdle) {
-      const id = window.requestIdleCallback(finish, { timeout: timeoutMs });
-      return () => {
-        cancelled = true;
-        window.cancelIdleCallback(id);
-      };
+    if (typeof window !== "undefined") {
+      const hasIdle = "requestIdleCallback" in window;
+      if (hasIdle) {
+        const id = window.requestIdleCallback(finish, { timeout: timeoutMs });
+        cleanup = () => {
+          cancelled = true;
+          window.cancelIdleCallback(id);
+        };
+      } else {
+        const id = window.setTimeout(finish, 400);
+        cleanup = () => {
+          cancelled = true;
+          window.clearTimeout(id);
+        };
+      }
     }
 
-    const id = window.setTimeout(finish, 400);
-    return () => {
-      cancelled = true;
-      window.clearTimeout(id);
-    };
+    return cleanup;
   }, [timeoutMs]);
 
   return idle;

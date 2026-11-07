@@ -10,6 +10,7 @@ import { Communities } from "@/components/communities";
 import { Recommendations } from "@/components/recommendations";
 import { Skills } from "@/components/skills";
 import { Terminal } from "@/components/terminal";
+import { Contact } from "@/components/contact";
 import { BlogCta } from "@/components/blog-cta";
 
 export const metadata: Metadata = {
@@ -19,6 +20,7 @@ export const metadata: Metadata = {
   },
 };
 
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export default function HomePage() {
   const dict = getDictionary("en");
   return (
@@ -31,6 +33,7 @@ export default function HomePage() {
       <Skills locale="en" />
       <Terminal locale="en" />
       <BlogCta locale="en" />
+      <Contact locale="en" />
     </PageChrome>
   );
 }

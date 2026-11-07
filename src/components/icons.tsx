@@ -4,6 +4,7 @@ type IconProps = {
   className?: string;
 };
 
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 function Svg({
   label,
   className,
@@ -29,6 +30,7 @@ function Svg({
   );
 }
 
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function GithubIcon(props: IconProps) {
   return (
     <Svg {...props}>
@@ -38,6 +40,7 @@ export function GithubIcon(props: IconProps) {
   );
 }
 
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function LinkedinIcon(props: IconProps) {
   return (
     <Svg {...props}>
@@ -49,6 +52,7 @@ export function LinkedinIcon(props: IconProps) {
 }
 
 /** X (Twitter) logo — filled brand glyph, unlike the stroked set. */
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function XIcon({ label, className }: IconProps) {
   return (
     <svg
@@ -64,6 +68,17 @@ export function XIcon({ label, className }: IconProps) {
   );
 }
 
+// skipcq: JS-0067 — module-scoped function, not a global declaration
+export function MailIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <rect width="20" height="16" x="2" y="4" rx="2" />
+      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+    </Svg>
+  );
+}
+
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function SunIcon(props: IconProps) {
   return (
     <Svg {...props}>
@@ -73,6 +88,7 @@ export function SunIcon(props: IconProps) {
   );
 }
 
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function MoonIcon(props: IconProps) {
   return (
     <Svg {...props}>
@@ -81,6 +97,7 @@ export function MoonIcon(props: IconProps) {
   );
 }
 
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function ArrowUpRightIcon(props: IconProps) {
   return (
     <Svg {...props}>
@@ -90,6 +107,7 @@ export function ArrowUpRightIcon(props: IconProps) {
   );
 }
 
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function DownloadIcon(props: IconProps) {
   return (
     <Svg {...props}>
@@ -100,6 +118,7 @@ export function DownloadIcon(props: IconProps) {
   );
 }
 
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function MenuIcon(props: IconProps) {
   return (
     <Svg {...props}>
@@ -108,6 +127,7 @@ export function MenuIcon(props: IconProps) {
   );
 }
 
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function CloseIcon(props: IconProps) {
   return (
     <Svg {...props}>
@@ -116,6 +136,7 @@ export function CloseIcon(props: IconProps) {
   );
 }
 
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function RssIcon(props: IconProps) {
   return (
     <Svg {...props}>
@@ -126,6 +147,7 @@ export function RssIcon(props: IconProps) {
   );
 }
 
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function ExternalLinkIcon(props: IconProps) {
   return (
     <Svg {...props}>
