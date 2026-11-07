@@ -313,11 +313,20 @@ describe("Contact", () => {
     render(<Contact />);
     expect(screen.getByRole("heading", { name: "Get in touch" })).toBeInTheDocument();
     expect(screen.getByText(/open to internships/i)).toBeInTheDocument();
-    for (const link of screen.getAllByRole("link")) {
-      expect(link).toHaveAttribute("href", links.email.href);
+    expect(screen.getByRole("link", { name: links.email.handle })).toHaveAttribute(
+      "href",
+      links.email.href,
+    );
+    expect(screen.getByRole("link", { name: "Email me" })).toHaveAttribute(
+      "href",
+      links.email.href,
+    );
+    for (const link of [links.github, links.linkedin, links.x]) {
+      expect(screen.getByRole("link", { name: link.label })).toHaveAttribute(
+        "href",
+        link.href,
+      );
     }
-    expect(screen.getByRole("link", { name: links.email.handle })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Email me" })).toBeInTheDocument();
   });
 });
 
