@@ -321,7 +321,17 @@ describe("Contact", () => {
       "href",
       links.email.href,
     );
-    for (const link of [links.github, links.linkedin, links.x]) {
+    for (const link of [
+      links.github,
+      links.linkedin,
+      links.x,
+      links.instagram,
+      links.threads,
+      links.leetcode,
+      links.devto,
+      links.kaggle,
+      links.hackerrank,
+    ]) {
       expect(screen.getByRole("link", { name: link.label })).toHaveAttribute("href", link.href);
     }
   });
