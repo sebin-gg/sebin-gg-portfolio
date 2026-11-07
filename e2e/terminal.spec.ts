@@ -46,7 +46,7 @@ test.describe("playground terminal", () => {
       content:
         "*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}",
     });
-    await page.locator("#terminal").scrollIntoViewIfNeeded();
+    await page.locator("#terminal").evaluate((el) => el.scrollIntoView());
 
     // Fill the transcript so the next row lands at a high index and therefore
     // a real positive animation-delay — where a missing fill mode made the row
@@ -101,7 +101,7 @@ test.describe("playground terminal", () => {
     await page.addStyleTag({
       content: "*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}",
     });
-    await page.locator("#terminal").scrollIntoViewIfNeeded();
+    await page.locator("#terminal").evaluate((el) => el.scrollIntoView());
 
     for (const command of ["whoami", "skills", "contact"]) {
       await page
