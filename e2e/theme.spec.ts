@@ -8,11 +8,24 @@ async function setDeviceScheme(page: Page, scheme: "light" | "dark") {
   await page.emulateMedia({ colorScheme: scheme });
   // Playwright 1.64+/WebKit can be flaky delivering the emulated matchMedia
   // change event; dispatch it explicitly so the app's live-scheme listener
-  // (registered in the theme init script) is exercised reliably.
-  await page.evaluate((next) => {
-    const mq = window.matchMedia(`(prefers-color-scheme: ${next})`);
-    mq.dispatchEvent(new Event("change"));
-  }, scheme);
+  // (registered in the theme init script) is exercised reliably. Try both the
+  // scheme query and the query object form; also nudge a couple times because
+  // matchMedia listener instance identity can vary by engine.
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await page.evaluate((next) => {
+      for (const q of [`(prefers-color-scheme: ${next})`, "(prefers-color-scheme: dark)"]) {
+        const mq = window.matchMedia(q);
+        try {
+          mq.dispatchEvent(
+            new MediaQueryListEvent("change", { matches: mq.matches, media: mq.media }),
+          );
+        } catch {
+          mq.dispatchEvent(new Event("change"));
+        }
+      }
+    }, scheme);
+    await page.waitForTimeout(50);
+  }
 }
 
 /**
