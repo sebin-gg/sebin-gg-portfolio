@@ -2,7 +2,7 @@ import { links } from "@/lib/site";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/locale";
 import { SectionHeading } from "@/components/section-heading";
-import { ArrowUpRightIcon, MailIcon } from "@/components/icons";
+import { ArrowUpRightIcon, ExternalLinkIcon, MailIcon } from "@/components/icons";
 
 // skipcq: JS-0067 — module-scoped component export, not a global declaration
 export function Contact({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
@@ -29,6 +29,31 @@ export function Contact({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale 
             <MailIcon className="h-4 w-4" />
             {links.email.handle}
           </a>
+          <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-2">
+            {[
+              links.github,
+              links.linkedin,
+              links.x,
+              links.instagram,
+              links.threads,
+              links.leetcode,
+              links.devto,
+              links.kaggle,
+              links.hackerrank,
+            ].map((link) => (
+              <li key={link.label}>
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-ink-soft hover:text-accent inline-flex items-center gap-1 text-sm transition-colors"
+                >
+                  {link.label}
+                  <ExternalLinkIcon className="h-3.5 w-3.5" />
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
         <a
           href={links.email.href}
