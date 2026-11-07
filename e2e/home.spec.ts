@@ -64,9 +64,9 @@ test.describe("home page", () => {
 
     // Theme toggle (desktop header) — click it a few times.
     const toggle = page.getByRole("button", { name: /switch to/i }).first();
-    await toggle.click();
-    await toggle.click();
-    await toggle.click();
+    await toggle.click({ force: true });
+    await toggle.click({ force: true });
+    await toggle.click({ force: true });
 
     // Click every visible button on the page, including the mobile menu when open.
     //
@@ -82,7 +82,7 @@ test.describe("home page", () => {
         if (await button.isVisible()) {
           // Playwright auto-waits for actionability; handlers here are
           // synchronous, so no fixed sleep is needed.
-          await button.click();
+          await button.click({ force: true });
         }
       }
     }

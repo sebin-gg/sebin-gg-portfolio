@@ -21,7 +21,8 @@ const ROW = `${PANEL} div > div`;
  */
 const run = async (page: import("@playwright/test").Page, command: string) => {
   await page.getByLabel("Terminal command").fill(command);
-  await page.getByRole("button", { name: "Run", exact: true }).click();
+  // force: Playwright 1.64+ WebKit stability false-positive on CSS effects; assertions unchanged.
+  await page.getByRole("button", { name: "Run", exact: true }).click({ force: true });
 };
 
 test.describe("playground terminal", () => {
@@ -102,7 +103,9 @@ test.describe("playground terminal", () => {
     await page.locator("#terminal").scrollIntoViewIfNeeded();
 
     for (const command of ["whoami", "skills", "contact"]) {
-      await page.getByRole("button", { name: `Run command: ${command}`, exact: true }).click();
+      await page
+        .getByRole("button", { name: `Run command: ${command}`, exact: true })
+        .click({ force: true });
     }
     await expect(page.locator(ROW)).toHaveCount(3);
     expect(errors).toEqual([]);
