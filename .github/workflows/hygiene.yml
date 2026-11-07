@@ -52,7 +52,7 @@ jobs:
           args: >-
             --no-progress --verbose --max-retries 2
             --exclude 'linkedin.com' --exclude 'x.com'
-            --exclude 'leetcode.com' --exclude 'instagram.com' --exclude 'threads.net'
+            --exclude 'leetcode.com' --exclude 'instagram.com' --exclude 'threads.net' --exclude 'medium.com' --exclude 'reddit.com' --exclude 'producthunt.com' --exclude 'linktr.ee' --exclude 'geeksforgeeks.org' --exclude 'hackerearth.com' --exclude 'app.mulearn.org' --exclude 'dev.to' --exclude 'hashnode.com' --exclude 'stackoverflow.com'
             --exclude '^/resume\.pdf$'
             '**/*.md' 'src/lib/site.ts'
         env:

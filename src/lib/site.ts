@@ -74,6 +74,51 @@ export const links = {
     href: "https://www.hackerrank.com/profile/sebinmathew543",
     handle: "sebinmathew543",
   },
+  stackoverflow: {
+    label: "Stack Overflow",
+    href: "https://stackoverflow.com/users/27457042/sebinmathew",
+    handle: "sebinmathew",
+  },
+  medium: {
+    label: "Medium",
+    href: "https://medium.com/@sebinmathew543",
+    handle: "@sebinmathew543",
+  },
+  hashnode: {
+    label: "Hashnode",
+    href: "https://hashnode.com/@sebin-gg",
+    handle: "@sebin-gg",
+  },
+  producthunt: {
+    label: "Product Hunt",
+    href: "https://www.producthunt.com/@sebin_gg",
+    handle: "@sebin_gg",
+  },
+  linktree: {
+    label: "Linktree",
+    href: "https://linktr.ee/sebin-gg",
+    handle: "sebin-gg",
+  },
+  reddit: {
+    label: "Reddit",
+    href: "https://www.reddit.com/user/banned_accounts",
+    handle: "u/banned_accounts",
+  },
+  geeksforgeeks: {
+    label: "GeeksforGeeks",
+    href: "https://www.geeksforgeeks.org/profile/sebinmatxya6",
+    handle: "sebinmatxya6",
+  },
+  hackerearth: {
+    label: "HackerEarth",
+    href: "https://www.hackerearth.com/@sebinmathew543",
+    handle: "@sebinmathew543",
+  },
+  mulearn: {
+    label: "μLearn",
+    href: "https://app.mulearn.org/profile/sebinmathew-2@mulearn",
+    handle: "sebinmathew-2@mulearn",
+  },
   email: {
     label: "Email",
     href: `mailto:${profile.email}`,
