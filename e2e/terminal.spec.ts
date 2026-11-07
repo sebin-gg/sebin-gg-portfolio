@@ -51,7 +51,7 @@ test.describe("playground terminal", () => {
     // Fill the transcript so the next row lands at a high index and therefore
     // a real positive animation-delay — where a missing fill mode made the row
     // paint at full opacity and then snap to zero.
-    for (const command of [
+    const commands = [
       "whoami",
       "about",
       "projects",
@@ -60,10 +60,11 @@ test.describe("playground terminal", () => {
       "resume",
       "contact",
       "help",
-    ]) {
-      await run(page, command);
+    ];
+    for (let i = 0; i < commands.length; i++) {
+      await run(page, commands[i]);
+      await expect(page.locator(ROW)).toHaveCount(i + 1);
     }
-    await expect(page.locator(ROW)).toHaveCount(8);
 
     await stability.evaluate((el: HTMLElement) => el.remove());
     await run(page, "whoami");
