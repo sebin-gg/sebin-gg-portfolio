@@ -41,8 +41,9 @@ test.describe("playground terminal", () => {
 
   test("fades a staggered line in without flashing before the delay", async ({ page }) => {
     await page.goto("/");
-    await page.addStyleTag({
-      content: "*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}",
+    const stability = await page.addStyleTag({
+      content:
+        "*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}",
     });
     await page.locator("#terminal").scrollIntoViewIfNeeded();
 
@@ -63,6 +64,7 @@ test.describe("playground terminal", () => {
     }
     await expect(page.locator(ROW)).toHaveCount(8);
 
+    await stability.evaluate((el: HTMLElement) => el.remove());
     await run(page, "whoami");
     const row = page.locator(ROW).last();
     const styles = await row.evaluate((el) => {
