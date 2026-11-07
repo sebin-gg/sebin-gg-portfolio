@@ -43,7 +43,37 @@ export const links = {
     href: "https://www.linkedin.com/in/sebin-gg",
     handle: "/in/sebin-gg",
   },
-  x: { label: "X", href: "https://x.com/M13568Sebin", handle: "@M13568Sebin" },
+  x: { label: "X", href: "https://x.com/Sebinmgg", handle: "@Sebinmgg" },
+  instagram: {
+    label: "Instagram",
+    href: "https://www.instagram.com/sebin5009",
+    handle: "@sebin5009",
+  },
+  threads: {
+    label: "Threads",
+    href: "https://www.threads.net/@sebin5009",
+    handle: "@sebin5009",
+  },
+  leetcode: {
+    label: "LeetCode",
+    href: "https://leetcode.com/u/sebin_mathew",
+    handle: "sebin_mathew",
+  },
+  devto: {
+    label: "DEV Community",
+    href: "https://dev.to/sebin_mathew_33808dbc3817",
+    handle: "sebin_mathew",
+  },
+  kaggle: {
+    label: "Kaggle",
+    href: "https://www.kaggle.com/sebinmathew1",
+    handle: "sebinmathew1",
+  },
+  hackerrank: {
+    label: "HackerRank",
+    href: "https://www.hackerrank.com/profile/sebinmathew543",
+    handle: "sebinmathew543",
+  },
   email: {
     label: "Email",
     href: `mailto:${profile.email}`,
