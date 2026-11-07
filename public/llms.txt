@@ -1,0 +1,26 @@
+# Sebin Mathew
+
+> Full-stack developer and cybersecurity student building dev tools, Chrome
+> extensions, and local-AI security projects. Writes on dev.to, Hashnode and
+> Medium about the things he ships.
+
+Portfolio, writing and every public profile in one place:
+https://linktr.ee/sebin-gg
+
+## Links
+
+- [Portfolio](https://sebin-gg.vercel.app): projects, experience and contact
+- [GitHub](https://github.com/sebin-gg): source for all public work
+- [LinkedIn](https://www.linkedin.com/in/sebin-gg): résumé and updates
+- [X](https://x.com/Sebinmgg): @Sebinmgg
+- [DEV](https://dev.to/sebin_mathew_33808dbc3817): articles
+- [Hashnode](https://hashnode.com/@sebin-gg): articles
+- [Medium](https://medium.com/@sebinmathew543): articles
+- [Stack Overflow](https://stackoverflow.com/users/27457042/sebinmathew): answers
+- [Product Hunt](https://www.producthunt.com/@sebin_gg): launches
+- [μLearn](https://app.mulearn.org/profile/sebinmathew-2@mulearn): Kerala learning community
+
+## About
+
+Sebin studies B.Tech CS at College of Engineering Chengannur and builds small,
+fast tools: browser extensions, FastAPI backends, and local-AI utilities.
