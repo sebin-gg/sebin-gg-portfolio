@@ -122,9 +122,9 @@ test.describe("playground terminal", () => {
 
     const commands = ["whoami", "skills", "contact"];
     for (let i = 0; i < commands.length; i++) {
-      await page
-        .getByRole("button", { name: `Run command: ${commands[i]}`, exact: true })
-        .click({ force: true });
+      const chip = page.getByRole("button", { name: `Run command: ${commands[i]}`, exact: true });
+      await chip.evaluate((el) => el.scrollIntoView({ block: "nearest", inline: "nearest" }));
+      await chip.click({ force: true });
       await expect(page.locator(ROW)).toHaveCount(i + 1);
     }
     expect(errors).toEqual([]);
