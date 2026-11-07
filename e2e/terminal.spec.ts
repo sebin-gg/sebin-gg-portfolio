@@ -122,6 +122,9 @@ test.describe("playground terminal", () => {
 
     const commands = ["whoami", "skills", "contact"];
     for (let i = 0; i < commands.length; i++) {
+      // Prior chip commands can trigger app anchor scrolling (e.g. contact -> #contact);
+      // keep the terminal in view so chips remain clickable across browsers.
+      await page.locator("#terminal").evaluate((el) => el.scrollIntoView({ block: "center" }));
       const chip = page.getByRole("button", { name: `Run command: ${commands[i]}`, exact: true });
       await chip.evaluate((el) => el.scrollIntoView({ block: "nearest", inline: "nearest" }));
       await chip.click({ force: true });
