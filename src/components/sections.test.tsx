@@ -322,10 +322,7 @@ describe("Contact", () => {
       links.email.href,
     );
     for (const link of [links.github, links.linkedin, links.x]) {
-      expect(screen.getByRole("link", { name: link.label })).toHaveAttribute(
-        "href",
-        link.href,
-      );
+      expect(screen.getByRole("link", { name: link.label })).toHaveAttribute("href", link.href);
     }
   });
 });
