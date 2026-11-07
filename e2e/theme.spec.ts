@@ -1,10 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
 
-async function htmlClass(page: Page) {
-  return page.evaluate(() => document.documentElement.className);
-}
+const htmlClass = async (page: Page) => page.evaluate(() => document.documentElement.className);
 
-async function setDeviceScheme(page: Page, scheme: "light" | "dark") {
+const setDeviceScheme = async (page: Page, scheme: "light" | "dark") => {
   await page.emulateMedia({ colorScheme: scheme });
   // Playwright 1.64+/WebKit can be flaky delivering the emulated matchMedia
   // change event; dispatch it explicitly so the app's live-scheme listener
@@ -26,7 +24,7 @@ async function setDeviceScheme(page: Page, scheme: "light" | "dark") {
     }, scheme);
     await page.waitForTimeout(50);
   }
-}
+};
 
 /**
  * The site follows the device's color scheme until the visitor makes an

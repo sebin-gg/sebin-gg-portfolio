@@ -70,7 +70,7 @@ test.describe("playground terminal", () => {
     // Force style recalculation so WebKit starts animations on elements rendered
     // after the global animation:none override is removed.
     await page.evaluate(() => {
-      void document.body.getBoundingClientRect();
+      document.body.getBoundingClientRect();
     });
     await run(page, "whoami");
     const row = page.locator(ROW).last();
