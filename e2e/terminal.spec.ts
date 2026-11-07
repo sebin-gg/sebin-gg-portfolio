@@ -41,7 +41,9 @@ test.describe("playground terminal", () => {
 
   test("fades a staggered line in without flashing before the delay", async ({ page }) => {
     await page.goto("/");
-    await page.addStyleTag({ content: "*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}" });
+    await page.addStyleTag({
+      content: "*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}",
+    });
     await page.locator("#terminal").scrollIntoViewIfNeeded();
 
     // Fill the transcript so the next row lands at a high index and therefore
@@ -92,7 +94,9 @@ test.describe("playground terminal", () => {
     const errors: string[] = [];
     page.on("pageerror", (err) => errors.push(err.message));
     await page.goto("/");
-    await page.addStyleTag({ content: "*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}" });
+    await page.addStyleTag({
+      content: "*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}",
+    });
     await page.locator("#terminal").scrollIntoViewIfNeeded();
 
     for (const command of ["whoami", "skills", "contact"]) {
@@ -106,7 +110,9 @@ test.describe("playground terminal", () => {
     const context = await browser.newContext({ reducedMotion: "reduce" });
     const page = await context.newPage();
     await page.goto("/");
-    await page.addStyleTag({ content: "*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}" });
+    await page.addStyleTag({
+      content: "*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}",
+    });
     await run(page, "whoami");
 
     const styles = await page
