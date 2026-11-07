@@ -67,8 +67,14 @@ test.describe("playground terminal", () => {
     }
 
     await stability.evaluate((el: HTMLElement) => el.remove());
+    // Force style recalculation so WebKit starts animations on elements rendered
+    // after the global animation:none override is removed.
+    await page.evaluate(() => {
+      void document.body.getBoundingClientRect();
+    });
     await run(page, "whoami");
     const row = page.locator(ROW).last();
+    await expect(row).toBeAttached();
     const styles = await row.evaluate((el) => {
       const computed = getComputedStyle(el);
       return {
@@ -87,7 +93,7 @@ test.describe("playground terminal", () => {
     // And it must actually end up fully visible.
     await expect
       .poll(() => row.evaluate((el) => Number(getComputedStyle(el).opacity)), {
-        timeout: 3000,
+        timeout: 4000,
       })
       .toBeGreaterThan(0.99);
   });

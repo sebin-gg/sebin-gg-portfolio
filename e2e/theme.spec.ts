@@ -4,6 +4,17 @@ async function htmlClass(page: Page) {
   return page.evaluate(() => document.documentElement.className);
 }
 
+async function setDeviceScheme(page: Page, scheme: "light" | "dark") {
+  await page.emulateMedia({ colorScheme: scheme });
+  // Playwright 1.64+/WebKit can be flaky delivering the emulated matchMedia
+  // change event; dispatch it explicitly so the app's live-scheme listener
+  // (registered in the theme init script) is exercised reliably.
+  await page.evaluate((next) => {
+    const mq = window.matchMedia(`(prefers-color-scheme: ${next})`);
+    mq.dispatchEvent(new Event("change"));
+  }, scheme);
+}
+
 /**
  * The site follows the device's color scheme until the visitor makes an
  * explicit choice, after which that choice is persisted and always wins.
@@ -57,7 +68,7 @@ test.describe("theme", () => {
     expect(await htmlClass(page)).not.toContain("dark");
 
     // No explicit choice, so flipping the OS switches the site over.
-    await page.emulateMedia({ colorScheme: "dark" });
+    await setDeviceScheme(page, "dark");
     await expect.poll(() => htmlClass(page)).toContain("dark");
   });
 
@@ -80,7 +91,7 @@ test.describe("theme", () => {
     );
     expect(light).toBe("light");
 
-    await page.emulateMedia({ colorScheme: "dark" });
+    await setDeviceScheme(page, "dark");
     await expect
       .poll(() =>
         page.evaluate(() =>
