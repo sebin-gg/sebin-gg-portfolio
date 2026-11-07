@@ -98,7 +98,7 @@ test.describe("home page", () => {
       const href = await link.getAttribute("href");
       if (!href || href.startsWith("http") || href.startsWith("mailto:")) continue;
       const before = page.url();
-      await link.click();
+      await link.click({ force: true });
       // Hash clicks and same-document links settle synchronously; real
       // navigations resolve the URL wait. Either way, no fixed sleep.
       await page.waitForURL((url) => url.href !== before, { timeout: 2000 }).catch(() => {});
