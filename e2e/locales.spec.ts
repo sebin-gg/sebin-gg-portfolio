@@ -71,6 +71,7 @@ test.describe("localized routes", () => {
   test("language switcher walks every locale and back", async ({ page }) => {
     const [first, second] = LOCALES;
     await page.goto("/");
+    await page.addStyleTag({ content: "*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}" });
     await page
       .getByRole("navigation", { name: getDictionary("en").common.language })
       .getByRole("link", { name: first.native })

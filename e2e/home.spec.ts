@@ -58,6 +58,7 @@ test.describe("home page", () => {
     page.on("pageerror", (err) => errors.push(err.message));
 
     await page.goto("/");
+    await page.addStyleTag({ content: "*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}" });
 
     // Theme toggle (desktop header) — click it a few times.
     const toggle = page.getByRole("button", { name: /switch to/i }).first();
