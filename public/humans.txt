@@ -1,0 +1,14 @@
+/* TEAM */
+
+Sebin Mathew — full-stack developer & cybersecurity enthusiast
+Site: https://sebin-gg.vercel.app
+GitHub: https://github.com/sebin-gg
+LinkedIn: https://www.linkedin.com/in/sebin-gg
+X: https://x.com/Sebinmgg
+Email: sebinmathew543@gmail.com
+
+/* SITE */
+
+Stack: Next.js, TypeScript, Tailwind CSS
+Deployed: Vercel
+Last updated: 2026-11
