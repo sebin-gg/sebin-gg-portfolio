@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 
-const htmlClass = async (page: Page) => page.evaluate(() => document.documentElement.className);
+const htmlClass = (page: Page) => page.evaluate(() => document.documentElement.className);
 
 const setDeviceScheme = async (page: Page, scheme: "light" | "dark") => {
   await page.emulateMedia({ colorScheme: scheme });
