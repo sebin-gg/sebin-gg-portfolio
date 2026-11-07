@@ -31,7 +31,11 @@ const clickHashAnchors = async (page: Page) => {
     if (!href?.startsWith("#")) continue;
     const before = page.url();
     await link.click({ force: true });
-    await page.waitForURL((url) => url.href !== before, { timeout: 2000 }).catch(() => {});
+    await page
+      .waitForURL((url) => url.href !== before, { timeout: 2000 })
+      .catch(() => {
+        // Hash/same-document clicks may settle without a URL change; continue tour.
+      });
   }
 };
 
