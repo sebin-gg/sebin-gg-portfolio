@@ -133,7 +133,9 @@ const jsonLdData = {
         addressRegion: "Kerala",
         addressCountry: "IN",
       },
-      sameAs: [links.github.href, links.linkedin.href, links.x.href],
+      sameAs: Object.values(links)
+        .filter((link) => link.href.startsWith("http"))
+        .map((link) => link.href),
       knowsAbout: [
         "Computer Science",
         "Full-Stack Development",
