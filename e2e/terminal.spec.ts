@@ -20,9 +20,9 @@ const ROW = `${PANEL} div > div`;
  * button.
  */
 const run = async (page: import("@playwright/test").Page, command: string) => {
-  await page.getByLabel("Terminal command").fill(command);
-  // force: Playwright 1.64+ WebKit stability false-positive on CSS effects; assertions unchanged.
-  await page.getByRole("button", { name: "Run", exact: true }).click({ force: true });
+  const input = page.getByLabel("Terminal command");
+  await input.fill(command);
+  await input.press("Enter");
 };
 
 test.describe("playground terminal", () => {
