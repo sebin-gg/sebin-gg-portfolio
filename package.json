@@ -68,7 +68,8 @@
     "puppeteer-core": "^25.16.0",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vitest": "^4.1.12"
+    "vitest": "^4.1.12",
+    "lighthouse": "^13.6.0"
   },
   "packageManager": "pnpm@11.20.0",
   "browserslist": [
