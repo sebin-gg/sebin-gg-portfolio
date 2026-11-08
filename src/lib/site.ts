@@ -96,8 +96,8 @@ export const links = {
   },
   linktree: {
     label: "Linktree",
-    href: "https://linktr.ee/sebin-gg",
-    handle: "sebin-gg",
+    href: "https://linktr.ee/sebinmathew",
+    handle: "sebinmathew",
   },
   reddit: {
     label: "Reddit",
