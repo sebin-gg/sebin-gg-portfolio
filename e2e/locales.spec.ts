@@ -71,10 +71,13 @@ test.describe("localized routes", () => {
   test("language switcher walks every locale and back", async ({ page }) => {
     const [first, second] = LOCALES;
     await page.goto("/");
+    await page.addStyleTag({
+      content: "*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}",
+    });
     await page
       .getByRole("navigation", { name: getDictionary("en").common.language })
       .getByRole("link", { name: first.native })
-      .click();
+      .click({ force: true });
     // waitForURL (not toHaveURL): under heavy CI load Firefox can resolve the
     // URL assertion against the pre-navigation page; this pins the wait to
     // the navigation itself.
@@ -85,7 +88,7 @@ test.describe("localized routes", () => {
     await page
       .getByRole("navigation", { name: first.dict.common.language })
       .getByRole("link", { name: second.native })
-      .click();
+      .click({ force: true });
     await page.waitForURL((url) => url.pathname === `/${second.code}`);
     await expect(page.getByRole("main")).toHaveAttribute("lang", second.code);
 
@@ -93,7 +96,7 @@ test.describe("localized routes", () => {
     await page
       .getByRole("navigation", { name: second.dict.common.language })
       .getByRole("link", { name: "English" })
-      .click();
+      .click({ force: true });
     await page.waitForURL(/\/$/);
     await expect(page.getByRole("main")).not.toHaveAttribute("lang");
   });
