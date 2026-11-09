@@ -165,7 +165,7 @@ export const timeline: TimelineItem[] = [
   {
     title: "Student Ambassador",
     org: "CampusCrew",
-    period: "Dec 2025 – present",
+    period: "Dec 2025 – Apr 2026",
     kind: "work",
     summary: [
       "Connect engineering peers with open-source roadmaps, hackathons, and technical bootcamps.",
