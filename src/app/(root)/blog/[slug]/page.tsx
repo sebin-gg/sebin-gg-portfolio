@@ -66,6 +66,9 @@ export default async function BlogPostPage({ params }: PostPageProps) {
   };
   return (
     <PageChrome locale="en" currentPath="/blog" skipLabel={dict.common.skipToContent}>
+      {/* JSON.stringify output with `<` escaped is inert markup — the same
+          pattern the root layout uses for its site-wide JSON-LD. */}
+      {/* skipcq: JS-0440 */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

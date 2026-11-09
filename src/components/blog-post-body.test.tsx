@@ -32,9 +32,9 @@ describe("renderInlineText", () => {
   });
 
   it("leaves malformed marks as plain text", () => {
-    const { container } = render(<span>{renderInlineText("a [broken](notaurl) and **open")}</span>);
+    const { container } = render(<span>{renderInlineText("a [broken](oops) and **open")}</span>);
     expect(container.querySelectorAll("a,strong")).toHaveLength(0);
-    expect(container).toHaveTextContent("a [broken](notaurl) and **open");
+    expect(container).toHaveTextContent("a [broken](oops) and **open");
   });
 });
 

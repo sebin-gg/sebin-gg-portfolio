@@ -25,7 +25,14 @@ version = 1
 # is module-scoped, so JS-0067 ("unexpected function declaration in the global
 # scope") false-positives there exactly as it does in the component and App
 # Router trees above.
+# `**/src/...` alone never matches — the leading `**/` requires at least one
+# path segment before `src`, and these trees live at the repo root, so every
+# entry silently matched nothing. List both forms: the root-relative glob for
+# this checkout and the anchored variant for path-prefix runners.
 exclude_patterns = [
+  "src/app/**",
+  "src/components/**",
+  "src/**/*.test.*",
   "**/src/app/**",
   "**/src/components/**",
   "**/src/**/*.test.*",
