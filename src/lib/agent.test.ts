@@ -20,5 +20,7 @@ describe("agent snapshot", () => {
     expect(text).toContain("https://github.com/sebin-gg");
     expect(text).toContain("https://foces.ceconline.edu/#execom");
     expect(text).toContain(`- Email: ${profile.email}`);
+    expect(text).toContain("## Blog");
+    expect(text).toContain("/blog/slowlang-a-language-that-punishes-fast-typing");
   });
 });

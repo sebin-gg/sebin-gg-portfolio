@@ -1,3 +1,4 @@
+import { blogPosts } from "@/lib/blog";
 import { links, profile, projects, resumeUrl, siteUrl, skills, timeline } from "@/lib/site";
 
 export type AgentSnapshot = {
@@ -92,6 +93,9 @@ export function buildLlmsText(): string {
     ``,
     `## Skills`,
     ...snap.skills.map((s) => `- ${s.group}: ${s.items.join(", ")}`),
+    ``,
+    `## Blog`,
+    ...blogPosts.map((p) => `- ${p.title}: ${p.description} (${snap.site}/blog/${p.slug})`),
     ``,
     `Full JSON: ${snap.site}/agent.json`,
   ];
