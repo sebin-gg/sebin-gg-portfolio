@@ -6,6 +6,7 @@ import { hreflangAlternates } from "@/lib/locale";
 import { ThemeInit } from "@/components/theme-init";
 import { MotionInit } from "@/components/motion-init";
 import { MotionParamSync } from "@/components/motion-param-sync";
+import { ClarityLoader } from "@/components/clarity";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -177,6 +178,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <MotionParamSync />
         </Suspense>
         {children}
+        <ClarityLoader />
       </body>
     </html>
   );
