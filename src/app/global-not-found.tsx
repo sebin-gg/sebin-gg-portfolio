@@ -36,6 +36,8 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+// skipcq: JS-0067 — root document component, not a global-scope leak
+// skipcq: JS-0415 — full HTML document needs html>head>body nesting
 export default function GlobalNotFound() {
   const dict = getDictionary("en");
   return (
