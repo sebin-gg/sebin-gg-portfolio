@@ -10,6 +10,7 @@ interface LocalePageProps {
   readonly params: Promise<{ locale: string }>;
 }
 
+// skipcq: JS-0067 — module-scoped export, not a global declaration
 export async function generateMetadata({ params }: LocalePageProps): Promise<Metadata> {
   const locale = await requireLocaleParam(params);
   const dict = getDictionary(locale);

@@ -34,6 +34,7 @@ export function generateStaticParams(): { locale: string }[] {
   return SUPPORTED_LOCALES.filter((locale) => locale !== "en").map((locale) => ({ locale }));
 }
 
+// skipcq: JS-0067 — module-scoped export, not a global declaration
 export async function generateMetadata({ params }: LocaleLayoutProps): Promise<Metadata> {
   const locale = await requireLocaleParam(params);
   const dict = getDictionary(locale);
