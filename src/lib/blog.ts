@@ -34,11 +34,6 @@ export function assertBlogSlugs(posts: readonly { readonly slug: string }[]): vo
   }
 }
 
-// skipcq: JS-0067 — module-scoped function, not a global declaration
-export function findPost(slug: string): BlogPost | undefined {
-  return blogPosts.find((post) => post.slug === slug);
-}
-
 export const blogPosts: BlogPost[] = [
   {
     slug: "slowlang-a-language-that-punishes-fast-typing",
@@ -94,5 +89,10 @@ export const blogPosts: BlogPost[] = [
     ],
   },
 ];
+
+// skipcq: JS-0067 — module-scoped function, not a global declaration
+export function findPost(slug: string): BlogPost | undefined {
+  return blogPosts.find((post) => post.slug === slug);
+}
 
 assertBlogSlugs(blogPosts);

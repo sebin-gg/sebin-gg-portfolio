@@ -67,17 +67,18 @@ export default async function BlogPostPage({ params }: PostPageProps) {
       url: siteUrl,
     },
   };
+  const postJsonLdScript = (
+    <script
+      type="application/ld+json"
+      // skipcq: JS-0440 — static JSON.stringify output, no user input
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+    />
+  );
   return (
     <PageChrome locale="en" currentPath="/blog" skipLabel={dict.common.skipToContent}>
       {/* JSON.stringify output with `<` escaped is inert markup — the same
           pattern the root layout uses for its site-wide JSON-LD. */}
-      {/* skipcq: JS-0440 */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
-        }}
-      />
+      {postJsonLdScript}
       <article className="mx-auto w-full max-w-2xl px-4 py-10 sm:px-6">
         <header className="mb-8">
           <h1 className="text-ink text-3xl font-bold tracking-tight sm:text-4xl">{post.title}</h1>
