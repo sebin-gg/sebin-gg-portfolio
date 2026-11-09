@@ -59,7 +59,7 @@ export function BlogPostBody({ blocks }: { readonly blocks: readonly BlogPostBlo
         if (block.kind === "list") {
           return (
             <ul key={key} className="list-disc space-y-2 pl-6">
-              {block.items.map((item, itemIndex) => (
+              {block.items.map((item) => (
                 <li key={item}>{renderInlineText(item)}</li>
               ))}
             </ul>
