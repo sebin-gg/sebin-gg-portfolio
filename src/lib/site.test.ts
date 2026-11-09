@@ -9,6 +9,7 @@ import {
   resolveSiteUrl,
   resumeUrl,
   runTerminalCommand,
+  sameAs,
   siteUrl,
   terminalCommands,
   terminalFacts,
@@ -69,6 +70,22 @@ describe("links", () => {
     expect(links.linkedin.href).toMatch(/^https:\/\/www\.linkedin\.com\/in\/sebin-gg$/);
     expect(links.x.href).toMatch(/^https:\/\/x\.com\//);
     expect(links.email.href).toBe(`mailto:${profile.email}`);
+  });
+});
+
+describe("sameAs", () => {
+  it("mirrors every https profile link exactly once, excluding mailto", () => {
+    const profileHrefs = Object.values(links)
+      .map((link) => link.href)
+      .filter((href) => href.startsWith("https://"));
+    expect(sameAs).toEqual([...new Set(profileHrefs)]);
+    expect(sameAs.some((href) => href.startsWith("mailto:"))).toBe(false);
+  });
+
+  it("keeps every entry an absolute https URL", () => {
+    for (const href of sameAs) {
+      expect(href).toMatch(/^https:\/\//);
+    }
   });
 });
 

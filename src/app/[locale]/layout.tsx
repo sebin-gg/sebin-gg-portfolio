@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { links, profile, siteUrl } from "@/lib/site";
+import { links, profile, sameAs, siteUrl } from "@/lib/site";
 import { hreflangAlternates, localePath, SUPPORTED_LOCALES } from "@/lib/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { requireLocaleParam } from "@/app/[locale]/locale-params";
@@ -135,7 +135,7 @@ function buildJsonLd(locale: string, title: string, description: string): JsonLd
           addressRegion: "Kerala",
           addressCountry: "IN",
         },
-        sameAs: [links.github.href, links.linkedin.href, links.x.href],
+        sameAs,
         knowsAbout: [
           "Computer Science",
           "Full-Stack Development",

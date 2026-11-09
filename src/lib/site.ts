@@ -96,8 +96,8 @@ export const links = {
   },
   linktree: {
     label: "Linktree",
-    href: "https://linktr.ee/sebin-gg",
-    handle: "sebin-gg",
+    href: "https://linktr.ee/sebinmathew",
+    handle: "sebinmathew",
   },
   reddit: {
     label: "Reddit",
@@ -119,12 +119,70 @@ export const links = {
     href: "https://app.mulearn.org/profile/sebinmathew-2@mulearn",
     handle: "sebinmathew-2@mulearn",
   },
+  devpost: {
+    label: "Devpost",
+    href: "https://devpost.com/sebinmathew543",
+    handle: "sebinmathew543",
+  },
+  codechef: {
+    label: "CodeChef",
+    href: "https://www.codechef.com/users/sebin_mathew",
+    handle: "sebin_mathew",
+  },
+  unstop: {
+    label: "Unstop",
+    href: "https://unstop.com/u/sebinmat8629",
+    handle: "sebinmat8629",
+  },
+  fossunited: {
+    label: "FOSS United",
+    href: "https://fossunited.org/u/sebin_mathew",
+    handle: "sebin_mathew",
+  },
+  quora: {
+    label: "Quora",
+    href: "https://www.quora.com/profile/Sebin-Mathew-74",
+    handle: "Sebin-Mathew-74",
+  },
+  wellfound: {
+    label: "Wellfound",
+    href: "https://wellfound.com/u/sebin-mathew",
+    handle: "sebin-mathew",
+  },
+  youtube: {
+    label: "YouTube",
+    href: "https://www.youtube.com/@sebinmathew183",
+    handle: "@sebinmathew183",
+  },
+  hashnodeBlog: {
+    label: "Hashnode blog",
+    href: "https://sebin-gg.hashnode.dev",
+    handle: "sebin-gg",
+  },
+  wordpress: {
+    label: "WordPress",
+    href: "https://sebingg.wordpress.com",
+    handle: "sebingg",
+  },
   email: {
     label: "Email",
     href: `mailto:${profile.email}`,
     handle: profile.email,
   },
 } as const;
+
+/**
+ * JSON-LD `sameAs` identity graph: every https profile URL in `links`,
+ * deduped. Both layouts read this instead of deriving their own lists so
+ * the root and localized Person nodes can never drift apart.
+ */
+export const sameAs = [
+  ...new Set(
+    Object.values(links)
+      .filter((link) => link.href.startsWith("https://"))
+      .map((link) => link.href),
+  ),
+];
 
 export const resumeUrl = "/resume.pdf";
 
