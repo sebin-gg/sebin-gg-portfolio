@@ -36,6 +36,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+// skipcq: JS-0067 — module-scoped component export, not a global declaration
 export default function GlobalNotFound() {
   const dict = getDictionary("en");
   return (
