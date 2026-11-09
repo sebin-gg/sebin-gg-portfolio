@@ -93,10 +93,10 @@ export function buildLlmsText(): string {
     ``,
     `## Skills`,
     ...snap.skills.map((s) => `- ${s.group}: ${s.items.join(", ")}`),
-    ``,
-    `## Blog`,
+    "",
+    "## Blog",
     ...blogPosts.map((p) => `- ${p.title}: ${p.description} (${snap.site}/blog/${p.slug})`),
-    ``,
+    "",
     `Full JSON: ${snap.site}/agent.json`,
   ];
   return lines.join("\n");
