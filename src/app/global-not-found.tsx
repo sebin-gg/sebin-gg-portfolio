@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { OfflineBanner } from "@/components/offline-banner";
 import { ThemeInit } from "@/components/theme-init";
+import { ClarityInit } from "@/components/clarity-init";
 import "./(root)/globals.css";
 
 /*
@@ -45,6 +46,7 @@ export default function GlobalNotFound() {
     >
       <head>
         <ThemeInit />
+        <ClarityInit />
       </head>
       <body className="bg-canvas text-ink flex min-h-screen flex-col antialiased">
         <a

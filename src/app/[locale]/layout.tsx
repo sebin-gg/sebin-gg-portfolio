@@ -8,7 +8,7 @@ import { requireLocaleParam } from "@/app/[locale]/locale-params";
 import { ThemeInit } from "@/components/theme-init";
 import { MotionInit } from "@/components/motion-init";
 import { MotionParamSync } from "@/components/motion-param-sync";
-import { ClarityLoader } from "@/components/clarity";
+import { ClarityInit } from "@/components/clarity-init";
 import "../(root)/globals.css";
 
 const geistSans = Geist({
@@ -168,6 +168,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         />
         <ThemeInit />
         <MotionInit />
+        <ClarityInit />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -178,7 +179,6 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
           <MotionParamSync />
         </Suspense>
         {children}
-        <ClarityLoader />
       </body>
     </html>
   );
