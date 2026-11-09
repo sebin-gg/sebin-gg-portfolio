@@ -2,7 +2,7 @@
   "meta": {
     "title": "Sebin Mathew — full-stack developer & security tools",
     "description": "Computer Science student at College of Engineering Chengannur. Building full-stack web applications, Chrome extensions, and local security tooling.",
-    "blogDescription": "Notes and write-ups on security drills, prompt engineering, and shipping fast websites — first posts are on the way.",
+    "blogDescription": "Notes and write-ups on security drills, prompt engineering, and shipping fast websites — starting with how SlowLang punishes fast typists.",
     "a11yDescription": "How this portfolio handles accessibility: keyboard navigation, color contrast, reduced motion, and the WCAG standards it aims to meet."
   },
   "common": {
@@ -187,9 +187,9 @@
   },
   "blogCta": {
     "title": "Notes & write-ups",
-    "comingSoon": "Coming soon",
-    "body": "First posts are planned around OWASP drills, the brevity-prompt extension, and what 2G performance budgets taught me.",
-    "link": "See what’s planned"
+    "comingSoon": "New post",
+    "body": "First post is up: a sarcastic programming language that punishes fast typing. OWASP drills, brevity-prompt, and 2G budgets are still planned.",
+    "link": "Read the first post"
   },
   "blog": {
     "title": "Notes & write-ups",

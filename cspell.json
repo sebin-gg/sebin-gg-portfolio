@@ -23,6 +23,7 @@
   ],
   "files": ["**/*.{md,mdx,ts,tsx,mjs,cjs,json,yml,yaml,sh,toml,txt,css}"],
   "words": [
+    "Abin",
     "Agensi",
     "Bootcamp",
     "CGPA",
@@ -47,6 +48,7 @@
     "Ollama",
     "PATHCONV",
     "Pydantic",
+    "Pyodide",
     "Résumé",
     "SAMEORIGIN",
     "SETLOCAL",
