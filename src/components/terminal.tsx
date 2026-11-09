@@ -87,6 +87,7 @@ export function Terminal({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale
       <SectionHeading id="terminal-title" title={dict.terminal.title} lede={dict.terminal.lede} />
       <div
         data-terminal-panel
+        data-clarity-mask="true"
         className="border-line/80 bg-panel/90 mx-auto max-w-2xl rounded-xl border p-4 font-mono text-sm shadow-sm backdrop-blur-xs sm:p-5"
       >
         <div aria-live="polite" className="space-y-2">

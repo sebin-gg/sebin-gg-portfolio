@@ -100,7 +100,10 @@ it human-voiced, typographic apostrophes only.
 1. **Performance is a feature.** Keep this site static-first and lean for ~2G/3G. The only image
    exception is Sebin's local FOCES timeline portrait, rendered small in monochrome with `next/image`
    at its native dimensions and default lazy loading. Do not add other images, client-side libraries,
-   analytics, or heavy JS. New interactive UI = tiny isolated client component only. Self-host fonts
+   analytics, or heavy JS. The sole analytics exception is the owner-requested Microsoft
+   Clarity tag (`src/lib/clarity.ts`, PR #135): server-rendered inline bootstrap, production
+   host only, terminal panel masked — any further analytics still requires the same explicit
+   owner sign-off. New interactive UI = tiny isolated client component only. Self-host fonts
    via `next/font`, never a CDN link.
 2. **Content lives in `src/lib/site.ts`.** Copy, links, projects, experience — update data there,
    not inside components. Keep copy human-voiced (no AI tells), with typographic apostrophes —
