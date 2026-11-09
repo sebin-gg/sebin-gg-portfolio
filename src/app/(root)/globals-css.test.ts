@@ -38,6 +38,11 @@ describe("?motion=on load-in cue", () => {
     expect(css).toMatch(/html\[data-motion="on"\] #main\s*\{[^}]*animation: page-enter/);
   });
 
+  it("runs for a positive duration", () => {
+    const rule = css.match(/html\[data-motion="on"\] #main\s*\{[^}]*\}/)?.[0] ?? "";
+    expect(rule).toMatch(/animation:\s*page-enter\s+\d*\.?[1-9]\d*m?s/);
+  });
+
   it("needs no scroll-driven timeline so it works without view() support", () => {
     const rule = css.match(/html\[data-motion="on"\] #main\s*\{[^}]*\}/)?.[0] ?? "";
     expect(rule).not.toContain("animation-timeline");
