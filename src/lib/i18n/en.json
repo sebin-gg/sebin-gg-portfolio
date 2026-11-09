@@ -2,7 +2,7 @@
   "meta": {
     "title": "Sebin Mathew — full-stack developer & security tools",
     "description": "Computer Science student at College of Engineering Chengannur. Building full-stack web applications, Chrome extensions, and local security tooling.",
-    "blogDescription": "Notes and write-ups on security drills, prompt engineering, and shipping fast websites — first posts are on the way.",
+    "blogDescription": "Notes and write-ups on security drills, prompt engineering, and shipping fast websites — starting with how SlowLang punishes fast typists.",
     "a11yDescription": "How this portfolio handles accessibility: keyboard navigation, color contrast, reduced motion, and the WCAG standards it aims to meet."
   },
   "common": {
