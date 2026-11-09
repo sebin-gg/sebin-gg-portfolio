@@ -51,7 +51,7 @@ export const links = {
   },
   threads: {
     label: "Threads",
-    href: "https://www.threads.net/@sebin5009",
+    href: "https://www.threads.com/@sebin5009",
     handle: "@sebin5009",
   },
   leetcode: {

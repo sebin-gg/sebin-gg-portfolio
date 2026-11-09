@@ -21,6 +21,7 @@ export async function generateMetadata({ params }: LocalePageProps): Promise<Met
       languages: hreflangAlternates("/accessibility", siteUrl),
     },
     openGraph: {
+      type: "website",
       url: `${siteUrl}/${locale}/accessibility`,
       title: dict.a11y.title,
       description: dict.meta.a11yDescription,

@@ -39,7 +39,10 @@ export async function generateMetadata({ params }: LocaleLayoutProps): Promise<M
   const dict = getDictionary(locale);
   return {
     metadataBase: new URL(siteUrl),
-    title: dict.meta.title,
+    title: {
+      default: dict.meta.title,
+      template: `%s · ${profile.name}`,
+    },
     description: dict.meta.description,
     alternates: {
       canonical: `${siteUrl}${localePath(locale, "/")}`,
