@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { blogPosts } from "@/lib/blog";
+import { blogPosts, findPost } from "@/lib/blog";
 import { profile, siteUrl } from "@/lib/site";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { PageChrome } from "@/components/page-chrome";
@@ -11,10 +11,6 @@ const dict = getDictionary("en");
 type PostPageProps = {
   readonly params: Promise<{ slug: string }>;
 };
-
-function findPost(slug: string) {
-  return blogPosts.find((post) => post.slug === slug);
-}
 
 export function generateStaticParams() {
   return blogPosts.map((post) => ({ slug: post.slug }));
@@ -65,7 +61,9 @@ export default async function BlogPostPage({ params }: PostPageProps) {
     <PageChrome locale="en" currentPath="/blog" skipLabel={dict.common.skipToContent}>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
       />
       <article className="mx-auto w-full max-w-2xl px-4 py-10 sm:px-6">
         <header className="mb-8">

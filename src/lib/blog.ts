@@ -15,6 +15,28 @@ export type BlogPost = {
   body: readonly BlogPostBlock[];
 };
 
+const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+/** Slugs land raw in route params, index links, RSS and the sitemap, so they
+ * must stay unique single URL-safe path segments. Runs at module load — a bad
+ * entry fails the build rather than publishing an unreachable post. */
+export function assertBlogSlugs(posts: readonly { readonly slug: string }[]): void {
+  const seen = new Set<string>();
+  for (const post of posts) {
+    if (!SLUG_PATTERN.test(post.slug)) {
+      throw new Error(`Blog slug must be a lowercase URL-safe segment: ${post.slug}`);
+    }
+    if (seen.has(post.slug)) {
+      throw new Error(`Duplicate blog slug: ${post.slug}`);
+    }
+    seen.add(post.slug);
+  }
+}
+
+export function findPost(slug: string): BlogPost | undefined {
+  return blogPosts.find((post) => post.slug === slug);
+}
+
 export const blogPosts: BlogPost[] = [
   {
     slug: "slowlang-a-language-that-punishes-fast-typing",
@@ -70,3 +92,5 @@ export const blogPosts: BlogPost[] = [
     ],
   },
 ];
+
+assertBlogSlugs(blogPosts);
