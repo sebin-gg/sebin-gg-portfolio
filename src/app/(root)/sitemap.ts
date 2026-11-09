@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { siteUrl } from "@/lib/site";
+import { blogPosts } from "@/lib/blog";
 import { hreflangAlternates, localePath, SUPPORTED_LOCALES } from "@/lib/locale";
 
 type SitemapEntry = MetadataRoute.Sitemap[number];
@@ -26,6 +27,12 @@ function localizedEntries(entry: (typeof CANONICAL_PATHS)[number]): SitemapEntry
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...CANONICAL_PATHS.flatMap(localizedEntries),
+    ...blogPosts.map((post) => ({
+      url: `${siteUrl}/blog/${post.slug}`,
+      lastModified: new Date(post.publishedAt),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
     {
       // llms.txt — machine-readable site summary for AI agents.
       url: `${siteUrl}/llms.txt`,
