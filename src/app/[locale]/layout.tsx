@@ -34,12 +34,16 @@ export function generateStaticParams(): { locale: string }[] {
   return SUPPORTED_LOCALES.filter((locale) => locale !== "en").map((locale) => ({ locale }));
 }
 
+// skipcq: JS-0067 — module-scoped export, not a global declaration
 export async function generateMetadata({ params }: LocaleLayoutProps): Promise<Metadata> {
   const locale = await requireLocaleParam(params);
   const dict = getDictionary(locale);
   return {
     metadataBase: new URL(siteUrl),
-    title: dict.meta.title,
+    title: {
+      default: dict.meta.title,
+      template: `%s · ${profile.name}`,
+    },
     description: dict.meta.description,
     alternates: {
       canonical: `${siteUrl}${localePath(locale, "/")}`,

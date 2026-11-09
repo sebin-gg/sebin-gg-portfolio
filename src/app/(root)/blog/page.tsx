@@ -20,6 +20,14 @@ export const metadata: Metadata = {
     url: `${siteUrl}/blog`,
     title: `${dict.blog.title} · ${profile.name}`,
     description: dict.meta.blogDescription,
+    images: [
+      {
+        url: "/og-image",
+        width: 1200,
+        height: 630,
+        alt: `${dict.blog.title} · ${profile.name}`,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
