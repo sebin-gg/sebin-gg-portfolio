@@ -8,6 +8,7 @@ import { requireLocaleParam } from "@/app/[locale]/locale-params";
 import { ThemeInit } from "@/components/theme-init";
 import { MotionInit } from "@/components/motion-init";
 import { MotionParamSync } from "@/components/motion-param-sync";
+import { ClarityInit } from "@/components/clarity-init";
 import "../(root)/globals.css";
 
 const geistSans = Geist({
@@ -55,7 +56,7 @@ export async function generateMetadata({ params }: LocaleLayoutProps): Promise<M
       title: dict.meta.title,
       description: dict.meta.description,
       siteName: dict.meta.title,
-      locale: locale,
+      locale,
       images: [
         {
           url: "/og-image",
@@ -94,6 +95,7 @@ interface JsonLdValue {
   [key: string]: JsonLdPrimitive | JsonLdPrimitive[] | JsonLdValue | JsonLdValue[];
 }
 
+// skipcq: JS-0067 — module-scoped helper, not a global declaration
 function buildJsonLd(locale: string, title: string, description: string): JsonLdValue {
   const pageUrl = `${siteUrl}${localePath(locale, "/")}`;
   return {
@@ -171,6 +173,8 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         />
         <ThemeInit />
         <MotionInit />
+        <ClarityInit />
+        {/* skipcq: JS-0440 — static JSON.stringify output, no user input */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
