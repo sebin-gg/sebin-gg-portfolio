@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildAgentSnapshot, buildLlmsText } from "@/lib/agent";
+import { blogPosts } from "@/lib/blog";
 import { links, profile } from "@/lib/site";
 
 describe("agent snapshot", () => {
@@ -20,7 +21,11 @@ describe("agent snapshot", () => {
     expect(text).toContain("https://github.com/sebin-gg");
     expect(text).toContain("https://foces.ceconline.edu/#execom");
     expect(text).toContain(`- Email: ${profile.email}`);
-    expect(text).toContain("## Blog");
-    expect(text).toContain("/blog/slowlang-a-language-that-punishes-fast-typing");
+    const [firstPost] = blogPosts;
+    if (!firstPost) throw new Error("expected at least one blog post");
+    const blogSection = text.split("## Blog")[1];
+    expect(blogSection).toContain(
+      `- [${firstPost.title}](https://sebin-gg.vercel.app/blog/${firstPost.slug}): ${firstPost.description}`,
+    );
   });
 });
