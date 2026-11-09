@@ -54,8 +54,15 @@ export default async function BlogPostPage({ params }: PostPageProps) {
     headline: post.title,
     description: post.description,
     datePublished: post.publishedAt,
+    dateModified: post.publishedAt,
+    image: `${siteUrl}/og-image`,
     mainEntityOfPage: `${siteUrl}/blog/${post.slug}`,
     author: { "@type": "Person", name: profile.name, url: siteUrl },
+    publisher: {
+      "@type": "Person",
+      name: profile.name,
+      url: siteUrl,
+    },
   };
   return (
     <PageChrome locale="en" currentPath="/blog" skipLabel={dict.common.skipToContent}>

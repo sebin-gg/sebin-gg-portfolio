@@ -21,6 +21,21 @@ describe("renderInlineText", () => {
     expect(container).toHaveTextContent("a bold move");
     expect(container.querySelector("strong")).toHaveTextContent("bold");
   });
+
+  it("handles adjacent marks and trailing text", () => {
+    const { container } = render(
+      <span>{renderInlineText("**one** [two](https://e.com) tail")}</span>,
+    );
+    expect(container.querySelector("strong")).toHaveTextContent("one");
+    expect(screen.getByRole("link", { name: "two" })).toHaveAttribute("href", "https://e.com");
+    expect(container).toHaveTextContent(/tail$/);
+  });
+
+  it("leaves malformed marks as plain text", () => {
+    const { container } = render(<span>{renderInlineText("a [broken](notaurl) and **open")}</span>);
+    expect(container.querySelectorAll("a,strong")).toHaveLength(0);
+    expect(container).toHaveTextContent("a [broken](notaurl) and **open");
+  });
 });
 
 describe("BlogPostBody", () => {
@@ -36,6 +51,20 @@ describe("BlogPostBody", () => {
     );
     expect(screen.getByRole("heading", { name: "mid" })).toBeInTheDocument();
     expect(screen.getByText("intro")).toBeInTheDocument();
+    expect(screen.getAllByRole("listitem")).toHaveLength(2);
+  });
+
+  it("renders list items that share a text prefix", () => {
+    render(
+      <BlogPostBody
+        blocks={[
+          {
+            kind: "list",
+            items: ["identical prefix text — first item", "identical prefix text — second item"],
+          },
+        ]}
+      />,
+    );
     expect(screen.getAllByRole("listitem")).toHaveLength(2);
   });
 });
