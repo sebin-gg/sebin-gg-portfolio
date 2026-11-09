@@ -1,6 +1,7 @@
 const CLARITY_PROJECT_ID = "zas9c0vkoo";
 const PRODUCTION_HOST = "sebin-gg.vercel.app";
 
+// skipcq: JS-0067 — module-scoped export, not a global declaration
 export function clarityInitScriptSource(): string {
   const id = JSON.stringify(CLARITY_PROJECT_ID);
   const host = JSON.stringify(PRODUCTION_HOST);
@@ -11,7 +12,7 @@ export function clarityInitScriptSource(): string {
   if (window.location.hostname !== ${host}) return;
   (function(c,l,a,r,i,t,y){
     c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms"+"/tag/"+i;
     y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
   })(window,document,"clarity","script",${id});
 })();

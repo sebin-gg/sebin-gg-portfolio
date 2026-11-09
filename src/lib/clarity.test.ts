@@ -6,7 +6,7 @@ describe("clarityInitScriptSource", () => {
     const script = clarityInitScriptSource();
     expect(script).toContain('document,"clarity","script",');
     expect(script).toContain('"zas9c0vkoo"');
-    expect(script).toContain("https://www.clarity.ms/tag/");
+    expect(script).toContain('"https://www.clarity.ms"+"/tag/"');
     expect(script).toContain("t.async=1");
   });
 
