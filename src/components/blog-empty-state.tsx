@@ -3,6 +3,7 @@ import { DEFAULT_LOCALE, type Locale } from "@/lib/locale";
 import { BlogFollowActions } from "@/components/blog-follow-actions";
 import { RssIcon } from "@/components/icons";
 
+// skipcq: JS-0067 — module-scoped component export, not a global declaration
 export function BlogEmptyState({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
   const dict = getDictionary(locale);
 

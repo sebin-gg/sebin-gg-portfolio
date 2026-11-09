@@ -1,6 +1,7 @@
 import { blogPosts } from "@/lib/blog";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/locale";
 
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 function formatDate(publishedAt: string, locale: Locale): string {
   return new Date(`${publishedAt}T00:00:00`).toLocaleDateString(locale, {
     year: "numeric",
@@ -9,6 +10,7 @@ function formatDate(publishedAt: string, locale: Locale): string {
   });
 }
 
+// skipcq: JS-0067 — module-scoped component export, not a global declaration
 export function BlogPostList({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
   return (
     <ul className="mx-auto grid max-w-2xl gap-4">

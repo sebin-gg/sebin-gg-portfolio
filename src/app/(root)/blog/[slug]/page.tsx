@@ -12,12 +12,14 @@ type PostPageProps = {
   readonly params: Promise<{ slug: string }>;
 };
 
+// skipcq: JS-0067 — module-scoped export, not a global declaration
 export function generateStaticParams() {
   return blogPosts.map((post) => ({ slug: post.slug }));
 }
 
 export const dynamicParams = false;
 
+// skipcq: JS-0067 — module-scoped export, not a global declaration
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
   const { slug } = await params;
   const post = findPost(slug);
@@ -42,6 +44,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
   };
 }
 
+// skipcq: JS-0067 — module-scoped component export, not a global declaration
 export default async function BlogPostPage({ params }: PostPageProps) {
   const { slug } = await params;
   const post = findPost(slug);

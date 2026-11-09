@@ -12,6 +12,7 @@ const CANONICAL_PATHS = [
 ] as const;
 
 /** One sitemap row per localized route, each carrying hreflang alternates for every locale. */
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 function localizedEntries(entry: (typeof CANONICAL_PATHS)[number]): SitemapEntry[] {
   return SUPPORTED_LOCALES.map((locale) => ({
     url: `${siteUrl}${localePath(locale, entry.path)}`,
@@ -24,6 +25,7 @@ function localizedEntries(entry: (typeof CANONICAL_PATHS)[number]): SitemapEntry
   }));
 }
 
+// skipcq: JS-0067 — module-scoped export, not a global declaration
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...CANONICAL_PATHS.flatMap(localizedEntries),

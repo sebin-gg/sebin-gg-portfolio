@@ -2,6 +2,7 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/locale";
 import { BlogFollowActions } from "@/components/blog-follow-actions";
 
+// skipcq: JS-0067 — module-scoped component export, not a global declaration
 export function BlogHeader({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
   const dict = getDictionary(locale);
 

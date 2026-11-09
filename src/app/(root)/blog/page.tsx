@@ -38,6 +38,7 @@ export const metadata: Metadata = {
   },
 };
 
+// skipcq: JS-0067 — module-scoped component export, not a global declaration
 export default function BlogPage() {
   return (
     <PageChrome locale="en" currentPath="/blog" skipLabel={dict.common.skipToContent}>

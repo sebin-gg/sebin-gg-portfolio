@@ -20,6 +20,7 @@ const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 /** Slugs land raw in route params, index links, RSS and the sitemap, so they
  * must stay unique single URL-safe path segments. Runs at module load — a bad
  * entry fails the build rather than publishing an unreachable post. */
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function assertBlogSlugs(posts: readonly { readonly slug: string }[]): void {
   const seen = new Set<string>();
   for (const post of posts) {
@@ -33,6 +34,7 @@ export function assertBlogSlugs(posts: readonly { readonly slug: string }[]): vo
   }
 }
 
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function findPost(slug: string): BlogPost | undefined {
   return blogPosts.find((post) => post.slug === slug);
 }

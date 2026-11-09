@@ -8,6 +8,7 @@ import type { BlogPostBlock } from "@/lib/blog";
  */
 const INLINE_PATTERN = /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)|\*\*([^*]+)\*\*/g;
 
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 function inlinePart(match: RegExpExecArray, key: number): ReactNode {
   if (match[1] !== undefined && match[2] !== undefined) {
     return (
@@ -25,6 +26,7 @@ function inlinePart(match: RegExpExecArray, key: number): ReactNode {
   return <strong key={key}>{match[3]}</strong>;
 }
 
+// skipcq: JS-0067 — module-scoped function, not a global declaration
 export function renderInlineText(text: string): ReactNode {
   const parts: ReactNode[] = [];
   let last = 0;
@@ -41,6 +43,7 @@ export function renderInlineText(text: string): ReactNode {
   return parts;
 }
 
+// skipcq: JS-0067 — module-scoped component export, not a global declaration
 export function BlogPostBody({ blocks }: { readonly blocks: readonly BlogPostBlock[] }) {
   return (
     <div className="text-ink-soft space-y-5 leading-relaxed">
