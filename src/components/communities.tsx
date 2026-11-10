@@ -3,7 +3,7 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/locale";
 import { SectionHeading } from "@/components/section-heading";
 
-export function Communities({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
+export const Communities = ({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) => {
   const dict = getDictionary(locale);
   return (
     <section
@@ -42,4 +42,4 @@ export function Communities({ locale = DEFAULT_LOCALE }: { readonly locale?: Loc
       </ul>
     </section>
   );
-}
+};
