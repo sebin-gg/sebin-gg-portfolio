@@ -405,6 +405,10 @@ export type Community = {
   href?: string;
 };
 
+/** The hackathon organiser’s official site. Blog copy links the same URL, so
+ * it is defined once here and interpolated into the post body. */
+export const tinkerHubUrl = "https://www.tinkerhub.org";
+
 export const communities: readonly Community[] = [
   { name: "FOCES CEC", role: "Project Coordinator" },
   { name: "CampusCrew", role: "Student Ambassador" },
@@ -412,7 +416,7 @@ export const communities: readonly Community[] = [
   {
     name: "TinkerHub",
     role: "Hackathon winner, Useless Projects 2.0",
-    href: "https://www.tinkerhub.org",
+    href: tinkerHubUrl,
   },
 ];
 

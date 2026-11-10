@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { blogPosts } from "@/lib/blog";
 import {
   communities,
   links,
@@ -185,6 +186,16 @@ describe("communities", () => {
       }
     }
     expect(communities.find((c) => c.name === "TinkerHub")?.href).toBe("https://www.tinkerhub.org");
+  });
+
+  it("keeps every TinkerHub mention on the same canonical URL", () => {
+    const entry = communities.find((c) => c.name === "TinkerHub");
+    for (const post of blogPosts) {
+      const text = post.body.map((b) => (b.kind === "list" ? b.items.join(" ") : b.text)).join(" ");
+      for (const m of text.matchAll(/\[TinkerHub\]\(([^)]+)\)/g)) {
+        expect(m[1]).toBe(entry?.href);
+      }
+    }
   });
 });
 
