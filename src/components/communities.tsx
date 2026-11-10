@@ -22,7 +22,20 @@ export function Communities({ locale = DEFAULT_LOCALE }: { readonly locale?: Loc
             key={community.name}
             className="border-line/80 bg-panel/90 hover:border-accent/60 rounded-xl border p-5 shadow-sm backdrop-blur-xs transition-colors"
           >
-            <p className="text-ink font-semibold">{community.name}</p>
+            <p className="text-ink font-semibold">
+              {"href" in community ? (
+                <a
+                  href={community.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-accent underline-offset-4 transition-colors hover:underline"
+                >
+                  {community.name}
+                </a>
+              ) : (
+                community.name
+              )}
+            </p>
             <p className="text-ink-soft mt-1 text-sm">{dict.communities.roles[index]}</p>
           </li>
         ))}

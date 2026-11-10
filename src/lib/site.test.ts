@@ -177,6 +177,15 @@ describe("communities", () => {
       expect(getDictionary(locale).communities.roles).toHaveLength(communities.length);
     }
   });
+
+  it("only links community names to real https org pages", () => {
+    for (const community of communities) {
+      if ("href" in community) {
+        expect(community.href).toMatch(/^https:\/\//);
+      }
+    }
+    expect(communities.find((c) => c.name === "TinkerHub")?.href).toBe("https://www.tinkerhub.org");
+  });
 });
 
 describe("recommendations", () => {

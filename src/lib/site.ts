@@ -403,7 +403,11 @@ export const communities = [
   { name: "FOCES CEC", role: "Project Coordinator" },
   { name: "CampusCrew", role: "Student Ambassador" },
   { name: "OWASP Kerala", role: "Bootcamp trainee 2025" },
-  { name: "TinkerHub", role: "Hackathon winner, Useless Projects 2.0" },
+  {
+    name: "TinkerHub",
+    role: "Hackathon winner, Useless Projects 2.0",
+    href: "https://www.tinkerhub.org",
+  },
 ] as const;
 
 /**
