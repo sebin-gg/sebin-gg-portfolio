@@ -399,7 +399,13 @@ export const navItems = [
 /**
  * Communities and programs from Sebin’s work outside the classroom.
  */
-export const communities = [
+export type Community = {
+  name: string;
+  role: string;
+  href?: string;
+};
+
+export const communities: readonly Community[] = [
   { name: "FOCES CEC", role: "Project Coordinator" },
   { name: "CampusCrew", role: "Student Ambassador" },
   { name: "OWASP Kerala", role: "Bootcamp trainee 2025" },
@@ -408,7 +414,7 @@ export const communities = [
     role: "Hackathon winner, Useless Projects 2.0",
     href: "https://www.tinkerhub.org",
   },
-] as const;
+];
 
 /**
  * Recommendations from people Sebin has worked with. The section stays

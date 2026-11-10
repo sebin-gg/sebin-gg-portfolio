@@ -180,7 +180,7 @@ describe("communities", () => {
 
   it("only links community names to real https org pages", () => {
     for (const community of communities) {
-      if ("href" in community) {
+      if (community.href) {
         expect(community.href).toMatch(/^https:\/\//);
       }
     }

@@ -23,7 +23,7 @@ export function Communities({ locale = DEFAULT_LOCALE }: { readonly locale?: Loc
             className="border-line/80 bg-panel/90 hover:border-accent/60 rounded-xl border p-5 shadow-sm backdrop-blur-xs transition-colors"
           >
             <p className="text-ink font-semibold">
-              {"href" in community ? (
+              {community.href ? (
                 <a
                   href={community.href}
                   target="_blank"
