@@ -405,7 +405,7 @@ export type Community = {
   href?: string;
 };
 
-/** The hackathon organiser’s official site. Blog copy links the same URL, so
+/** The hackathon organizer’s official site. Blog copy links the same URL, so
  * it is defined once here and interpolated into the post body. */
 export const tinkerHubUrl = "https://www.tinkerhub.org";
 
