@@ -41,7 +41,7 @@ jobs:
       # without it the job passes while every project link is unchecked. The
       # generated `/llms.txt` and `/agent.json` responses are covered by the unit
       # tests that assert the same site.ts data.
-      # LinkedIn, X, LeetCode, Instagram, Threads and Quora block bot traffic, so they are excluded to avoid
+      # LinkedIn, X, LeetCode, Instagram, Threads, Quora and Unstop block bot traffic, so they are excluded to avoid
       # false failures; every other link is checked with retries.
       # (mailto: links are excluded by default in lychee v2.)
       # `/resume.pdf` is a root-relative path served from `public/`, not a URL
@@ -52,7 +52,7 @@ jobs:
           args: >-
             --no-progress --verbose --max-retries 2
             --exclude 'linkedin.com' --exclude 'x.com'
-            --exclude 'leetcode.com' --exclude 'instagram.com' --exclude 'threads.net' --exclude 'medium.com' --exclude 'reddit.com' --exclude 'producthunt.com' --exclude 'linktr.ee' --exclude 'geeksforgeeks.org' --exclude 'hackerearth.com' --exclude 'app.mulearn.org' --exclude 'dev.to' --exclude 'hashnode.com' --exclude 'stackoverflow.com' --exclude 'quora.com'
+            --exclude 'leetcode.com' --exclude 'instagram.com' --exclude 'threads.net' --exclude 'medium.com' --exclude 'reddit.com' --exclude 'producthunt.com' --exclude 'linktr.ee' --exclude 'geeksforgeeks.org' --exclude 'hackerearth.com' --exclude 'app.mulearn.org' --exclude 'dev.to' --exclude 'hashnode.com' --exclude 'stackoverflow.com' --exclude 'quora.com' --exclude 'unstop.com'
             --exclude '^/resume\.pdf$'
             '**/*.md' 'src/lib/site.ts'
         env:

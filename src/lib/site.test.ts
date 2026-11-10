@@ -190,8 +190,11 @@ describe("communities", () => {
 
   it("keeps every TinkerHub mention on the same canonical URL", () => {
     const entry = communities.find((c) => c.name === "TinkerHub");
-    for (const post of blogPosts) {
-      const text = post.body.map((b) => (b.kind === "list" ? b.items.join(" ") : b.text)).join(" ");
+    const texts = blogPosts.map((post) =>
+      post.body.map((b) => (b.kind === "list" ? b.items.join(" ") : b.text)).join(" "),
+    );
+    expect(texts.join(" ")).toMatch(/\[TinkerHub\]\([^)]+\)/);
+    for (const text of texts) {
       for (const m of text.matchAll(/\[TinkerHub\]\(([^)]+)\)/g)) {
         expect(m[1]).toBe(entry?.href);
       }
