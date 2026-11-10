@@ -131,6 +131,15 @@ describe("Communities", () => {
     expect(screen.getAllByText(/Project Coordinator/i).length).toBeGreaterThan(0);
   });
 
+  it("renders communities with an org page as external links", () => {
+    render(<Communities />);
+    const link = screen.getByRole("link", { name: "TinkerHub" });
+    expect(link).toHaveAttribute("href", "https://www.tinkerhub.org");
+    expect(link).toHaveAttribute("target", "_blank");
+    expect(link).toHaveAttribute("rel", "noopener noreferrer");
+    expect(screen.queryByRole("link", { name: "FOCES CEC" })).not.toBeInTheDocument();
+  });
+
   it("pairs every translated role with its own community in every locale", () => {
     // Asserting one English role leaves role-to-community drift invisible:
     // rotating the dictionary array still renders, just against the wrong cards.

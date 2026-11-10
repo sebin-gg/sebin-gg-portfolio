@@ -2,6 +2,7 @@
  * here, so publishing means appending one entry. Bodies are structured blocks;
  * inline text supports the two marks the body renderer understands:
  * `[label](https://url)` links and `**strong**` spans. */
+import { tinkerHubUrl } from "@/lib/site";
 export type BlogPostBlock =
   | { readonly kind: "p"; readonly text: string }
   | { readonly kind: "h2"; readonly text: string }
@@ -44,7 +45,7 @@ export const blogPosts: BlogPost[] = [
     body: [
       {
         kind: "p",
-        text: "Most programming languages want you to go faster. Faster compile times, faster iteration, faster shipping. So for TinkerHub’s Useless Projects 2.0 hackathon — a Kerala event celebrating gloriously useless software — my teammate [Abin Zachariah Abraham](https://www.linkedin.com/in/abin-zachariah-abraham-124576339/) and I went the other way: we built a language that actively slows you down.",
+        text: `Most programming languages want you to go faster. Faster compile times, faster iteration, faster shipping. So for [TinkerHub](${tinkerHubUrl})’s Useless Projects 2.0 hackathon — a Kerala event celebrating gloriously useless software — my teammate [Abin Zachariah Abraham](https://www.linkedin.com/in/abin-zachariah-abraham-124576339/) and I went the other way: we built a language that actively slows you down.`,
       },
       {
         kind: "p",

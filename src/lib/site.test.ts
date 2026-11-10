@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { blogPosts } from "@/lib/blog";
 import {
   communities,
   links,
@@ -175,6 +176,28 @@ describe("communities", () => {
   it("keeps one dictionary role line per community", () => {
     for (const locale of SUPPORTED_LOCALES) {
       expect(getDictionary(locale).communities.roles).toHaveLength(communities.length);
+    }
+  });
+
+  it("only links community names to real https org pages", () => {
+    for (const community of communities) {
+      if (community.href) {
+        expect(community.href).toMatch(/^https:\/\//);
+      }
+    }
+    expect(communities.find((c) => c.name === "TinkerHub")?.href).toBe("https://www.tinkerhub.org");
+  });
+
+  it("keeps every TinkerHub mention on the same canonical URL", () => {
+    const entry = communities.find((c) => c.name === "TinkerHub");
+    const texts = blogPosts.map((post) =>
+      post.body.map((b) => (b.kind === "list" ? b.items.join(" ") : b.text)).join(" "),
+    );
+    expect(texts.join(" ")).toMatch(/\[TinkerHub\]\([^)]+\)/);
+    for (const text of texts) {
+      for (const m of text.matchAll(/\[TinkerHub\]\(([^)]+)\)/g)) {
+        expect(m[1]).toBe(entry?.href);
+      }
     }
   });
 });
