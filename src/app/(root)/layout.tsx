@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { links, profile, siteMeta, siteUrl } from "@/lib/site";
+import { links, profile, sameAs, siteMeta, siteUrl } from "@/lib/site";
 import { hreflangAlternates } from "@/lib/locale";
 import { ThemeInit } from "@/components/theme-init";
 import { MotionInit } from "@/components/motion-init";
@@ -134,9 +134,7 @@ const jsonLdData = {
         addressRegion: "Kerala",
         addressCountry: "IN",
       },
-      sameAs: Object.values(links)
-        .filter((link) => link.href.startsWith("http"))
-        .map((link) => link.href),
+      sameAs,
       knowsAbout: [
         "Computer Science",
         "Full-Stack Development",
