@@ -344,10 +344,9 @@ describe("Contact", () => {
     ]) {
       expect(screen.getByRole("link", { name: link.label })).toHaveAttribute("href", link.href);
     }
-    expect(screen.getByRole("link", { name: links.mastodon.label })).toHaveAttribute(
-      "rel",
-      expect.stringContaining("me"),
-    );
+    expect(
+      screen.getByRole("link", { name: links.mastodon.label }).getAttribute("rel")?.split(/\s+/),
+    ).toContain("me");
   });
 });
 
