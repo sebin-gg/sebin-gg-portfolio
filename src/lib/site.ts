@@ -44,6 +44,11 @@ export const links = {
     handle: "/in/sebin-gg",
   },
   x: { label: "X", href: "https://x.com/Sebinmgg", handle: "@Sebinmgg" },
+  mastodon: {
+    label: "Mastodon",
+    href: "https://mastodon.social/@sebinmathew",
+    handle: "@sebinmathew",
+  },
   instagram: {
     label: "Instagram",
     href: "https://www.instagram.com/sebin5009",
