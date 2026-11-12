@@ -13,29 +13,30 @@ const htmlClass = (page: Page) => page.evaluate(() => document.documentElement.c
  */
 const installSchemeProbe = (page: Page, scheme: "light" | "dark") =>
   page.addInitScript((initial) => {
-    const w = window as unknown as {
+    const win = window as unknown as {
       __scheme?: "light" | "dark";
       __mediaQueryLists?: MediaQueryList[];
       __origMatchMedia?: typeof window.matchMedia;
     };
-    if (w.__origMatchMedia) return;
+    if (win.__origMatchMedia) return;
     // Seed before page scripts run so even the first-paint media query sees
     // the emulated scheme on engines where emulateMedia is inert (WebKit).
-    w.__scheme = initial;
-    w.__mediaQueryLists = [];
-    w.__origMatchMedia = window.matchMedia.bind(window);
-    window.matchMedia = (q: string) => {
-      const mq = w.__origMatchMedia!(q);
+    win.__scheme = initial;
+    win.__mediaQueryLists = [];
+    win.__origMatchMedia = window.matchMedia.bind(window);
+    const origMatchMedia = win.__origMatchMedia;
+    window.matchMedia = (query: string) => {
+      const mq = origMatchMedia(query);
       const proxied = new Proxy(mq, {
         get(target, prop, receiver) {
-          if (prop === "matches" && w.__scheme) {
-            return q.includes("dark") ? w.__scheme === "dark" : w.__scheme !== "dark";
+          if (prop === "matches" && win.__scheme) {
+            return query.includes("dark") ? win.__scheme === "dark" : win.__scheme !== "dark";
           }
-          const v = Reflect.get(target, prop, receiver);
-          return typeof v === "function" ? v.bind(target) : v;
+          const value = Reflect.get(target, prop, receiver);
+          return typeof value === "function" ? value.bind(target) : value;
         },
       });
-      w.__mediaQueryLists!.push(proxied);
+      win.__mediaQueryLists?.push(proxied);
       return proxied;
     };
   }, scheme);
@@ -52,9 +53,12 @@ const setDeviceScheme = async (page: Page, scheme: "light" | "dark") => {
   // so listeners that re-read `.matches` (the app's own path) see the new
   // value on engines that never propagate emulated media (WebKit).
   await page.evaluate((next) => {
-    const w = window as unknown as { __scheme?: string; __mediaQueryLists?: MediaQueryList[] };
-    w.__scheme = next;
-    for (const mq of w.__mediaQueryLists ?? []) {
+    const win = window as unknown as {
+      __scheme?: string;
+      __mediaQueryLists?: MediaQueryList[];
+    };
+    win.__scheme = next;
+    for (const mq of win.__mediaQueryLists ?? []) {
       try {
         mq.dispatchEvent(new Event("change"));
       } catch {
@@ -65,8 +69,8 @@ const setDeviceScheme = async (page: Page, scheme: "light" | "dark") => {
   // Nudge a few times for engines that deliver the emulated change late.
   for (let attempt = 0; attempt < 3; attempt++) {
     await page.evaluate((next) => {
-      for (const q of [`(prefers-color-scheme: ${next})`, "(prefers-color-scheme: dark)"]) {
-        const mq = window.matchMedia(q);
+      for (const query of [`(prefers-color-scheme: ${next})`, "(prefers-color-scheme: dark)"]) {
+        const mq = window.matchMedia(query);
         try {
           mq.dispatchEvent(
             new MediaQueryListEvent("change", { matches: mq.matches, media: mq.media }),
