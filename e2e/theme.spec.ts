@@ -29,7 +29,7 @@ const installSchemeProbe = (page: Page, scheme: "light" | "dark") =>
       const mq = origMatchMedia(query);
       const proxied = new Proxy(mq, {
         get(target, prop, receiver) {
-          if (prop === "matches" && win.__scheme) {
+          if (prop === "matches" && win.__scheme && query.includes("prefers-color-scheme")) {
             return query.includes("dark") ? win.__scheme === "dark" : win.__scheme !== "dark";
           }
           const value = Reflect.get(target, prop, receiver);
