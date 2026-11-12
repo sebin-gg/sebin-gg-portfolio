@@ -15,14 +15,14 @@ const installSchemeProbe = (page: Page, scheme: "light" | "dark") =>
   page.addInitScript((initial) => {
     const w = window as unknown as {
       __scheme?: "light" | "dark";
-      __mqls?: MediaQueryList[];
+      __mediaQueryLists?: MediaQueryList[];
       __origMatchMedia?: typeof window.matchMedia;
     };
     if (w.__origMatchMedia) return;
     // Seed before page scripts run so even the first-paint media query sees
     // the emulated scheme on engines where emulateMedia is inert (WebKit).
     w.__scheme = initial;
-    w.__mqls = [];
+    w.__mediaQueryLists = [];
     w.__origMatchMedia = window.matchMedia.bind(window);
     window.matchMedia = (q: string) => {
       const mq = w.__origMatchMedia!(q);
@@ -35,7 +35,7 @@ const installSchemeProbe = (page: Page, scheme: "light" | "dark") =>
           return typeof v === "function" ? v.bind(target) : v;
         },
       });
-      w.__mqls!.push(proxied);
+      w.__mediaQueryLists!.push(proxied);
       return proxied;
     };
   }, scheme);
@@ -52,9 +52,9 @@ const setDeviceScheme = async (page: Page, scheme: "light" | "dark") => {
   // so listeners that re-read `.matches` (the app's own path) see the new
   // value on engines that never propagate emulated media (WebKit).
   await page.evaluate((next) => {
-    const w = window as unknown as { __scheme?: string; __mqls?: MediaQueryList[] };
+    const w = window as unknown as { __scheme?: string; __mediaQueryLists?: MediaQueryList[] };
     w.__scheme = next;
-    for (const mq of w.__mqls ?? []) {
+    for (const mq of w.__mediaQueryLists ?? []) {
       try {
         mq.dispatchEvent(new Event("change"));
       } catch {
