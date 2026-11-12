@@ -25,13 +25,15 @@ const installSchemeProbe = (page: Page, scheme: "light" | "dark") =>
     win.__mediaQueryLists = [];
     win.__origMatchMedia = window.matchMedia.bind(window);
     const origMatchMedia = win.__origMatchMedia;
+    const emulatedScheme = (prop: string | symbol, query: string) =>
+      prop === "matches" && win.__scheme && query.includes("prefers-color-scheme");
+    const schemeMatches = (query: string) =>
+      query.includes("dark") ? win.__scheme === "dark" : win.__scheme !== "dark";
     window.matchMedia = (query: string) => {
       const mq = origMatchMedia(query);
       const proxied = new Proxy(mq, {
         get(target, prop, receiver) {
-          if (prop === "matches" && win.__scheme && query.includes("prefers-color-scheme")) {
-            return query.includes("dark") ? win.__scheme === "dark" : win.__scheme !== "dark";
-          }
+          if (emulatedScheme(prop, query)) return schemeMatches(query);
           const value = Reflect.get(target, prop, receiver);
           return typeof value === "function" ? value.bind(target) : value;
         },
