@@ -34,6 +34,7 @@ export function Contact({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale 
               links.github,
               links.linkedin,
               links.x,
+              links.mastodon,
               links.instagram,
               links.threads,
               links.leetcode,
@@ -45,7 +46,7 @@ export function Contact({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale 
                 <a
                   href={link.href}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel={link === links.mastodon ? "me noopener noreferrer" : "noopener noreferrer"}
                   className="text-ink-soft hover:text-accent inline-flex items-center gap-1 text-sm transition-colors"
                 >
                   {link.label}
