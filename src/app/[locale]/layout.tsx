@@ -1,13 +1,14 @@
 import { Suspense } from "react";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { links, profile, siteUrl } from "@/lib/site";
+import { links, profile, sameAs, siteUrl } from "@/lib/site";
 import { hreflangAlternates, localePath, SUPPORTED_LOCALES } from "@/lib/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { requireLocaleParam } from "@/app/[locale]/locale-params";
 import { ThemeInit } from "@/components/theme-init";
 import { MotionInit } from "@/components/motion-init";
 import { MotionParamSync } from "@/components/motion-param-sync";
+import { ClarityInit } from "@/components/clarity-init";
 import "../(root)/globals.css";
 
 const geistSans = Geist({
@@ -34,12 +35,16 @@ export function generateStaticParams(): { locale: string }[] {
   return SUPPORTED_LOCALES.filter((locale) => locale !== "en").map((locale) => ({ locale }));
 }
 
+// skipcq: JS-0067 — module-scoped export, not a global declaration
 export async function generateMetadata({ params }: LocaleLayoutProps): Promise<Metadata> {
   const locale = await requireLocaleParam(params);
   const dict = getDictionary(locale);
   return {
     metadataBase: new URL(siteUrl),
-    title: dict.meta.title,
+    title: {
+      default: dict.meta.title,
+      template: `%s · ${profile.name}`,
+    },
     description: dict.meta.description,
     alternates: {
       canonical: `${siteUrl}${localePath(locale, "/")}`,
@@ -51,7 +56,7 @@ export async function generateMetadata({ params }: LocaleLayoutProps): Promise<M
       title: dict.meta.title,
       description: dict.meta.description,
       siteName: dict.meta.title,
-      locale: locale,
+      locale,
       images: [
         {
           url: "/og-image",
@@ -90,6 +95,7 @@ interface JsonLdValue {
   [key: string]: JsonLdPrimitive | JsonLdPrimitive[] | JsonLdValue | JsonLdValue[];
 }
 
+// skipcq: JS-0067 — module-scoped helper, not a global declaration
 function buildJsonLd(locale: string, title: string, description: string): JsonLdValue {
   const pageUrl = `${siteUrl}${localePath(locale, "/")}`;
   return {
@@ -129,7 +135,7 @@ function buildJsonLd(locale: string, title: string, description: string): JsonLd
           addressRegion: "Kerala",
           addressCountry: "IN",
         },
-        sameAs: [links.github.href, links.linkedin.href, links.x.href],
+        sameAs,
         knowsAbout: [
           "Computer Science",
           "Full-Stack Development",
@@ -167,6 +173,8 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         />
         <ThemeInit />
         <MotionInit />
+        <ClarityInit />
+        {/* skipcq: JS-0440 — static JSON.stringify output, no user input */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { siteUrl } from "@/lib/site";
-import { hreflangAlternates } from "@/lib/locale";
+import { blogPosts } from "@/lib/blog";
+import { hreflangAlternates, localePath, SUPPORTED_LOCALES } from "@/lib/locale";
 
 type SitemapEntry = MetadataRoute.Sitemap[number];
 
@@ -10,22 +11,30 @@ const CANONICAL_PATHS = [
   { path: "/accessibility", changeFrequency: "yearly", priority: 0.4 },
 ] as const;
 
-/** One sitemap row per canonical route, with hreflang alternates for all locales. */
-function localizedEntry(entry: (typeof CANONICAL_PATHS)[number]): SitemapEntry {
-  return {
-    url: `${siteUrl}${entry.path}`,
+/** One sitemap row per localized route, each carrying hreflang alternates for every locale. */
+// skipcq: JS-0067 — module-scoped function, not a global declaration
+function localizedEntries(entry: (typeof CANONICAL_PATHS)[number]): SitemapEntry[] {
+  return SUPPORTED_LOCALES.map((locale) => ({
+    url: `${siteUrl}${localePath(locale, entry.path)}`,
     lastModified: new Date(),
     changeFrequency: entry.changeFrequency,
     priority: entry.priority,
     alternates: {
       languages: hreflangAlternates(entry.path, siteUrl),
     },
-  };
+  }));
 }
 
+// skipcq: JS-0067 — module-scoped export, not a global declaration
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
-    ...CANONICAL_PATHS.map(localizedEntry),
+    ...CANONICAL_PATHS.flatMap(localizedEntries),
+    ...blogPosts.map((post) => ({
+      url: `${siteUrl}/blog/${post.slug}`,
+      lastModified: new Date(post.publishedAt),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
     {
       // llms.txt — machine-readable site summary for AI agents.
       url: `${siteUrl}/llms.txt`,
