@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { OfflineBanner } from "@/components/offline-banner";
 import { ThemeInit } from "@/components/theme-init";
 import { ClarityInit } from "@/components/clarity-init";
+import { MotionInit } from "@/components/motion-init";
 import "./(root)/globals.css";
 
 /*
@@ -37,6 +38,7 @@ export const metadata: Metadata = {
 };
 
 // skipcq: JS-0067 — module-scoped component export, not a global declaration
+// skipcq: JS-0415 — full HTML document needs html>head>body nesting
 export default function GlobalNotFound() {
   const dict = getDictionary("en");
   return (
@@ -48,6 +50,7 @@ export default function GlobalNotFound() {
       <head>
         <ThemeInit />
         <ClarityInit />
+        <MotionInit />
       </head>
       <body className="bg-canvas text-ink flex min-h-screen flex-col antialiased">
         <a

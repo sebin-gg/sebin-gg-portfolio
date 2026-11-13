@@ -25,4 +25,26 @@ describe("section fade-up animation", () => {
   it("the OS reduce block escapes an explicit ?motion=on override", () => {
     expect(css).toMatch(/prefers-reduced-motion: reduce[\s\S]*html:not\(\[data-motion="on"\]\)/);
   });
+
+  it("the fade travels far enough to be visible", () => {
+    const fade = css.match(/@keyframes section-fade\s*\{[\s\S]*?\}\s*\}/)?.[0] ?? "";
+    expect(fade).toContain("translateY(24px)");
+  });
+});
+
+describe("?motion=on load-in cue", () => {
+  it("plays a one-shot page-enter animation on #main", () => {
+    expect(css).toContain("@keyframes page-enter");
+    expect(css).toMatch(/html\[data-motion="on"\] #main\s*\{[^}]*animation: page-enter/);
+  });
+
+  it("runs for a positive duration", () => {
+    const rule = css.match(/html\[data-motion="on"\] #main\s*\{[^}]*\}/)?.[0] ?? "";
+    expect(rule).toMatch(/animation:\s*page-enter\s+\d*\.?[1-9]\d*m?s/);
+  });
+
+  it("needs no scroll-driven timeline so it works without view() support", () => {
+    const rule = css.match(/html\[data-motion="on"\] #main\s*\{[^}]*\}/)?.[0] ?? "";
+    expect(rule).not.toContain("animation-timeline");
+  });
 });

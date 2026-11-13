@@ -44,6 +44,11 @@ export const links = {
     handle: "/in/sebin-gg",
   },
   x: { label: "X", href: "https://x.com/Sebinmgg", handle: "@Sebinmgg" },
+  mastodon: {
+    label: "Mastodon",
+    href: "https://mastodon.social/@sebinmathew",
+    handle: "@sebinmathew",
+  },
   instagram: {
     label: "Instagram",
     href: "https://www.instagram.com/sebin5009",
@@ -96,8 +101,8 @@ export const links = {
   },
   linktree: {
     label: "Linktree",
-    href: "https://linktr.ee/sebin-gg",
-    handle: "sebin-gg",
+    href: "https://linktr.ee/sebinmathew",
+    handle: "sebinmathew",
   },
   reddit: {
     label: "Reddit",
@@ -119,12 +124,70 @@ export const links = {
     href: "https://app.mulearn.org/profile/sebinmathew-2@mulearn",
     handle: "sebinmathew-2@mulearn",
   },
+  devpost: {
+    label: "Devpost",
+    href: "https://devpost.com/sebinmathew543",
+    handle: "sebinmathew543",
+  },
+  codechef: {
+    label: "CodeChef",
+    href: "https://www.codechef.com/users/sebin_mathew",
+    handle: "sebin_mathew",
+  },
+  unstop: {
+    label: "Unstop",
+    href: "https://unstop.com/u/sebinmat8629",
+    handle: "sebinmat8629",
+  },
+  fossunited: {
+    label: "FOSS United",
+    href: "https://fossunited.org/u/sebin_mathew",
+    handle: "sebin_mathew",
+  },
+  quora: {
+    label: "Quora",
+    href: "https://www.quora.com/profile/Sebin-Mathew-74",
+    handle: "Sebin-Mathew-74",
+  },
+  wellfound: {
+    label: "Wellfound",
+    href: "https://wellfound.com/u/sebin-mathew",
+    handle: "sebin-mathew",
+  },
+  youtube: {
+    label: "YouTube",
+    href: "https://www.youtube.com/@sebinmathew183",
+    handle: "@sebinmathew183",
+  },
+  hashnodeBlog: {
+    label: "Hashnode blog",
+    href: "https://sebin-gg.hashnode.dev",
+    handle: "sebin-gg",
+  },
+  wordpress: {
+    label: "WordPress",
+    href: "https://sebingg.wordpress.com",
+    handle: "sebingg",
+  },
   email: {
     label: "Email",
     href: `mailto:${profile.email}`,
     handle: profile.email,
   },
 } as const;
+
+/**
+ * JSON-LD `sameAs` identity graph: every https profile URL in `links`,
+ * deduped. Both layouts read this instead of deriving their own lists so
+ * the root and localized Person nodes can never drift apart.
+ */
+export const sameAs = [
+  ...new Set(
+    Object.values(links)
+      .filter((link) => link.href.startsWith("https://"))
+      .map((link) => link.href),
+  ),
+];
 
 export const resumeUrl = "/resume.pdf";
 
@@ -165,7 +228,7 @@ export const timeline: TimelineItem[] = [
   {
     title: "Student Ambassador",
     org: "CampusCrew",
-    period: "Dec 2025 – present",
+    period: "Dec 2025 – Apr 2026",
     kind: "work",
     summary: [
       "Connect engineering peers with open-source roadmaps, hackathons, and technical bootcamps.",
@@ -341,12 +404,26 @@ export const navItems = [
 /**
  * Communities and programs from Sebin’s work outside the classroom.
  */
-export const communities = [
+export type Community = {
+  name: string;
+  role: string;
+  href?: string;
+};
+
+/** The hackathon organizer’s official site. Blog copy links the same URL, so
+ * it is defined once here and interpolated into the post body. */
+export const tinkerHubUrl = "https://www.tinkerhub.org";
+
+export const communities: readonly Community[] = [
   { name: "FOCES CEC", role: "Project Coordinator" },
   { name: "CampusCrew", role: "Student Ambassador" },
   { name: "OWASP Kerala", role: "Bootcamp trainee 2025" },
-  { name: "TinkerHub", role: "Hackathon winner, Useless Projects 2.0" },
-] as const;
+  {
+    name: "TinkerHub",
+    role: "Hackathon winner, Useless Projects 2.0",
+    href: tinkerHubUrl,
+  },
+];
 
 /**
  * Recommendations from people Sebin has worked with. The section stays

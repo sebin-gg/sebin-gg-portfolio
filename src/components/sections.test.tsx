@@ -131,6 +131,15 @@ describe("Communities", () => {
     expect(screen.getAllByText(/Project Coordinator/i).length).toBeGreaterThan(0);
   });
 
+  it("renders communities with an org page as external links", () => {
+    render(<Communities />);
+    const link = screen.getByRole("link", { name: "TinkerHub" });
+    expect(link).toHaveAttribute("href", "https://www.tinkerhub.org");
+    expect(link).toHaveAttribute("target", "_blank");
+    expect(link).toHaveAttribute("rel", "noopener noreferrer");
+    expect(screen.queryByRole("link", { name: "FOCES CEC" })).not.toBeInTheDocument();
+  });
+
   it("pairs every translated role with its own community in every locale", () => {
     // Asserting one English role leaves role-to-community drift invisible:
     // rotating the dictionary array still renders, just against the wrong cards.
@@ -325,6 +334,7 @@ describe("Contact", () => {
       links.github,
       links.linkedin,
       links.x,
+      links.mastodon,
       links.instagram,
       links.threads,
       links.leetcode,
@@ -334,6 +344,9 @@ describe("Contact", () => {
     ]) {
       expect(screen.getByRole("link", { name: link.label })).toHaveAttribute("href", link.href);
     }
+    expect(
+      screen.getByRole("link", { name: links.mastodon.label }).getAttribute("rel")?.split(/\s+/),
+    ).toContain("me");
   });
 });
 
