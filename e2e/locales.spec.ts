@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { getDictionary } from "../src/lib/i18n/dictionaries";
+import { profile } from "../src/lib/site";
 import type { Locale } from "../src/lib/locale";
 import manifest from "../src/lib/i18n/manifest.json";
 
@@ -59,12 +60,15 @@ test.describe("localized routes", () => {
       await expect(page.getByRole("main")).toHaveAttribute("lang", locale.code);
       await expect(page.getByRole("contentinfo")).toBeVisible();
       await expect(page.locator('meta[property="og:image"]')).toHaveCount(1);
+      // The [locale] layout template appends the site name to child titles.
+      await expect(page).toHaveTitle(`${locale.dict.blog.title} · ${profile.name}`);
     });
 
     test(`${locale.code} accessibility page has localized metadata image`, async ({ page }) => {
       await page.goto(`/${locale.code}/accessibility`);
       await expect(page.getByRole("main")).toHaveAttribute("lang", locale.code);
       await expect(page.locator('meta[property="og:image"]')).toHaveCount(1);
+      await expect(page).toHaveTitle(`${locale.dict.a11y.title} · ${profile.name}`);
     });
   }
 

@@ -4,17 +4,17 @@
   "entries": [
     {
       "fileId": "5e07a01c3fdfd4268c94f418eb63d2f8ccf59a165754e6ae5356b819edf03858",
-      "versionId": "372066dfc643554e342c5e2aca0373d68e9b0a03d7f3f0d5cc4a841ae25abda8",
+      "versionId": "2ad5a56dfca406e7f043b31b163f9b0ea3472930b2be759f08b89308c97da058",
       "translations": {
         "hi": {
-          "updatedAt": "2026-11-07T20:34:04.583Z",
+          "updatedAt": "2026-11-13T07:59:35.228Z",
           "fileName": "src/lib/i18n/hi.json",
-          "postProcessHash": "9d9733bfe5c522cb7af99a0a4bec46d298fdf2ec59e15598f6ac5efdc4e3b14f"
+          "postProcessHash": "f662a4300f42862fd4df6e2d534db7e5e179c54440e4d23e9b37081e642191b6"
         },
         "ml": {
-          "updatedAt": "2026-11-07T20:34:04.584Z",
+          "updatedAt": "2026-11-13T07:59:35.229Z",
           "fileName": "src/lib/i18n/ml.json",
-          "postProcessHash": "2351ee420cf1eabf68be514ff3d3833302de748697f558b74a3790ad3e6a9c0c"
+          "postProcessHash": "cb9eb8d350c53a704218ac368604ceae55fb19101fe8dd8c3a619672dfd89f04"
         }
       },
       "fileName": "src/lib/i18n/en.json"

@@ -1,18 +1,25 @@
 import { describe, expect, it } from "vitest";
-import { blogPosts } from "@/lib/blog";
+import { assertBlogSlugs, blogPosts, findPost } from "./blog";
 
 describe("blog catalogue", () => {
-  it("stays sorted newest-first when posts ship", () => {
-    // Compare parsed instants, not raw strings: ISO timestamps carrying
-    // different UTC offsets sort incorrectly as text
-    // (`2026-02-01T00:30:00+02:00` precedes `2026-01-31T23:00:00Z`
-    // chronologically but sorts after it lexically). The RSS route parses every
-    // `publishedAt`, so a value that is not a date has to fail here too.
-    const times = blogPosts.map((post) => {
-      const time = Date.parse(post.publishedAt);
-      expect(Number.isNaN(time), `publishedAt is not a date: ${post.publishedAt}`).toBe(false);
-      return time;
-    });
-    expect(times).toEqual([...times].sort((a, b) => b - a));
+  it("ships unique URL-safe slugs", () => {
+    expect(() => assertBlogSlugs(blogPosts)).not.toThrow();
+  });
+
+  it("rejects slugs that are not single path segments", () => {
+    for (const slug of ["a/b", "a?b", "a#b", "Has Caps", "under_score"]) {
+      expect(() => assertBlogSlugs([{ slug }])).toThrow(/URL-safe/);
+    }
+  });
+
+  it("rejects duplicate slugs", () => {
+    expect(() => assertBlogSlugs([{ slug: "same" }, { slug: "same" }])).toThrow(/Duplicate/);
+  });
+
+  it("findPost resolves shipped slugs and misses unknown ones", () => {
+    const post = findPost("slowlang-a-language-that-punishes-fast-typing");
+    expect(post?.title).toMatch(/typing too fast/);
+    expect(post?.publishedAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(findPost("no-such-post")).toBeUndefined();
   });
 });

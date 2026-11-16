@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: LocalePageProps): Promise<Met
   const locale = await requireLocaleParam(params);
   const dict = getDictionary(locale);
   return {
-    title: dict.meta.title,
+    title: { absolute: dict.meta.title },
     description: dict.meta.description,
     alternates: {
       canonical: `${siteUrl}/${locale}`,

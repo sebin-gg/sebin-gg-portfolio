@@ -135,8 +135,24 @@ body {
 @keyframes section-fade {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(24px);
   }
+}
+
+/*
+  Load-in cue for the explicit ?motion=on override: a one-shot fade on the
+  page main so the flag visibly does something even above the fold and in
+  engines with no scroll-driven animation support (Firefox, older Safari).
+*/
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+html[data-motion="on"] #main {
+  animation: page-enter 700ms ease-out both;
 }
 
 @media (prefers-reduced-motion: no-preference) {

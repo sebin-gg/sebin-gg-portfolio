@@ -2,17 +2,77 @@ import { expect, test, type Page } from "@playwright/test";
 
 const htmlClass = (page: Page) => page.evaluate(() => document.documentElement.className);
 
+/**
+ * WebKit never re-evaluates `matchMedia().matches` after load under
+ * `page.emulateMedia`, and the app's live listener re-queries matchMedia
+ * rather than trusting the change event — so an event payload can't fake it.
+ * Install a proxy before any page script runs: it records every created
+ * MediaQueryList and, once `__scheme` is set, reports that scheme from
+ * `.matches`. Dispatching `change` on the recorded lists then reaches the
+ * app's registered listener through the real code path.
+ */
+const installSchemeProbe = (page: Page, scheme: "light" | "dark") =>
+  page.addInitScript((initial) => {
+    const win = window as unknown as {
+      __scheme?: "light" | "dark";
+      __mediaQueryLists?: MediaQueryList[];
+      __origMatchMedia?: typeof window.matchMedia;
+    };
+    if (win.__origMatchMedia) return;
+    // Seed before page scripts run so even the first-paint media query sees
+    // the emulated scheme on engines where emulateMedia is inert (WebKit).
+    win.__scheme = initial;
+    win.__mediaQueryLists = [];
+    win.__origMatchMedia = window.matchMedia.bind(window);
+    const origMatchMedia = win.__origMatchMedia;
+    const emulatedScheme = (prop: string | symbol, query: string) =>
+      prop === "matches" && win.__scheme && query.includes("prefers-color-scheme");
+    const schemeMatches = (query: string) =>
+      query.includes("dark") ? win.__scheme === "dark" : win.__scheme !== "dark";
+    window.matchMedia = (query: string) => {
+      const mq = origMatchMedia(query);
+      const proxied = new Proxy(mq, {
+        get(target, prop, receiver) {
+          if (emulatedScheme(prop, query)) return schemeMatches(query);
+          const value = Reflect.get(target, prop, receiver);
+          return typeof value === "function" ? value.bind(target) : value;
+        },
+      });
+      win.__mediaQueryLists?.push(proxied);
+      return proxied;
+    };
+  }, scheme);
+
+const visitWithScheme = (page: Page, scheme: "light" | "dark", url = "/") =>
+  page
+    .emulateMedia({ colorScheme: scheme })
+    .then(() => installSchemeProbe(page, scheme))
+    .then(() => page.goto(url));
+
 const setDeviceScheme = async (page: Page, scheme: "light" | "dark") => {
   await page.emulateMedia({ colorScheme: scheme });
-  // Playwright 1.64+/WebKit can be flaky delivering the emulated matchMedia
-  // change event; dispatch it explicitly so the app's live-scheme listener
-  // (registered in the theme init script) is exercised reliably. Try both the
-  // scheme query and the query object form; also nudge a couple times because
-  // matchMedia listener instance identity can vary by engine.
+  // Flip the recorded scheme and fire `change` on every tracked query list,
+  // so listeners that re-read `.matches` (the app's own path) see the new
+  // value on engines that never propagate emulated media (WebKit).
+  await page.evaluate((next) => {
+    const win = window as unknown as {
+      __scheme?: string;
+      __mediaQueryLists?: MediaQueryList[];
+    };
+    win.__scheme = next;
+    for (const mq of win.__mediaQueryLists ?? []) {
+      try {
+        mq.dispatchEvent(new Event("change"));
+      } catch {
+        /* detached list */
+      }
+    }
+  }, scheme);
+  // Nudge a few times for engines that deliver the emulated change late.
   for (let attempt = 0; attempt < 3; attempt++) {
     await page.evaluate((next) => {
-      for (const q of [`(prefers-color-scheme: ${next})`, "(prefers-color-scheme: dark)"]) {
-        const mq = window.matchMedia(q);
+      for (const query of [`(prefers-color-scheme: ${next})`, "(prefers-color-scheme: dark)"]) {
+        const mq = window.matchMedia(query);
         try {
           mq.dispatchEvent(
             new MediaQueryListEvent("change", { matches: mq.matches, media: mq.media }),
@@ -34,22 +94,19 @@ const setDeviceScheme = async (page: Page, scheme: "light" | "dark") => {
  */
 test.describe("theme", () => {
   test("a fresh visitor on a light device gets the light theme", async ({ page }) => {
-    await page.emulateMedia({ colorScheme: "light" });
-    await page.goto("/");
+    await visitWithScheme(page, "light");
     expect(await htmlClass(page)).not.toContain("dark");
     await expect(page.getByRole("button", { name: "Switch to dark mode" })).toBeVisible();
   });
 
   test("a fresh visitor on a dark device gets the dark theme", async ({ page }) => {
-    await page.emulateMedia({ colorScheme: "dark" });
-    await page.goto("/");
+    await visitWithScheme(page, "dark");
     expect(await htmlClass(page)).toContain("dark");
     await expect(page.getByRole("button", { name: "Switch to light mode" })).toBeVisible();
   });
 
   test("an explicit choice overrides the device and survives a reload", async ({ page }) => {
-    await page.emulateMedia({ colorScheme: "dark" });
-    await page.goto("/");
+    await visitWithScheme(page, "dark");
     await page.getByRole("button", { name: "Switch to light mode" }).click();
 
     await expect(page.getByRole("button", { name: "Switch to dark mode" })).toBeVisible();
@@ -61,8 +118,7 @@ test.describe("theme", () => {
   });
 
   test("toggling to dark from a light device persists", async ({ page }) => {
-    await page.emulateMedia({ colorScheme: "light" });
-    await page.goto("/");
+    await visitWithScheme(page, "light");
     await page.getByRole("button", { name: "Switch to dark mode" }).click();
 
     await expect(page.getByRole("button", { name: "Switch to light mode" })).toBeVisible();
@@ -74,8 +130,7 @@ test.describe("theme", () => {
   });
 
   test("follows a live device change while nothing is stored", async ({ page }) => {
-    await page.emulateMedia({ colorScheme: "light" });
-    await page.goto("/");
+    await visitWithScheme(page, "light");
     expect(await htmlClass(page)).not.toContain("dark");
 
     // No explicit choice, so flipping the OS switches the site over.
@@ -84,19 +139,16 @@ test.describe("theme", () => {
   });
 
   test("an explicit choice is not undone by a later device change", async ({ page }) => {
-    await page.emulateMedia({ colorScheme: "dark" });
-    await page.goto("/");
+    await visitWithScheme(page, "dark");
     await page.getByRole("button", { name: "Switch to light mode" }).click();
     expect(await htmlClass(page)).not.toContain("dark");
 
-    await page.emulateMedia({ colorScheme: "light" });
-    await page.waitForTimeout(250);
+    await setDeviceScheme(page, "light");
     expect(await htmlClass(page)).not.toContain("dark");
   });
 
   test("native widgets match the palette via color-scheme", async ({ page }) => {
-    await page.emulateMedia({ colorScheme: "light" });
-    await page.goto("/");
+    await visitWithScheme(page, "light");
     const light = await page.evaluate(() =>
       getComputedStyle(document.documentElement).getPropertyValue("color-scheme").trim(),
     );

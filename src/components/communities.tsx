@@ -3,7 +3,7 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/locale";
 import { SectionHeading } from "@/components/section-heading";
 
-export function Communities({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
+export const Communities = ({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) => {
   const dict = getDictionary(locale);
   return (
     <section
@@ -22,11 +22,24 @@ export function Communities({ locale = DEFAULT_LOCALE }: { readonly locale?: Loc
             key={community.name}
             className="border-line/80 bg-panel/90 hover:border-accent/60 rounded-xl border p-5 shadow-sm backdrop-blur-xs transition-colors"
           >
-            <p className="text-ink font-semibold">{community.name}</p>
+            <p className="text-ink font-semibold">
+              {community.href ? (
+                <a
+                  href={community.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-accent underline-offset-4 transition-colors hover:underline"
+                >
+                  {community.name}
+                </a>
+              ) : (
+                community.name
+              )}
+            </p>
             <p className="text-ink-soft mt-1 text-sm">{dict.communities.roles[index]}</p>
           </li>
         ))}
       </ul>
     </section>
   );
-}
+};
