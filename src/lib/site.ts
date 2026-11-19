@@ -49,16 +49,6 @@ export const links = {
     href: "https://mastodon.social/@sebinmathew",
     handle: "@sebinmathew",
   },
-  instagram: {
-    label: "Instagram",
-    href: "https://www.instagram.com/sebin5009",
-    handle: "@sebin5009",
-  },
-  threads: {
-    label: "Threads",
-    href: "https://www.threads.com/@sebin5009",
-    handle: "@sebin5009",
-  },
   leetcode: {
     label: "LeetCode",
     href: "https://leetcode.com/u/sebin_mathew",
