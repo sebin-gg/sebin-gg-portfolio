@@ -52,7 +52,7 @@ describe("Hero", () => {
     const card = screen.getByRole("complementary", { name: "Profile highlights" });
     expect(within(card).getByRole("img", { name: profile.name })).toHaveAttribute(
       "src",
-      expect.stringContaining("sebin-hero-v2.webp"),
+      expect.stringContaining("sebin-hero-cover.webp"),
     );
     expect(within(card).queryByText(/Education/i)).not.toBeInTheDocument();
     expect(within(card).getByRole("link", { name: links.github.handle })).toHaveAttribute(
@@ -252,6 +252,16 @@ describe("Terminal", () => {
     expect(container.querySelector(".font-mono")).toHaveClass("mx-auto");
   });
 
+  it("labels the command group and shows its count in the status bar", () => {
+    render(<Terminal />);
+
+    expect(screen.getByRole("group", { name: "Commands" })).toBeInTheDocument();
+    expect(screen.getByRole("status", { name: "Commands" })).toHaveTextContent(
+      String(terminalCommands.length).padStart(2, "0"),
+    );
+    expect(screen.getByLabelText("Terminal command")).toHaveClass("caret-accent");
+  });
+
   it("fades each printed line in only when motion is allowed", () => {
     const { container } = render(<Terminal />);
     const input = screen.getByLabelText("Terminal command");
@@ -274,11 +284,11 @@ describe("Terminal", () => {
     const input = screen.getByLabelText("Terminal command");
     fireEvent.change(input, { target: { value: "whoami" } });
     fireEvent.click(screen.getByRole("button", { name: "Run" }));
-    const firstKey = container.querySelector(".font-mono > div")?.firstElementChild?.textContent;
+    const firstKey = container.querySelector('.font-mono [aria-live="polite"] > div')?.textContent;
     fireEvent.change(input, { target: { value: "skills" } });
     fireEvent.click(screen.getByRole("button", { name: "Run" }));
 
-    const lines = container.querySelectorAll(".font-mono > div > div");
+    const lines = container.querySelectorAll('.font-mono [aria-live="polite"] > div');
     expect(lines).toHaveLength(2);
     expect(lines[0]).toHaveAttribute("style", expect.stringContaining("--fade-delay: 0ms"));
     expect(lines[1]).toHaveAttribute("style", expect.stringContaining("--fade-delay: 45ms"));
@@ -297,7 +307,7 @@ describe("Terminal", () => {
       fireEvent.change(input, { target: { value: command } });
       fireEvent.click(screen.getByRole("button", { name: "Run" }));
     };
-    const rows = () => container.querySelectorAll(".font-mono > div > div");
+    const rows = () => container.querySelectorAll('.font-mono [aria-live="polite"] > div');
 
     for (const command of [
       "whoami",

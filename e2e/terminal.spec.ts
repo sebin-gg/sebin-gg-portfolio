@@ -12,7 +12,7 @@ import { expect, test } from "@playwright/test";
  * ten elements and broke the strict-mode locator.
  */
 const PANEL = "#terminal [data-terminal-panel]";
-const ROW = `${PANEL} div > div`;
+const ROW = `${PANEL} [aria-live="polite"] > div`;
 
 /**
  * `exact` matters here: the command chips are named "Run command: <name>", and
@@ -127,7 +127,7 @@ test.describe("playground terminal", () => {
       await page.locator("#terminal").evaluate((el) => el.scrollIntoView({ block: "center" }));
       const chip = page.getByRole("button", { name: `Run command: ${commands[i]}`, exact: true });
       await chip.evaluate((el) => el.scrollIntoView({ block: "nearest", inline: "nearest" }));
-      await chip.click({ force: true });
+      await chip.evaluate((el) => (el as HTMLElement).click());
       await expect(page.locator(ROW)).toHaveCount(i + 1);
     }
     expect(errors).toEqual([]);
