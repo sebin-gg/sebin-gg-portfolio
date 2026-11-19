@@ -176,6 +176,7 @@ function HeroIntro({ dict }: { dict: ReturnType<typeof getDictionary> }) {
   );
 }
 
+// skipcq: JS-0067 — module-scoped component export, not a global declaration
 export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
   const dict = getDictionary(locale);
   const stats = [
