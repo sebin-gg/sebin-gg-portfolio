@@ -104,6 +104,7 @@ export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) 
     year: profile.classOf,
   });
 
+  // skipcq: JS-0415 — hero grid layout needs section>container>grid nesting
   return (
     <section id="top" aria-label={dict.hero.intro} className="relative overflow-hidden">
       {/* Soft radial brand glow, pure CSS so no image download. */}
