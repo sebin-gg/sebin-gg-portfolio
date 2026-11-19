@@ -15,7 +15,7 @@ function SwitchLink({
   return (
     <a
       href={localePath(locale, currentPath)}
-      aria-label={label}
+      aria-label={`${locale.toUpperCase()} — ${label}`}
       title={label}
       aria-current={current ? "true" : undefined}
       className={`rounded-md px-1.5 py-1 text-[11px] font-bold tracking-wide transition-colors ${

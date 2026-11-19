@@ -338,7 +338,7 @@ async function runCombo(browser, baseUrl, row) {
     await page.emulateMediaFeatures([{ name: "prefers-color-scheme", value: theme }]);
 
     const flags = flagsFor(device, network, cpu, mode);
-    const url = `${baseUrl}${route}`;
+    const url = `${baseUrl}${route}?motion=off`;
 
     // Seed the theme first; Lighthouse then re-navigates the same page and we
     // keep storage (disableStorageReset: true) so the class sticks.
