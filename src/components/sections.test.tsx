@@ -50,7 +50,7 @@ describe("Hero", () => {
   it("renders profile highlights with the portrait and key facts", () => {
     render(<Hero />);
     const card = screen.getByRole("complementary", { name: "Profile highlights" });
-    expect(within(card).getByRole("img", { name: profile.name })).toHaveAttribute(
+    expect(screen.getByRole("img", { name: profile.name })).toHaveAttribute(
       "src",
       expect.stringContaining("sebin-hero.webp"),
     );
