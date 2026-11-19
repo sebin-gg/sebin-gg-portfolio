@@ -12,7 +12,7 @@ import { expect, test } from "@playwright/test";
  * ten elements and broke the strict-mode locator.
  */
 const PANEL = "#terminal [data-terminal-panel]";
-const ROW = `${PANEL} div > div`;
+const ROW = `${PANEL} [aria-live="polite"] > div`;
 
 /**
  * `exact` matters here: the command chips are named "Run command: <name>", and
