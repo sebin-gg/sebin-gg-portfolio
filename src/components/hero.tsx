@@ -14,6 +14,27 @@ import {
 // skipcq: JS-0067 — module-scoped component export, not a global declaration
 type Fact = { label: string; value: string; href?: string; mailto?: boolean };
 
+function FactRow({ fact }: { fact: Fact }) {
+  return (
+    <div className="border-line/70 grid grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] items-baseline gap-3 border-b py-2.5 last:border-0">
+      <dt className="text-ink-faint min-w-0">{fact.label}</dt>
+      <dd className="text-ink min-w-0 text-right font-medium break-words">
+        {fact.href ? (
+          <a
+            href={fact.href}
+            {...(fact.mailto ? {} : { target: "_blank", rel: "noopener noreferrer" })}
+            className={`hover:text-accent transition-colors ${fact.mailto ? "text-xs" : ""}`}
+          >
+            {fact.value}
+          </a>
+        ) : (
+          fact.value
+        )}
+      </dd>
+    </div>
+  );
+}
+
 function HighlightsCard({
   label,
   name,
@@ -48,25 +69,7 @@ function HighlightsCard({
 
         <dl className="border-line/70 mt-5 border-t text-sm">
           {facts.map((fact) => (
-            <div
-              key={fact.label}
-              className="border-line/70 grid grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] items-baseline gap-3 border-b py-2.5 last:border-0"
-            >
-              <dt className="text-ink-faint min-w-0">{fact.label}</dt>
-              <dd className="text-ink min-w-0 text-right font-medium break-words">
-                {fact.href ? (
-                  <a
-                    href={fact.href}
-                    {...(fact.mailto ? {} : { target: "_blank", rel: "noopener noreferrer" })}
-                    className={`hover:text-accent transition-colors ${fact.mailto ? "text-xs" : ""}`}
-                  >
-                    {fact.value}
-                  </a>
-                ) : (
-                  fact.value
-                )}
-              </dd>
-            </div>
+            <FactRow key={fact.label} fact={fact} />
           ))}
         </dl>
       </div>
