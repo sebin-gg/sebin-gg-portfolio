@@ -52,7 +52,7 @@ describe("Hero", () => {
     const card = screen.getByRole("complementary", { name: "Profile highlights" });
     expect(within(card).getByRole("img", { name: profile.name })).toHaveAttribute(
       "src",
-      expect.stringContaining("sebin-hero.webp"),
+      expect.stringContaining("sebin-hero-v2.webp"),
     );
     expect(within(card).queryByText(/Education/i)).not.toBeInTheDocument();
     expect(within(card).getByRole("link", { name: links.github.handle })).toHaveAttribute(

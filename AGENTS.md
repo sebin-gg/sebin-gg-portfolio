@@ -98,7 +98,7 @@ it human-voiced, typographic apostrophes only.
 ## Rules
 
 1. **Performance is a feature.** Keep this site static-first and lean for ~2G/3G. The only image
-   exception is Sebin's hero portrait (`public/images/sebin-hero.webp`,
+   exception is Sebin's hero portrait (`public/images/sebin-hero-v2.webp`,
    `next/image` with `priority`). Do not add other images, client-side libraries,
    analytics, or heavy JS. The sole analytics exception is the owner-requested Microsoft
    Clarity tag (`src/lib/clarity.ts`, PR #135): server-rendered inline bootstrap, production

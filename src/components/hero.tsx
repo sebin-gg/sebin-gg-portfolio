@@ -39,7 +39,7 @@ export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) 
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_70%_0%,var(--glow),transparent_70%)]"
       />
       <div className="relative mx-auto w-full max-w-7xl px-4 pt-6 pb-6 sm:px-6 sm:pt-8 sm:pb-8 lg:px-8 lg:pt-10 lg:pb-10 2xl:max-w-[90rem]">
-        <div className="grid items-center gap-8 lg:grid-cols-[1.25fr_1fr] lg:gap-12 xl:gap-16">
+        <div className="grid items-center gap-8 lg:grid-cols-[1fr_1.15fr] lg:gap-12 xl:gap-16">
           <div>
             <h1 className="text-ink text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
               {profile.name}
@@ -142,12 +142,12 @@ export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) 
             />
             <div className="relative">
               <Image
-                src="/images/sebin-hero.webp"
+                src="/images/sebin-hero-v2.webp"
                 alt={profile.name}
-                width={960}
-                height={1280}
-                sizes="(min-width: 1280px) 33rem, (min-width: 1024px) 26rem, calc(100vw - 3rem)"
-                className="mb-4 h-56 w-full rounded-xl object-cover object-[center_22%] sm:h-64"
+                width={1280}
+                height={960}
+                sizes="(min-width: 1280px) 37rem, (min-width: 1024px) 31rem, calc(100vw - 3rem)"
+                className="mb-4 aspect-[4/3] w-full rounded-xl object-cover shadow-[0_12px_32px_rgb(0_0_0/0.35)]"
                 priority
               />
               <div className="flex items-center gap-3.5">
