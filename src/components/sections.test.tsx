@@ -348,8 +348,6 @@ describe("Contact", () => {
       links.linkedin,
       links.x,
       links.mastodon,
-      links.instagram,
-      links.threads,
       links.leetcode,
       links.devto,
       links.kaggle,

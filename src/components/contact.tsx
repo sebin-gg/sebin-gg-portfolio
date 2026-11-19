@@ -35,8 +35,6 @@ export function Contact({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale 
               links.linkedin,
               links.x,
               links.mastodon,
-              links.instagram,
-              links.threads,
               links.leetcode,
               links.devto,
               links.kaggle,
