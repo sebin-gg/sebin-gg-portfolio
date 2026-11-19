@@ -47,10 +47,13 @@ describe("Hero", () => {
     expect(screen.getByRole("link", { name: "X profile" })).toHaveAttribute("href", links.x.href);
   });
 
-  it("renders profile highlights with the monogram and key facts", () => {
+  it("renders profile highlights with the portrait and key facts", () => {
     render(<Hero />);
     const card = screen.getByRole("complementary", { name: "Profile highlights" });
-    expect(within(card).getByText("SM")).toBeInTheDocument();
+    expect(within(card).getByRole("img", { name: profile.name })).toHaveAttribute(
+      "src",
+      expect.stringContaining("sebin-hero.webp"),
+    );
     expect(within(card).queryByText(/Education/i)).not.toBeInTheDocument();
     expect(within(card).getByRole("link", { name: links.github.handle })).toHaveAttribute(
       "href",
