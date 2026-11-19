@@ -142,11 +142,11 @@ export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) 
             />
             <div className="relative">
               <Image
-                src="/images/sebin-hero.webp"
+                src="/images/sebin-hero-v2.webp"
                 alt={profile.name}
                 width={1280}
                 height={960}
-                sizes="(min-width: 1024px) 26rem, calc(100vw - 3rem)"
+                sizes="(min-width: 1280px) 37rem, (min-width: 1024px) 31rem, calc(100vw - 3rem)"
                 className="mb-4 aspect-[4/3] w-full rounded-xl object-cover shadow-[0_12px_32px_rgb(0_0_0/0.35)]"
                 priority
               />
