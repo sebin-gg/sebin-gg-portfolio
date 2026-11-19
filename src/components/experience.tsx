@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { timeline } from "@/lib/site";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/locale";
@@ -17,16 +16,6 @@ const ExperienceEntry = ({ item, period, role, summary }: ExperienceEntryProps) 
       aria-hidden="true"
       className="border-accent bg-canvas ring-canvas absolute top-1.5 -left-[31px] h-3.5 w-3.5 rounded-full border-2 ring-4 sm:-left-[39px]"
     />
-    {item.portrait ? (
-      <Image
-        src={item.portrait.src}
-        alt={item.portrait.alt}
-        width={item.portrait.width}
-        height={item.portrait.height}
-        sizes="(min-width: 640px) 5rem, 4rem"
-        className="mt-2 h-16 w-16 shrink-0 rounded-full object-cover grayscale sm:h-20 sm:w-20"
-      />
-    ) : null}
     <div className="min-w-0 flex-1">
       <span className="border-accent/20 bg-accent-soft text-accent inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold tracking-wider uppercase">
         {period}

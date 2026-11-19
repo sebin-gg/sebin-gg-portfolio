@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { Experience } from "@/components/experience";
 
 describe("Experience", () => {
-  it("links FOCES to the executive committee and shows a grayscale portrait", () => {
+  it("links FOCES to the executive committee", () => {
     render(<Experience />);
 
     expect(screen.getByRole("link", { name: "FOCES CEC" })).toHaveAttribute(
@@ -15,6 +15,5 @@ describe("Experience", () => {
       "rel",
       "noopener noreferrer",
     );
-    expect(screen.getByRole("img", { name: "Sebin Mathew" })).toHaveClass("grayscale");
   });
 });

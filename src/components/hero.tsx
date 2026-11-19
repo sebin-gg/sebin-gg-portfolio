@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { links, profile, projects, resumeUrl } from "@/lib/site";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { DEFAULT_LOCALE, formatString, type Locale } from "@/lib/locale";
@@ -9,11 +10,6 @@ import {
   MailIcon,
   XIcon,
 } from "@/components/icons";
-
-function monogram(name: string): string {
-  const [first, second] = name.trim().split(/\s+/);
-  return (first ? first[0] : "") + (second ? second[0] : "");
-}
 
 // skipcq: JS-0067 — module-scoped component export, not a global declaration
 export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
@@ -145,10 +141,16 @@ export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) 
               className="from-accent/25 to-accent-soft/40 pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-gradient-to-br blur-2xl sm:-top-20 sm:-right-20 sm:h-56 sm:w-56"
             />
             <div className="relative">
+              <Image
+                src="/images/sebin-hero.webp"
+                alt={profile.name}
+                width={960}
+                height={1280}
+                sizes="(min-width: 1280px) 33rem, (min-width: 1024px) 26rem, calc(100vw - 3rem)"
+                className="mb-4 h-56 w-full rounded-xl object-cover object-[center_22%] sm:h-64"
+                priority
+              />
               <div className="flex items-center gap-3.5">
-                <span className="from-accent to-accent-strong text-accent-ink shadow-accent/25 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br text-base font-bold shadow-md sm:h-12 sm:w-12 sm:text-lg">
-                  {monogram(profile.name)}
-                </span>
                 <div>
                   <p className="text-ink text-sm font-semibold">{profile.name}</p>
                   <p className="text-ink-faint text-sm">

@@ -88,9 +88,9 @@ export function Terminal({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale
       <div
         data-terminal-panel
         data-clarity-mask="true"
-        className="border-line/80 bg-panel/90 mx-auto max-w-2xl rounded-xl border p-4 font-mono text-sm shadow-sm backdrop-blur-xs sm:p-5"
+        className="border-line/80 bg-panel/90 mx-auto max-w-4xl rounded-xl border p-5 font-mono text-base shadow-sm backdrop-blur-xs sm:p-6"
       >
-        <div aria-live="polite" className="space-y-2">
+        <div aria-live="polite" className="min-h-48 space-y-2 sm:min-h-56">
           {entries.length === 0 ? <p className="text-ink-faint">$ {dict.terminal.hint}</p> : null}
           {entries.map((entry, index) => (
             <div
