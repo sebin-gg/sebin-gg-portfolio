@@ -50,10 +50,8 @@ function scrollToAnchor(anchor: string | null) {
  * Playground terminal. Tiny client island: commands resolve from a static
  * table in site.ts, no network, no parsing.
  */
-// skipcq: JS-0067
 type TerminalDict = ReturnType<typeof getDictionary>["terminal"];
 
-// skipcq: JS-0067
 // skipcq: JS-0067
 function TerminalEntry({ entry, index }: { entry: Entry; index: number }) {
   return (
@@ -72,6 +70,8 @@ function TerminalEntry({ entry, index }: { entry: Entry; index: number }) {
   );
 }
 
+// skipcq: JS-0067
+// skipcq: JS-0415 — terminal panel chrome needs deep nesting
 function TerminalPanel({
   dict,
   entries,
@@ -184,6 +184,7 @@ function TerminalPanel({
   );
 }
 
+// skipcq: JS-0067
 export function Terminal({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
   const dict = getDictionary(locale);
   const [entries, setEntries] = useState<Entry[]>([]);

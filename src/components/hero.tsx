@@ -11,7 +11,6 @@ import {
   XIcon,
 } from "@/components/icons";
 
-// skipcq: JS-0067 — module-scoped component export, not a global declaration
 type Fact = { label: string; value: string; href?: string; mailto?: boolean };
 
 // skipcq: JS-0067
@@ -79,6 +78,8 @@ function HighlightsCard({
   );
 }
 
+// skipcq: JS-0067 — module-scoped component export, not a global declaration
+// skipcq: JS-0415 — hero grid layout needs section>container>grid nesting
 export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
   const dict = getDictionary(locale);
   const stats = [
