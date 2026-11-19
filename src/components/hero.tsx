@@ -80,6 +80,102 @@ function HighlightsCard({
 
 // skipcq: JS-0067 — module-scoped component export, not a global declaration
 // skipcq: JS-0415 — hero grid layout needs section>container>grid nesting
+// skipcq: JS-0067
+// skipcq: JS-0415 — intro column needs deep action/social nesting
+function HeroIntro({ dict }: { dict: ReturnType<typeof getDictionary> }) {
+  return (
+    <div>
+      <h1 className="text-ink text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
+        {profile.name}
+      </h1>
+      <p className="text-ink-soft mt-2.5 text-lg font-medium sm:mt-3 sm:text-xl lg:text-2xl">
+        {dict.hero.role}
+      </p>
+      <p className="text-ink-faint mt-1.5 text-sm font-medium sm:text-base">{dict.hero.tagline}</p>
+      <p className="text-ink-soft mt-3 max-w-xl text-base leading-relaxed sm:mt-4 sm:text-lg">
+        {dict.about.bio[0]}
+      </p>
+      <ul
+        aria-label={dict.hero.focusAreas}
+        className="mt-4 flex flex-wrap gap-1.5 sm:mt-5 sm:gap-2"
+      >
+        {dict.hero.focus.map((area) => (
+          <li
+            key={area}
+            className="border-line/80 bg-panel/80 text-ink-soft hover:border-accent/40 hover:text-ink rounded-full border px-3 py-1 text-xs font-medium backdrop-blur-xs transition-colors sm:text-sm"
+          >
+            {area}
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-6 flex flex-col gap-3 sm:mt-7">
+        {/* Primary action row: cleanly on one line */}
+        <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
+          <a
+            href="#projects"
+            className="bg-accent text-accent-ink hover:bg-accent-strong shadow-accent/20 inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-semibold whitespace-nowrap shadow-md transition-all hover:shadow-lg sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
+          >
+            {dict.hero.viewProjects}
+            <ArrowUpRightIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+          </a>
+          <a
+            href={resumeUrl}
+            download="Sebin-Mathew-Resume.pdf"
+            title={dict.hero.downloadResume}
+            className="border-line/80 bg-panel/90 text-ink hover:border-accent hover:text-accent inline-flex items-center justify-center gap-1.5 rounded-lg border px-3.5 py-2 text-xs font-semibold whitespace-nowrap shadow-xs backdrop-blur-xs transition-all sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
+          >
+            <DownloadIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+            {dict.hero.downloadResume}
+          </a>
+          <a
+            href={links.email.href}
+            title={links.email.handle}
+            className="border-line/80 bg-panel/90 text-ink hover:border-accent hover:text-accent inline-flex items-center justify-center gap-1.5 rounded-lg border px-3.5 py-2 text-xs font-semibold whitespace-nowrap shadow-xs backdrop-blur-xs transition-all sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
+          >
+            <MailIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+            {dict.hero.emailMe}
+          </a>
+        </div>
+
+        {/* Social media links: neatly lined up in a single row directly below */}
+        <div className="flex items-center gap-2 pt-0.5">
+          <a
+            href={links.github.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={dict.hero.githubProfile}
+            title={`${links.github.label} — ${links.github.handle}`}
+            className="border-line/80 bg-panel/90 text-ink-soft hover:border-accent hover:text-accent flex h-9 w-9 items-center justify-center rounded-lg border shadow-xs backdrop-blur-xs transition-all sm:h-10 sm:w-10"
+          >
+            <GithubIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+          </a>
+          <a
+            href={links.linkedin.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={dict.hero.linkedinProfile}
+            title={`${links.linkedin.label} — ${links.linkedin.handle}`}
+            className="border-line/80 bg-panel/90 text-ink-soft hover:border-accent hover:text-accent flex h-9 w-9 items-center justify-center rounded-lg border shadow-xs backdrop-blur-xs transition-all sm:h-10 sm:w-10"
+          >
+            <LinkedinIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+          </a>
+          <a
+            href={links.x.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={dict.hero.xProfile}
+            title={`${links.x.label} — ${links.x.handle}`}
+            className="border-line/80 bg-panel/90 text-ink-soft hover:border-accent hover:text-accent flex h-9 w-9 items-center justify-center rounded-lg border shadow-xs backdrop-blur-xs transition-all sm:h-10 sm:w-10"
+          >
+            <XIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
   const dict = getDictionary(locale);
   const stats = [
@@ -114,97 +210,7 @@ export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) 
       />
       <div className="relative mx-auto w-full max-w-7xl px-4 pt-6 pb-6 sm:px-6 sm:pt-8 sm:pb-8 lg:px-8 lg:pt-10 lg:pb-10 2xl:max-w-[90rem]">
         <div className="grid items-center gap-8 lg:grid-cols-[1fr_1.15fr] lg:gap-12 xl:gap-16">
-          <div>
-            <h1 className="text-ink text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
-              {profile.name}
-            </h1>
-            <p className="text-ink-soft mt-2.5 text-lg font-medium sm:mt-3 sm:text-xl lg:text-2xl">
-              {dict.hero.role}
-            </p>
-            <p className="text-ink-faint mt-1.5 text-sm font-medium sm:text-base">
-              {dict.hero.tagline}
-            </p>
-            <p className="text-ink-soft mt-3 max-w-xl text-base leading-relaxed sm:mt-4 sm:text-lg">
-              {dict.about.bio[0]}
-            </p>
-            <ul
-              aria-label={dict.hero.focusAreas}
-              className="mt-4 flex flex-wrap gap-1.5 sm:mt-5 sm:gap-2"
-            >
-              {dict.hero.focus.map((area) => (
-                <li
-                  key={area}
-                  className="border-line/80 bg-panel/80 text-ink-soft hover:border-accent/40 hover:text-ink rounded-full border px-3 py-1 text-xs font-medium backdrop-blur-xs transition-colors sm:text-sm"
-                >
-                  {area}
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-6 flex flex-col gap-3 sm:mt-7">
-              {/* Primary action row: cleanly on one line */}
-              <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
-                <a
-                  href="#projects"
-                  className="bg-accent text-accent-ink hover:bg-accent-strong shadow-accent/20 inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-semibold whitespace-nowrap shadow-md transition-all hover:shadow-lg sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
-                >
-                  {dict.hero.viewProjects}
-                  <ArrowUpRightIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                </a>
-                <a
-                  href={resumeUrl}
-                  download="Sebin-Mathew-Resume.pdf"
-                  title={dict.hero.downloadResume}
-                  className="border-line/80 bg-panel/90 text-ink hover:border-accent hover:text-accent inline-flex items-center justify-center gap-1.5 rounded-lg border px-3.5 py-2 text-xs font-semibold whitespace-nowrap shadow-xs backdrop-blur-xs transition-all sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
-                >
-                  <DownloadIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                  {dict.hero.downloadResume}
-                </a>
-                <a
-                  href={links.email.href}
-                  title={links.email.handle}
-                  className="border-line/80 bg-panel/90 text-ink hover:border-accent hover:text-accent inline-flex items-center justify-center gap-1.5 rounded-lg border px-3.5 py-2 text-xs font-semibold whitespace-nowrap shadow-xs backdrop-blur-xs transition-all sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
-                >
-                  <MailIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                  {dict.hero.emailMe}
-                </a>
-              </div>
-
-              {/* Social media links: neatly lined up in a single row directly below */}
-              <div className="flex items-center gap-2 pt-0.5">
-                <a
-                  href={links.github.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={dict.hero.githubProfile}
-                  title={`${links.github.label} — ${links.github.handle}`}
-                  className="border-line/80 bg-panel/90 text-ink-soft hover:border-accent hover:text-accent flex h-9 w-9 items-center justify-center rounded-lg border shadow-xs backdrop-blur-xs transition-all sm:h-10 sm:w-10"
-                >
-                  <GithubIcon className="h-4 w-4 sm:h-5 sm:w-5" />
-                </a>
-                <a
-                  href={links.linkedin.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={dict.hero.linkedinProfile}
-                  title={`${links.linkedin.label} — ${links.linkedin.handle}`}
-                  className="border-line/80 bg-panel/90 text-ink-soft hover:border-accent hover:text-accent flex h-9 w-9 items-center justify-center rounded-lg border shadow-xs backdrop-blur-xs transition-all sm:h-10 sm:w-10"
-                >
-                  <LinkedinIcon className="h-4 w-4 sm:h-5 sm:w-5" />
-                </a>
-                <a
-                  href={links.x.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={dict.hero.xProfile}
-                  title={`${links.x.label} — ${links.x.handle}`}
-                  className="border-line/80 bg-panel/90 text-ink-soft hover:border-accent hover:text-accent flex h-9 w-9 items-center justify-center rounded-lg border shadow-xs backdrop-blur-xs transition-all sm:h-10 sm:w-10"
-                >
-                  <XIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                </a>
-              </div>
-            </div>
-          </div>
+          <HeroIntro dict={dict} />
 
           <HighlightsCard
             label={dict.hero.highlights}
