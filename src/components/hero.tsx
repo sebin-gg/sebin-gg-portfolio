@@ -12,6 +12,68 @@ import {
 } from "@/components/icons";
 
 // skipcq: JS-0067 — module-scoped component export, not a global declaration
+type Fact = { label: string; value: string; href?: string; mailto?: boolean };
+
+function HighlightsCard({
+  label,
+  name,
+  collegeLine,
+  facts,
+}: {
+  label: string;
+  name: string;
+  collegeLine: string;
+  facts: readonly Fact[];
+}) {
+  return (
+    <aside
+      aria-label={label}
+      className="border-line/80 bg-panel shadow-ink/5 relative grid overflow-hidden rounded-2xl border shadow-xl sm:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]"
+    >
+      <div className="relative aspect-[4/3] overflow-hidden sm:aspect-auto sm:min-h-72">
+        <Image
+          src="/images/sebin-hero-cover.webp"
+          alt={profile.name}
+          fill
+          sizes="(min-width: 1024px) 18rem, (min-width: 640px) 44vw, calc(100vw - 3rem)"
+          className="object-cover object-[center_40%]"
+          preload
+        />
+      </div>
+      <div className="relative p-5 sm:p-6">
+        <div className="border-accent border-l-2 pl-3">
+          <p className="text-ink text-sm font-semibold">{name}</p>
+          <p className="text-ink-soft mt-0.5 text-sm">{collegeLine}</p>
+        </div>
+
+        <dl className="border-line/70 mt-5 border-t text-sm">
+          {facts.map((fact) => (
+            <div
+              key={fact.label}
+              className="border-line/70 grid grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] items-baseline gap-3 border-b py-2.5 last:border-0"
+            >
+              <dt className="text-ink-faint min-w-0">{fact.label}</dt>
+              <dd className="text-ink min-w-0 text-right font-medium break-words">
+                {fact.href ? (
+                  <a
+                    href={fact.href}
+                    {...(fact.mailto ? {} : { target: "_blank", rel: "noopener noreferrer" })}
+                    className={`hover:text-accent transition-colors ${fact.mailto ? "text-xs" : ""}`}
+                  >
+                    {fact.value}
+                  </a>
+                ) : (
+                  fact.value
+                )}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </aside>
+  );
+}
+
 export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) {
   const dict = getDictionary(locale);
   const stats = [
@@ -30,6 +92,11 @@ export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) 
     { label: dict.about.degreeLabel, value: dict.about.degreeValue },
     { label: dict.about.cgpaLabel, value: String(profile.cgpa) },
   ];
+
+  const collegeLine = formatString(dict.hero.collegeLine, {
+    short: profile.collegeShort,
+    year: profile.classOf,
+  });
 
   return (
     <section id="top" aria-label={dict.hero.intro} className="relative overflow-hidden">
@@ -132,56 +199,12 @@ export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) 
             </div>
           </div>
 
-          <aside
-            aria-label={dict.hero.highlights}
-            className="border-line/80 bg-panel shadow-ink/5 relative grid overflow-hidden rounded-2xl border shadow-xl sm:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]"
-          >
-            <div className="relative aspect-[4/3] overflow-hidden sm:aspect-auto sm:min-h-72">
-              <Image
-                src="/images/sebin-hero-cover.webp"
-                alt={profile.name}
-                fill
-                sizes="(min-width: 1024px) 18rem, (min-width: 640px) 44vw, calc(100vw - 3rem)"
-                className="object-cover object-[center_40%]"
-                preload
-              />
-            </div>
-            <div className="relative p-5 sm:p-6">
-              <div className="border-accent border-l-2 pl-3">
-                <p className="text-ink text-sm font-semibold">{profile.name}</p>
-                <p className="text-ink-soft mt-0.5 text-sm">
-                  {formatString(dict.hero.collegeLine, {
-                    short: profile.collegeShort,
-                    year: profile.classOf,
-                  })}
-                </p>
-              </div>
-
-              <dl className="border-line/70 mt-5 border-t text-sm">
-                {facts.map((fact) => (
-                  <div
-                    key={fact.label}
-                    className="border-line/70 grid grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] items-baseline gap-3 border-b py-2.5 last:border-0"
-                  >
-                    <dt className="text-ink-faint min-w-0">{fact.label}</dt>
-                    <dd className="text-ink min-w-0 text-right font-medium break-words">
-                      {fact.href ? (
-                        <a
-                          href={fact.href}
-                          {...(fact.mailto ? {} : { target: "_blank", rel: "noopener noreferrer" })}
-                          className={`hover:text-accent transition-colors ${fact.mailto ? "text-xs" : ""}`}
-                        >
-                          {fact.value}
-                        </a>
-                      ) : (
-                        fact.value
-                      )}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          </aside>
+          <HighlightsCard
+            label={dict.hero.highlights}
+            name={profile.name}
+            collegeLine={collegeLine}
+            facts={facts}
+          />
         </div>
 
         <dl className="border-line/80 bg-line/80 mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-xl border shadow-sm backdrop-blur-xs sm:mt-10 lg:mt-12">
