@@ -53,6 +53,25 @@ function scrollToAnchor(anchor: string | null) {
 // skipcq: JS-0067
 type TerminalDict = ReturnType<typeof getDictionary>["terminal"];
 
+// skipcq: JS-0067
+// skipcq: JS-0067
+function TerminalEntry({ entry, index }: { entry: Entry; index: number }) {
+  return (
+    <div
+      style={fadeStyle(index)}
+      className="motion-allowed:animate-[terminal-fade_320ms_ease-out_both] motion-allowed:[animation-delay:var(--fade-delay)]"
+    >
+      <p className="text-ink">
+        <span aria-hidden="true" className="text-accent mr-2">
+          $
+        </span>
+        {entry.command}
+      </p>
+      <p className="text-ink-soft mt-0.5 pl-5">{entry.output}</p>
+    </div>
+  );
+}
+
 function TerminalPanel({
   dict,
   entries,
@@ -98,19 +117,7 @@ function TerminalPanel({
               </p>
             ) : null}
             {entries.map((entry, index) => (
-              <div
-                key={entry.id}
-                style={fadeStyle(index)}
-                className="motion-allowed:animate-[terminal-fade_320ms_ease-out_both] motion-allowed:[animation-delay:var(--fade-delay)]"
-              >
-                <p className="text-ink">
-                  <span aria-hidden="true" className="text-accent mr-2">
-                    $
-                  </span>
-                  {entry.command}
-                </p>
-                <p className="text-ink-soft mt-0.5 pl-5">{entry.output}</p>
-              </div>
+              <TerminalEntry key={entry.id} entry={entry} index={index} />
             ))}
           </div>
         </div>

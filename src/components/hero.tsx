@@ -14,6 +14,7 @@ import {
 // skipcq: JS-0067 — module-scoped component export, not a global declaration
 type Fact = { label: string; value: string; href?: string; mailto?: boolean };
 
+// skipcq: JS-0067
 function FactRow({ fact }: { fact: Fact }) {
   return (
     <div className="border-line/70 grid grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] items-baseline gap-3 border-b py-2.5 last:border-0">
@@ -35,6 +36,7 @@ function FactRow({ fact }: { fact: Fact }) {
   );
 }
 
+// skipcq: JS-0067
 function HighlightsCard({
   label,
   name,
