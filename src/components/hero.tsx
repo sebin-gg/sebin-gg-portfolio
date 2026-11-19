@@ -134,44 +134,42 @@ export function Hero({ locale = DEFAULT_LOCALE }: { readonly locale?: Locale }) 
 
           <aside
             aria-label={dict.hero.highlights}
-            className="border-line/80 bg-panel/80 relative overflow-hidden rounded-2xl border p-5 shadow-xl shadow-black/5 backdrop-blur-md sm:p-6"
+            className="border-line/80 bg-panel shadow-ink/5 relative grid overflow-hidden rounded-2xl border shadow-xl sm:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]"
           >
-            <div
-              aria-hidden="true"
-              className="from-accent/25 to-accent-soft/40 pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-gradient-to-br blur-2xl sm:-top-20 sm:-right-20 sm:h-56 sm:w-56"
-            />
-            <div className="relative">
+            <div className="relative aspect-[4/3] overflow-hidden sm:aspect-auto sm:min-h-72">
               <Image
-                src="/images/sebin-hero-v2.webp"
+                src="/images/sebin-hero-cover.webp"
                 alt={profile.name}
-                width={1280}
-                height={960}
-                sizes="(min-width: 1280px) 37rem, (min-width: 1024px) 31rem, calc(100vw - 3rem)"
-                className="mb-4 aspect-[4/3] w-full rounded-xl object-cover shadow-[0_12px_32px_rgb(0_0_0/0.35)]"
-                priority
+                fill
+                sizes="(min-width: 1024px) 18rem, (min-width: 640px) 44vw, calc(100vw - 3rem)"
+                className="object-cover object-[center_40%]"
+                preload
               />
-              <div className="flex items-center gap-3.5">
-                <div>
-                  <p className="text-ink text-sm font-semibold">{profile.name}</p>
-                  <p className="text-ink-faint text-sm">
-                    {formatString(dict.hero.collegeLine, {
-                      short: profile.collegeShort,
-                      year: profile.classOf,
-                    })}
-                  </p>
-                </div>
+            </div>
+            <div className="relative p-5 sm:p-6">
+              <div className="border-accent border-l-2 pl-3">
+                <p className="text-ink text-sm font-semibold">{profile.name}</p>
+                <p className="text-ink-soft mt-0.5 text-sm">
+                  {formatString(dict.hero.collegeLine, {
+                    short: profile.collegeShort,
+                    year: profile.classOf,
+                  })}
+                </p>
               </div>
 
-              <dl className="mt-5 space-y-2.5 text-sm sm:mt-6 sm:space-y-3">
+              <dl className="border-line/70 mt-5 border-t text-sm">
                 {facts.map((fact) => (
-                  <div key={fact.label} className="flex items-baseline justify-between gap-4">
-                    <dt className="text-ink-faint">{fact.label}</dt>
-                    <dd className="text-ink text-right font-medium">
+                  <div
+                    key={fact.label}
+                    className="border-line/70 grid grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] items-baseline gap-3 border-b py-2.5 last:border-0"
+                  >
+                    <dt className="text-ink-faint min-w-0">{fact.label}</dt>
+                    <dd className="text-ink min-w-0 text-right font-medium break-words">
                       {fact.href ? (
                         <a
                           href={fact.href}
                           {...(fact.mailto ? {} : { target: "_blank", rel: "noopener noreferrer" })}
-                          className="hover:text-accent transition-colors"
+                          className={`hover:text-accent transition-colors ${fact.mailto ? "text-xs" : ""}`}
                         >
                           {fact.value}
                         </a>
