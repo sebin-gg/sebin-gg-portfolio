@@ -42,7 +42,7 @@
   --line-strong: #94a3b8;
   --ink: #0f172a;
   --ink-soft: #475569;
-  --ink-faint: #5a6880;
+  --ink-faint: #46566e;
   --accent: #4f46e5;
   --accent-strong: #4338ca;
   --accent-soft: #eef2ff;
@@ -60,11 +60,11 @@
   --ink: #f8fafc;
   --ink-soft: #a3b1c7;
   --ink-faint: #8593ad;
-  --accent: #818cf8;
-  --accent-strong: #a5b4fc;
+  --accent: #a5b4fc;
+  --accent-strong: #c7d2fe;
   --accent-soft: #1e1b4b;
-  --accent-ink: #1e1b4b;
-  --glow: rgba(129, 140, 248, 0.2);
+  --accent-ink: #0b1020;
+  --glow: rgba(165, 180, 252, 0.2);
 }
 
 @theme inline {
